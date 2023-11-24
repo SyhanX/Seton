@@ -67,4 +67,10 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
     kapt("com.google.dagger:dagger-compiler:2.48.1")
+
+    // Lifecycle-
+    val lifecycleVersion = "2.6.2"
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
 }
