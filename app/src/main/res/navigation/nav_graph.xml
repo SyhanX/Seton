@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_NotesFragment_to_EditNoteFragment"
             app:destination="@id/EditNoteFragment" />
+        <action
+            android:id="@+id/action_NotesFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/EditNoteFragment"
@@ -24,7 +27,15 @@
             app:destination="@id/NotesFragment" />
         <argument
             android:name="currentNoteId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.seton.presentation.about.AboutFragment"
+        android:label="About">
+        <action
+            android:id="@+id/action_aboutFragment_to_NotesFragment"
+            app:destination="@id/NotesFragment" />
     </fragment>
 </navigation>

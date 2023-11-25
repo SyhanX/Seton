@@ -51,7 +51,7 @@ class NotesFragment : Fragment(), MenuProvider {
 
         setUpRecyclerView()
         observeData()
-        
+
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
@@ -78,6 +78,7 @@ class NotesFragment : Fragment(), MenuProvider {
             }
         }
     }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.notes_menu, menu)
     }
@@ -89,11 +90,12 @@ class NotesFragment : Fragment(), MenuProvider {
 
                 true
             }
-            R.id.action_about -> {
-                //do something
 
+            R.id.action_about -> {
+                findNavController().navigate(R.id.action_NotesFragment_to_aboutFragment)
                 true
             }
+
             else -> false
         }
     }
