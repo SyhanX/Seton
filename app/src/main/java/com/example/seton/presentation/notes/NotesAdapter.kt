@@ -2,6 +2,7 @@ package com.example.seton.presentation.notes
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,10 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
         holder.binding.apply {
             noteTitle.text = currentItem.title
             noteContent.text = currentItem.content
+            noteCard.setOnClickListener {
+                val action = NotesFragmentDirections.actionNotesFragmentToEditNoteFragment(currentItem.id!!)
+                holder.itemView.findNavController().navigate(action)
+            }
         }
     }
 }

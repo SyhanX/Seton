@@ -22,14 +22,13 @@ class EditNoteViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _noteTitle = MutableStateFlow(NoteTextFieldState())
-    val noteTitle: StateFlow<NoteTextFieldState>
-        get() = _noteTitle
+    val noteTitle: StateFlow<NoteTextFieldState> = _noteTitle
 
     private val _noteContent = MutableStateFlow(NoteTextFieldState())
-    val noteContent: StateFlow<NoteTextFieldState>
-        get() = _noteContent
+    val noteContent: StateFlow<NoteTextFieldState> = _noteContent
 
     private var currentNoteId: Int? = null
+    private val argId: Int? = savedStateHandle.get<Int>("currentNoteId")
 
     init {
         savedStateHandle.get<Int>("currentNoteId")?.let { noteId ->
@@ -43,6 +42,7 @@ class EditNoteViewModel @Inject constructor(
                         _noteContent.value = noteContent.value.copy(
                             text = note.content
                         )
+                        Log.d(TAG, "init: $note ")
                     }
                 }
             }
@@ -75,6 +75,30 @@ class EditNoteViewModel @Inject constructor(
                         )
                     } catch (e: InvalidNoteException) {
                         Log.d(TAG, "onEvent: Invalid note")
+                    }
+                }
+            }
+
+            is EditNoteEvent.GetNoteById -> {
+                argId?.let { noteId ->
+                    viewModelScope.launch {
+                        noteUseCases.getNoteById(noteId)?.also { note ->
+                            currentNoteId = note.id
+                            _noteTitle.value = noteTitle.value.copy(
+                                text = note.title
+                            )
+                            _noteContent.value = noteContent.value.copy(
+                                text = note.content
+                            )
+                            Log.d(
+                                TAG, """
+                        onEvent: note info
+                        id: ${note.id} 
+                        title: ${noteTitle.value.text} 
+                        content: ${noteContent.value.text} 
+                    """.trimIndent()
+                            )
+                        }
                     }
                 }
             }
