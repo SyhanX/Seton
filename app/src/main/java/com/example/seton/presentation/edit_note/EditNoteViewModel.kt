@@ -76,6 +76,18 @@ class EditNoteViewModel @Inject constructor(
                     }
                 }
             }
+
+            EditNoteEvent.DeleteNote -> {
+                viewModelScope.launch {
+                    noteUseCases.deleteNote(
+                        Note(
+                            title = noteTitle.value.text,
+                            content = noteContent.value.text,
+                            id = currentNoteId
+                        )
+                    )
+                }
+            }
         }
     }
 }
