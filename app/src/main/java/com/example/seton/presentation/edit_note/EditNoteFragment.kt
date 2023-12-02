@@ -1,5 +1,6 @@
 package com.example.seton.presentation.edit_note
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -15,8 +16,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.seton.R
-import com.example.seton.data.datasource.observeWithLifecycle
 import com.example.seton.databinding.FragmentEditNoteBinding
+import com.example.seton.domain.util.observeWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -75,8 +76,17 @@ class EditNoteFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.action_delete -> {
-                viewModel.onEvent(EditNoteEvent.DeleteNote)
-                findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
+                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                builder
+                    .setMessage(R.string.ask_delete_note)
+                    .setTitle(R.string.confirm_action)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        viewModel.onEvent(EditNoteEvent.DeleteNote)
+                        findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
+                    }
+                    .setNegativeButton(R.string.no) { _, _ -> }
+                    .create()
+                builder.show()
                 true
             }
             else -> false

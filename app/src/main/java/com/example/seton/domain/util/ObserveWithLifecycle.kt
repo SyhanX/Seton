@@ -1,4 +1,4 @@
-package com.example.seton.data.datasource
+package com.example.seton.domain.util
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle

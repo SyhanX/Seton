@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/action_settings"
+        android:id="@+id/action_change_layout"
+        android:icon="@drawable/ic_dashboard"
+        android:title="@string/change_layout"
+        android:visible="true"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/action_about"
         android:icon="@drawable/ic_info"

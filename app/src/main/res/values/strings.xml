@@ -13,4 +13,10 @@
     <string name="note_content">Note</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="ask_delete_note">Delete note?</string>
+    <string name="confirm_action">Confirm action</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="change_layout">Change layout</string>
+    <string name="no_notes">Your notes will appear here</string>
 </resources>

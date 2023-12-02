@@ -1,5 +1,6 @@
 package com.example.seton.presentation.notes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seton.domain.use_case.NoteUseCases
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "notesvm"
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
@@ -34,6 +37,7 @@ class NotesViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     isLinearLayout = !state.value.isLinearLayout
                 )
+                Log.d(TAG, "linear layout: ${state.value.isLinearLayout}")
             }
             is NoteEvent.DeleteNote -> {
                 viewModelScope.launch {
