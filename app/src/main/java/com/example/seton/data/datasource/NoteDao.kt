@@ -7,8 +7,6 @@ import androidx.room.Upsert
 import com.example.seton.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
-private const val TAG = "notedao"
-
 @Dao
 interface NoteDao {
 
