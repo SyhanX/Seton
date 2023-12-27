@@ -1,10 +1,10 @@
-package com.example.seton.data.di
+package com.example.seton.di
 
 import android.app.Application
 import androidx.room.Room
 import com.example.seton.data.datasource.AppDatabase
 import com.example.seton.data.repository.NoteRepositoryImpl
-import com.example.seton.domain.repository.NoteRepository
+import com.example.seton.data.repository.NoteRepository
 import com.example.seton.domain.use_case.DeleteNote
 import com.example.seton.domain.use_case.GetAllNotes
 import com.example.seton.domain.use_case.GetNoteById

@@ -1,4 +1,4 @@
-package com.example.seton.presentation.notes
+package com.example.seton.presentation.note_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +13,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,26 +20,27 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.seton.R
 import com.example.seton.databinding.FragmentNotesBinding
 import com.example.seton.domain.util.observeWithLifecycle
+import com.example.seton.presentation.note_list.state.NoteEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
+private const val TAG = "notesfragment"
 @AndroidEntryPoint
-class NotesFragment : Fragment(), MenuProvider {
+class NoteListFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
-    private val notesAdapter = NotesAdapter()
+    private val notesAdapter = NoteListAdapter()
 
-    private val viewModel: NotesViewModel by viewModels()
+    private val viewModel: NoteListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNotesBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -59,21 +59,19 @@ class NotesFragment : Fragment(), MenuProvider {
         binding.fabCreateNote.setOnClickListener {
             findNavController().navigate(R.id.action_NotesFragment_to_EditNoteFragment)
         }
+
     }
 
     private fun submitData() {
-        lifecycleScope.launch {
-            viewModel.state.collectLatest {
-                notesAdapter.submitList(it.noteList)
-            }
+        viewModel.state.observeWithLifecycle(this) {
+            notesAdapter.submitList(it.noteList)
         }
-
     }
 
     private fun setUpRecyclerView() {
         recyclerView.apply {
             adapter = notesAdapter
-            viewModel.state.observeWithLifecycle(this@NotesFragment) {
+            viewModel.state.observeWithLifecycle(this@NoteListFragment) {
                 layoutManager = if (it.isLinearLayout) {
                     LinearLayoutManager(requireContext())
                 } else {
@@ -107,11 +105,16 @@ class NotesFragment : Fragment(), MenuProvider {
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.notes_menu, menu)
+        menuInflater.inflate(R.menu.note_list_menu, menu)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
+            R.id.action_settings -> {
+                findNavController().navigate(R.id.action_NotesFragment_to_settingsFragment)
+                true
+            }
+
             R.id.action_about -> {
                 findNavController().navigate(R.id.action_NotesFragment_to_aboutFragment)
                 true

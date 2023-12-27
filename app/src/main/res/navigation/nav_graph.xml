@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/NotesFragment"
-        android:name="com.example.seton.presentation.notes.NotesFragment"
+        android:name="com.example.seton.presentation.note_list.NoteListFragment"
         android:label="@string/notes"
         tools:layout="@layout/fragment_notes">
         <action
@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_NotesFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_NotesFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/EditNoteFragment"
@@ -36,6 +39,15 @@
         android:label="About">
         <action
             android:id="@+id/action_aboutFragment_to_NotesFragment"
+            app:destination="@id/NotesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.seton.presentation.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_NotesFragment"
             app:destination="@id/NotesFragment" />
     </fragment>
 </navigation>

@@ -18,4 +18,6 @@
     <string name="no">No</string>
     <string name="change_layout">Change layout</string>
     <string name="no_notes">Your notes will appear here</string>
+    <string name="app_language">App language</string>
+    <string name="settings">Settings</string>
 </resources>

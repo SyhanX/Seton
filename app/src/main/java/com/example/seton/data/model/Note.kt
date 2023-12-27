@@ -1,4 +1,4 @@
-package com.example.seton.domain.model
+package com.example.seton.data.model
 
 
 import androidx.room.Entity
@@ -11,7 +11,6 @@ data class Note(
     @PrimaryKey
     val id: Int? = null
 )
-
 
 class InvalidNoteException(message: String): Exception(message)
 

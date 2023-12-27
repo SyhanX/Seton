@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.domain.model.InvalidNoteException
-import com.example.seton.domain.model.Note
+import com.example.seton.data.model.InvalidNoteException
+import com.example.seton.data.model.Note
 import com.example.seton.domain.use_case.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +50,7 @@ class EditNoteViewModel @Inject constructor(
     fun onEvent(event: EditNoteEvent) {
         when (event) {
             is EditNoteEvent.EnterTitle -> {
-                _noteTitle.value = noteContent.value.copy(
+                _noteTitle.value = noteTitle.value.copy(
                     text = event.title
                 )
             }

@@ -2,7 +2,7 @@ package com.example.seton.data.datasource
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.seton.domain.model.Note
+import com.example.seton.data.model.Note
 
 @Database(
     entities = [Note::class],

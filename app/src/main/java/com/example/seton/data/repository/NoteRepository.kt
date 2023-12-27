@@ -1,6 +1,6 @@
-package com.example.seton.domain.repository
+package com.example.seton.data.repository
 
-import com.example.seton.domain.model.Note
+import com.example.seton.data.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {

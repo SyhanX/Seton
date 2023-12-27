@@ -1,8 +1,8 @@
 package com.example.seton.domain.use_case
 
-import com.example.seton.domain.model.InvalidNoteException
-import com.example.seton.domain.model.Note
-import com.example.seton.domain.repository.NoteRepository
+import com.example.seton.data.model.InvalidNoteException
+import com.example.seton.data.model.Note
+import com.example.seton.data.repository.NoteRepository
 
 class UpsertNote(
     private val repository: NoteRepository
