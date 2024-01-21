@@ -2,7 +2,6 @@ package com.example.seton.feature_notes.data.repository
 
 import com.example.seton.feature_notes.data.datasource.NoteDao
 import com.example.seton.feature_notes.data.model.Note
-import com.example.seton.feature_notes.data.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryImpl(
