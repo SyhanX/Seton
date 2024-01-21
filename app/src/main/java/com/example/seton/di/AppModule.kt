@@ -2,14 +2,14 @@ package com.example.seton.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.seton.data.datasource.AppDatabase
-import com.example.seton.data.repository.NoteRepositoryImpl
-import com.example.seton.data.repository.NoteRepository
-import com.example.seton.domain.use_case.DeleteNote
-import com.example.seton.domain.use_case.GetAllNotes
-import com.example.seton.domain.use_case.GetNoteById
-import com.example.seton.domain.use_case.NoteUseCases
-import com.example.seton.domain.use_case.UpsertNote
+import com.example.seton.common.data.datasource.AppDatabase
+import com.example.seton.feature_notes.data.repository.NoteRepositoryImpl
+import com.example.seton.feature_notes.data.repository.NoteRepository
+import com.example.seton.feature_notes.domain.use_case.DeleteNote
+import com.example.seton.feature_notes.domain.use_case.GetAllNotes
+import com.example.seton.feature_notes.domain.use_case.GetNoteById
+import com.example.seton.feature_notes.domain.use_case.NoteUseCases
+import com.example.seton.feature_notes.domain.use_case.UpsertNote
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

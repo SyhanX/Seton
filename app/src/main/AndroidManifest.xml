@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".presentation.SetonApplication"
+        android:name=".common.SetonApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Seton"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".common.presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Seton">
             <intent-filter>

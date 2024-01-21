@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".presentation.settings.SettingsFragment">
+    tools:context=".feature_settings.presentation.settings.SettingsFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
