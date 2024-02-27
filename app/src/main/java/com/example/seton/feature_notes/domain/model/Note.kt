@@ -1,4 +1,4 @@
-package com.example.seton.feature_notes.data.model
+package com.example.seton.feature_notes.domain.model
 
 
 import androidx.room.Entity
@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "note_table")
 data class Note(
-    val title: String,
-    val content: String,
     @PrimaryKey
-    val id: Int? = null
+    val noteId: Int? = null,
+    val title: String,
+    val content: String
 )
 
 class InvalidNoteException(message: String): Exception(message)
