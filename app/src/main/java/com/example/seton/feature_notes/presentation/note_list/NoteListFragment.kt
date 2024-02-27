@@ -18,8 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.seton.R
-import com.example.seton.databinding.FragmentNotesBinding
 import com.example.seton.common.domain.util.observeWithLifecycle
+import com.example.seton.common.domain.util.showAlertDialog
+import com.example.seton.databinding.FragmentNotesBinding
 import com.example.seton.feature_notes.presentation.note_list.state.NoteEvent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -122,6 +123,18 @@ class NoteListFragment : Fragment(), MenuProvider {
 
             R.id.action_change_layout -> {
                 changeLayout(menuItem)
+                true
+            }
+
+            R.id.action_delete_notes -> {
+                showAlertDialog(
+                    context = requireContext(),
+                    message = R.string.ask_delete_all_notes,
+                    positiveText = R.string.delete,
+                    negativeText = R.string.cancel
+                ) {
+                    viewModel.onEvent(NoteEvent.DeleteAllNotes)
+                }
                 true
             }
 

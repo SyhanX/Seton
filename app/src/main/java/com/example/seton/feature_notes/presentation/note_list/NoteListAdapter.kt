@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.seton.databinding.NoteCardBinding
-import com.example.seton.feature_notes.presentation.note_list.state.NoteItemState
+import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
 
 class NoteListAdapter :
-    ListAdapter<NoteItemState, NoteListAdapter.NoteStateViewHolder>(NoteListDiffCallback) {
+    ListAdapter<NoteCardState, NoteListAdapter.NoteStateViewHolder>(NoteListDiffCallback) {
 
     inner class NoteStateViewHolder(val binding: NoteCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: NoteItemState) {
+        fun bind(item: NoteCardState) {
             binding.apply {
                 noteTitle.text = item.title
                 noteContent.text = item.content
@@ -49,14 +49,14 @@ class NoteListAdapter :
     override fun getItemViewType(position: Int): Int = position
 }
 
-private object NoteListDiffCallback : DiffUtil.ItemCallback<NoteItemState>() {
-    override fun areItemsTheSame(oldItem: NoteItemState, newItem: NoteItemState): Boolean =
+private object NoteListDiffCallback : DiffUtil.ItemCallback<NoteCardState>() {
+    override fun areItemsTheSame(oldItem: NoteCardState, newItem: NoteCardState): Boolean =
         oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: NoteItemState, newItem: NoteItemState): Boolean =
+    override fun areContentsTheSame(oldItem: NoteCardState, newItem: NoteCardState): Boolean =
         oldItem.hashCode() == newItem.hashCode() && oldItem == newItem
 
-    override fun getChangePayload(oldItem: NoteItemState, newItem: NoteItemState): Any? {
+    override fun getChangePayload(oldItem: NoteCardState, newItem: NoteCardState): Any? {
         return if (oldItem.isChecked != newItem.isChecked) true else null
     }
 }
