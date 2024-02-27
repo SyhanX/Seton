@@ -1,9 +1,9 @@
-package com.example.seton.common.data.datasource
+package com.example.seton.common.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.seton.feature_notes.data.datasource.NoteDao
-import com.example.seton.feature_notes.data.model.Note
+import com.example.seton.feature_notes.domain.model.Note
 
 @Database(
     entities = [Note::class],
