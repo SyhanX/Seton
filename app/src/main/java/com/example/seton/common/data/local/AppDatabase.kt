@@ -2,6 +2,7 @@ package com.example.seton.common.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.seton.feature_notes.data.datasource.NoteDao
 import com.example.seton.feature_notes.domain.model.Note
 
@@ -10,6 +11,7 @@ import com.example.seton.feature_notes.domain.model.Note
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun noteDao(): NoteDao

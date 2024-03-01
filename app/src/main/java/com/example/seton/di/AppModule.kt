@@ -7,9 +7,7 @@ import com.example.seton.feature_notes.data.repository.NoteRepositoryImpl
 import com.example.seton.feature_notes.domain.repository.NoteRepository
 import com.example.seton.feature_notes.domain.use_case.DeleteAllNotes
 import com.example.seton.feature_notes.domain.use_case.DeleteNote
-import com.example.seton.feature_notes.domain.use_case.GetAllImageNotes
 import com.example.seton.feature_notes.domain.use_case.GetAllNotes
-import com.example.seton.feature_notes.domain.use_case.GetImageNoteById
 import com.example.seton.feature_notes.domain.use_case.GetNoteById
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
 import com.example.seton.feature_notes.domain.use_case.UpsertNote
@@ -47,9 +45,7 @@ object AppModule {
             deleteNote = DeleteNote(repository),
             deleteAllNotes = DeleteAllNotes(repository),
             upsertNote = UpsertNote(repository),
-            getNoteById = GetNoteById(repository),
-            getAllImageNotes = GetAllImageNotes(repository),
-            getImageNoteById = GetImageNoteById(repository)
+            getNoteById = GetNoteById(repository)
         )
     }
 }

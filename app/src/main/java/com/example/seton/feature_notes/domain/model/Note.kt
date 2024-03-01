@@ -9,7 +9,8 @@ data class Note(
     @PrimaryKey
     val noteId: Int? = null,
     val title: String,
-    val content: String
+    val content: String,
+    val imageFileName: String? = null
 )
 
 class InvalidNoteException(message: String): Exception(message)

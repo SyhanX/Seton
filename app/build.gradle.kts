@@ -83,4 +83,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
 
+    //coil
+    implementation("io.coil-kt:coil:2.6.0")
 }

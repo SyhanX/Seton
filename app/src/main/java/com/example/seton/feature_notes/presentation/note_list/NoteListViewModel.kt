@@ -46,7 +46,7 @@ class NoteListViewModel @Inject constructor(
 
             }
 
-            NoteEvent.DeleteAllNotes -> {
+            is NoteEvent.DeleteAllNotes -> {
                 viewModelScope.launch {
                     noteUseCases.deleteAllNotes()
                 }

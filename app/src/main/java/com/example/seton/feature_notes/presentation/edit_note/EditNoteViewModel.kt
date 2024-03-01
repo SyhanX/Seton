@@ -1,15 +1,18 @@
 package com.example.seton.feature_notes.presentation.edit_note
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.feature_notes.data.model.InvalidNoteException
-import com.example.seton.feature_notes.data.model.Note
+import com.example.seton.common.domain.util.ImageStorageManager
+import com.example.seton.feature_notes.domain.model.InvalidNoteException
+import com.example.seton.feature_notes.domain.model.Note
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,11 +24,8 @@ class EditNoteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _noteTitle = MutableStateFlow(NoteTextFieldState())
-    val noteTitle: StateFlow<NoteTextFieldState> = _noteTitle
-
-    private val _noteContent = MutableStateFlow(NoteTextFieldState())
-    val noteContent: StateFlow<NoteTextFieldState> = _noteContent
+    private val _noteState = MutableStateFlow(NoteState())
+    val noteState = _noteState.asStateFlow()
 
     private var currentNoteId: Int? = null
 
@@ -34,12 +34,15 @@ class EditNoteViewModel @Inject constructor(
             if (noteId != -1) {
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
-                        currentNoteId = note.id
-                        _noteTitle.value = noteTitle.value.copy(
-                            text = note.title
+                        currentNoteId = note.noteId
+                        _noteState.value = noteState.value.copy(
+                            title = note.title
                         )
-                        _noteContent.value = noteContent.value.copy(
-                            text = note.content
+                        _noteState.value = noteState.value.copy(
+                            content = note.content
+                        )
+                        _noteState.value = noteState.value.copy(
+                            imageFileName = note.imageFileName
                         )
                     }
                 }
@@ -47,47 +50,110 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: EditNoteEvent) {
-        when (event) {
-            is EditNoteEvent.EnterTitle -> {
-                _noteTitle.value = noteTitle.value.copy(
-                    text = event.title
-                )
-            }
+    fun enterTitle(title: String) {
+        _noteState.value = noteState.value.copy(
+            title = title
+        )
+    }
 
-            is EditNoteEvent.EnterContent -> {
-                _noteContent.value = noteContent.value.copy(
-                    text = event.content
-                )
-            }
+    fun enterContent(content: String) {
+        _noteState.value = noteState.value.copy(
+            content = content
+        )
+    }
 
-            is EditNoteEvent.SaveNote -> {
-                viewModelScope.launch {
-                    try {
-                        noteUseCases.upsertNote(
-                            Note(
-                                title = noteTitle.value.text,
-                                content = noteContent.value.text,
-                                id = currentNoteId
-                            )
-                        )
-                    } catch (e: InvalidNoteException) {
-                        Log.d(TAG, "onEvent: Invalid note")
-                    }
-                }
-            }
+    fun insertImage(fileName: String) {
+        _noteState.value = noteState.value.copy(
+            imageFileName = fileName
+        )
+    }
 
-            EditNoteEvent.DeleteNote -> {
-                viewModelScope.launch {
-                    noteUseCases.deleteNote(
+    fun saveNote() {
+        viewModelScope.launch {
+            try {
+                if (noteState.value.imageFileName != null) {
+                    noteUseCases.upsertNote(
                         Note(
-                            title = noteTitle.value.text,
-                            content = noteContent.value.text,
-                            id = currentNoteId
+                            title = noteState.value.title,
+                            content = noteState.value.content,
+                            imageFileName = noteState.value.imageFileName,
+                            noteId = currentNoteId
+                        )
+                    )
+                } else {
+                    noteUseCases.upsertNote(
+                        Note(
+                            title = noteState.value.title,
+                            content = noteState.value.content,
+                            noteId = currentNoteId
                         )
                     )
                 }
+            } catch (e: InvalidNoteException) {
+                Log.e(TAG, "onEvent: Invalid note")
             }
+        }
+    }
+
+    fun deleteNote() {
+        viewModelScope.launch {
+            //TODO
+            noteUseCases.deleteNote(
+                Note(
+                    title = noteState.value.title,
+                    content = noteState.value.content,
+                    noteId = currentNoteId
+                )
+            )
+        }
+    }
+
+    fun saveBitmapToDevice(context: Context, bitmap: Bitmap?, fileName: String) {
+        if (bitmap != null) {
+            ImageStorageManager.saveToInternalStorage(
+                context = context,
+                bitmapImage = bitmap,
+                imageFileName = fileName
+            )
+            Log.i(TAG, "Saved bitmap: $bitmap")
+        } else {
+            Log.e(TAG, "Couldn't save bitmap because its value is NULL")
+        }
+    }
+
+    fun getBitmapFromDevice(context: Context, fileName: String?): Bitmap? {
+        if (fileName != null) {
+            return try {
+                val bitmap = ImageStorageManager.getImageFromInternalStorage(
+                    context = context,
+                    imageFileName = fileName
+                )
+                Log.i(TAG, "Got bitmap successfully: $fileName")
+                bitmap
+            } catch (exception: Exception) {
+                Log.e(TAG, "Couldn't get bitmap $fileName because it doesn't exist.")
+                null
+            }
+        } else {
+            Log.e(TAG, "Couldn't get bitmap because it doesn't exist.")
+            return null
+        }
+    }
+
+    fun deleteBitmapFromDevice(context: Context, fileName: String?) {
+        if (fileName != null) {
+            try {
+                ImageStorageManager.deleteImageFromInternalStorage(
+                    context = context,
+                    imageFileName = fileName
+                )
+                Log.i(TAG, "Deleted bitmap successfully.")
+            } catch (exception: IllegalArgumentException) {
+                Log.e(TAG, "Couldn't delete bitmap $fileName because it doesn't exist.")
+                return
+            }
+        } else {
+            Log.e(TAG, "Couldn't delete bitmap because it doesn't exist.")
         }
     }
 }
