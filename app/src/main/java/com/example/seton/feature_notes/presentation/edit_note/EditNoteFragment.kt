@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -19,18 +18,22 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isGone
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.seton.R
-import com.example.seton.common.domain.util.observeWithLifecycle
 import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.databinding.FragmentEditNoteBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.launch
 
 private const val TAG = "edit_note_fragment"
 
@@ -59,49 +62,67 @@ class EditNoteFragment : Fragment(), MenuProvider {
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
-        viewModel.noteState.observeWithLifecycle(this) {
-            val isContentEmpty = TextUtils.isEmpty(binding.addContent.text)
-            val isTitleEmpty = TextUtils.isEmpty(binding.addTitle.text)
 
-            if (it.imageFileName != null) {
-                val bitmap = viewModel.getBitmapFromDevice(
-                    context = requireContext(),
-                    fileName = it.imageFileName
-                )
-                Log.d(TAG, "bitmap: $bitmap")
-                binding.noteImage.setImageBitmap(bitmap)
-            }
-            if (isTitleEmpty) {
-                binding.addTitle.setText(it.title)
-            }
-            if (isContentEmpty) {
-                binding.addContent.setText(it.content)
-            }
-        }
-        binding.apply {
-            addTitle.doAfterTextChanged {
-                viewModel.enterTitle(it.toString())
-            }
-            addContent.doAfterTextChanged {
-                viewModel.enterContent(it.toString())
-            }
-            addContent.movementMethod = ScrollingMovementMethod()
-            btnSave.setOnClickListener { saveNote() }
-            bottomBar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.action_add_image -> {
-                        pickerMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        true
-                    }
-
-                    R.id.action_add_reminder -> {
-                        true
-                    }
-
-                    else -> false
+        if (args.currentNoteId != -1) {
+            lifecycleScope.launch {
+                viewModel.noteState.takeWhile {
+                    TextUtils.isEmpty(binding.addTitle.text) || TextUtils.isEmpty(binding.addContent.text) || binding.noteImage.isGone
+                }.collectLatest { state ->
+                    restoreState(
+                        title = state.title,
+                        content = state.content,
+                        imageFileName = state.imageFileName
+                    )
                 }
             }
         }
+        binding.addTitle.doAfterTextChanged {
+            viewModel.enterTitle(it.toString())
+        }
+        binding.addContent.apply {
+            movementMethod = ScrollingMovementMethod()
+            doAfterTextChanged {
+                viewModel.enterContent(it.toString())
+            }
+        }
+        binding.btnSave.setOnClickListener {
+            if (pickerBitmap != null) {
+                savePickedImage()
+                saveNote()
+            } else {
+                saveNote()
+            }
+        }
+        binding.bottomBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_add_image -> {
+                    pickerMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    true
+                }
+
+                R.id.action_add_reminder -> {
+                    true
+                }
+
+                else -> false
+            }
+
+        }
+
+    }
+
+    private fun restoreState(title: String, content: String, imageFileName: String?) {
+        viewModel.getBitmapFromDevice(
+            context = requireContext(),
+            fileName = imageFileName
+        )?.let { bitmap ->
+            binding.noteImage.apply {
+                visibility = View.VISIBLE
+                setImageBitmap(bitmap)
+            }
+        }
+        binding.addTitle.setText(title)
+        binding.addContent.setText(content)
     }
 
     private fun saveNote() {
@@ -116,14 +137,13 @@ class EditNoteFragment : Fragment(), MenuProvider {
             ).show()
             return
         }
-        saveImageToDeviceAndDatabase()
         viewModel.saveNote()
         Snackbar.make(binding.root, R.string.note_saved, Snackbar.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
     }
 
-    private fun saveImageToDeviceAndDatabase() {
-        val fileName = "bitmapFrom${binding.addTitle.text.toString()}"
+    private fun savePickedImage() {
+        val fileName = pickerBitmap.toString()
         viewModel.saveBitmapToDevice(
             context = requireContext(),
             bitmap = pickerBitmap,

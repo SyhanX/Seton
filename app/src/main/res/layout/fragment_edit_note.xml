@@ -16,7 +16,7 @@
         android:hint="@string/note_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/note_image">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/add_title"
@@ -38,7 +38,7 @@
         android:hint="@string/note_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_row">
+        app:layout_constraintTop_toBottomOf="@id/note_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/add_content"
@@ -54,22 +54,17 @@
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/image_row"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/note_content"
-        app:layout_constraintTop_toBottomOf="@id/note_title"
-        android:padding="8dp">
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/note_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/note_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_launcher_background" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/note_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            tools:src="@drawable/ic_launcher_background" />
-
-    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
