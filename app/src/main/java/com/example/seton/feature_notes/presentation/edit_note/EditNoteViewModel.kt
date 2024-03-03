@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.common.domain.util.ImageStorageManager
+import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.feature_notes.domain.model.InvalidNoteException
 import com.example.seton.feature_notes.domain.model.Note
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
@@ -120,7 +120,7 @@ class EditNoteViewModel @Inject constructor(
 
     fun saveBitmapToDevice(context: Context, bitmap: Bitmap?, fileName: String) {
         if (bitmap != null) {
-            ImageStorageManager.saveToInternalStorage(
+            StorageManager.saveToInternalStorage(
                 context = context,
                 bitmapImage = bitmap,
                 imageFileName = fileName
@@ -134,7 +134,7 @@ class EditNoteViewModel @Inject constructor(
     fun getBitmapFromDevice(context: Context, fileName: String?): Bitmap? {
         if (fileName != null) {
             return try {
-                val bitmap = ImageStorageManager.getImageFromInternalStorage(
+                val bitmap = StorageManager.getImageFromInternalStorage(
                     context = context,
                     imageFileName = fileName
                 )
@@ -153,7 +153,7 @@ class EditNoteViewModel @Inject constructor(
     fun deleteBitmapFromDevice(context: Context, fileName: String?) {
         if (fileName != null) {
             try {
-                ImageStorageManager.deleteImageFromInternalStorage(
+                StorageManager.deleteImageFromInternalStorage(
                     context = context,
                     imageFileName = fileName
                 )

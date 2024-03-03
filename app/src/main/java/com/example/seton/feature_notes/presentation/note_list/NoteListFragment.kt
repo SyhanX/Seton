@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.seton.R
+import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.common.domain.util.observeWithLifecycle
 import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.databinding.FragmentNotesBinding
@@ -134,6 +135,7 @@ class NoteListFragment : Fragment(), MenuProvider {
                     negativeText = R.string.cancel
                 ) {
                     viewModel.onEvent(NoteEvent.DeleteAllNotes)
+                    StorageManager.deleteEverythingFromAppDirectory(requireContext())
                 }
                 true
             }

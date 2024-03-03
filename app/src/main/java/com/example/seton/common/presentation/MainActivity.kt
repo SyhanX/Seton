@@ -12,6 +12,8 @@ import com.example.seton.R
 import com.example.seton.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "main_activity"
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 

@@ -6,7 +6,8 @@ import android.graphics.BitmapFactory
 import java.io.File
 import java.io.FileInputStream
 
-class ImageStorageManager {
+private const val TAG = "storage_manager"
+class StorageManager {
     companion object {
         fun saveToInternalStorage(
             context: Context,
@@ -26,9 +27,19 @@ class ImageStorageManager {
         }
 
         fun deleteImageFromInternalStorage(context: Context, imageFileName: String): Boolean {
-            val dir = context.filesDir
-            val file = File(dir, imageFileName)
+            val directory = context.filesDir
+            val file = File(directory, imageFileName)
             return file.delete()
         }
+
+        fun deleteEverythingFromAppDirectory(context: Context) {
+            val directory = context.filesDir
+            for (file: File in directory.listFiles()!!) {
+                if(file.name != "profileInstalled") {
+                    file.delete()
+                }
+            }
+        }
+
     }
 }
