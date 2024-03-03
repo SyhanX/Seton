@@ -90,21 +90,31 @@ class EditNoteViewModel @Inject constructor(
                     )
                 }
             } catch (e: InvalidNoteException) {
-                Log.e(TAG, "onEvent: Invalid note")
+                Log.e(TAG, "Error saving note.")
             }
         }
     }
 
     fun deleteNote() {
         viewModelScope.launch {
-            //TODO
-            noteUseCases.deleteNote(
-                Note(
-                    title = noteState.value.title,
-                    content = noteState.value.content,
-                    noteId = currentNoteId
+            if (noteState.value.imageFileName != null) {
+                noteUseCases.deleteNote(
+                    Note(
+                        title = noteState.value.title,
+                        content = noteState.value.content,
+                        imageFileName = noteState.value.imageFileName,
+                        noteId = currentNoteId
+                    )
                 )
-            )
+            } else {
+                noteUseCases.deleteNote(
+                    Note(
+                        title = noteState.value.title,
+                        content = noteState.value.content,
+                        noteId = currentNoteId
+                    )
+                )
+            }
         }
     }
 

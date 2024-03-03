@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.seton.R
+import com.example.seton.common.domain.util.observeWithLifecycle
 import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.databinding.FragmentEditNoteBinding
 import com.google.android.material.snackbar.Snackbar
@@ -46,7 +47,17 @@ class EditNoteFragment : Fragment(), MenuProvider {
     private val args by navArgs<EditNoteFragmentArgs>()
 
     private lateinit var pickerMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    private var pickerBitmap: Bitmap? = null
+    private var pickedBitmap: Bitmap? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pickerMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                pickedBitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
+                binding.noteImage.setImageBitmap(pickedBitmap)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,39 +87,37 @@ class EditNoteFragment : Fragment(), MenuProvider {
                 }
             }
         }
-        binding.addTitle.doAfterTextChanged {
-            viewModel.enterTitle(it.toString())
-        }
-        binding.addContent.apply {
-            movementMethod = ScrollingMovementMethod()
-            doAfterTextChanged {
+        binding.apply {
+            addTitle.doAfterTextChanged {
+                viewModel.enterTitle(it.toString())
+            }
+            addContent.movementMethod = ScrollingMovementMethod()
+            addContent.doAfterTextChanged {
                 viewModel.enterContent(it.toString())
             }
-        }
-        binding.btnSave.setOnClickListener {
-            if (pickerBitmap != null) {
-                savePickedImage()
-                saveNote()
-            } else {
-                saveNote()
+            btnSave.setOnClickListener {
+                if (pickedBitmap != null) {
+                    savePickedImage()
+                    saveNote()
+                } else {
+                    saveNote()
+                }
+            }
+            bottomBar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_add_image -> {
+                        pickerMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        true
+                    }
+
+                    R.id.action_add_reminder -> {
+                        true
+                    }
+
+                    else -> false
+                }
             }
         }
-        binding.bottomBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add_image -> {
-                    pickerMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    true
-                }
-
-                R.id.action_add_reminder -> {
-                    true
-                }
-
-                else -> false
-            }
-
-        }
-
     }
 
     private fun restoreState(title: String, content: String, imageFileName: String?) {
@@ -138,15 +147,38 @@ class EditNoteFragment : Fragment(), MenuProvider {
             return
         }
         viewModel.saveNote()
-        Snackbar.make(binding.root, R.string.note_saved, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(
+            binding.root,
+            R.string.note_saved,
+            Snackbar.LENGTH_SHORT
+        ).show()
         findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
     }
 
+    private fun deleteNote() {
+        showAlertDialog(
+            context = requireContext(),
+            message = R.string.ask_delete_note,
+            title = R.string.confirm_action
+        ) {
+            viewModel.noteState.observeWithLifecycle(this) { state ->
+                state.imageFileName?.let {
+                    viewModel.deleteBitmapFromDevice(
+                        context = requireContext(),
+                        fileName = it
+                    )
+                }
+            }
+            viewModel.deleteNote()
+            findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
+        }
+    }
+
     private fun savePickedImage() {
-        val fileName = pickerBitmap.toString()
+        val fileName = pickedBitmap.toString()
         viewModel.saveBitmapToDevice(
             context = requireContext(),
-            bitmap = pickerBitmap,
+            bitmap = pickedBitmap,
             fileName = fileName
         )
         viewModel.insertImage(fileName)
@@ -160,14 +192,7 @@ class EditNoteFragment : Fragment(), MenuProvider {
             }
 
             R.id.action_delete -> {
-                showAlertDialog(
-                    context = requireContext(),
-                    message = R.string.ask_delete_note,
-                    title = R.string.confirm_action
-                ) {
-                    viewModel.deleteNote()
-                    findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
-                }
+                deleteNote()
                 true
             }
 
@@ -181,16 +206,6 @@ class EditNoteFragment : Fragment(), MenuProvider {
             override fun handleOnBackPressed() = saveNote()
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        pickerMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                pickerBitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
-                binding.noteImage.setImageBitmap(pickerBitmap)
-            }
-        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

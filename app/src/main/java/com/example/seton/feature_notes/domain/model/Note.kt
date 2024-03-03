@@ -16,11 +16,3 @@ data class Note(
 class InvalidNoteException(message: String): Exception(message)
 
 
-/*
-* additional properties that I will never implement
-*
-* val createdAt:
-* val editedAt:
-* val color:
-*/
-
