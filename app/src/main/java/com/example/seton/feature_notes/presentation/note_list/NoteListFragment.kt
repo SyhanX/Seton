@@ -22,13 +22,11 @@ import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.common.domain.util.observeWithLifecycle
 import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.databinding.FragmentNotesBinding
-import com.example.seton.feature_notes.presentation.note_list.state.NoteEvent
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "notesfragment"
+private const val TAG = "NotesFragment"
 @AndroidEntryPoint
 class NoteListFragment : Fragment(), MenuProvider {
-
     private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
 
@@ -65,7 +63,7 @@ class NoteListFragment : Fragment(), MenuProvider {
     }
 
     private fun submitData() {
-        viewModel.state.observeWithLifecycle(this) {
+        viewModel.noteListState.observeWithLifecycle(this) {
             notesAdapter.submitList(it.noteList)
         }
     }
@@ -73,7 +71,7 @@ class NoteListFragment : Fragment(), MenuProvider {
     private fun setUpRecyclerView() {
         recyclerView.apply {
             adapter = notesAdapter
-            viewModel.state.observeWithLifecycle(this@NoteListFragment) {
+            viewModel.noteListState.observeWithLifecycle(this@NoteListFragment) {
                 layoutManager = if (it.isLinearLayout) {
                     LinearLayoutManager(requireContext())
                 } else {
@@ -84,7 +82,7 @@ class NoteListFragment : Fragment(), MenuProvider {
     }
 
     private fun changeListVisibility() {
-        viewModel.state.observeWithLifecycle(this) { listState ->
+        viewModel.noteListState.observeWithLifecycle(this) { listState ->
             if (listState.noteList.isEmpty()) {
                 binding.noteRecycler.visibility = View.GONE
                 binding.emptyListText.visibility = View.VISIBLE
@@ -98,12 +96,12 @@ class NoteListFragment : Fragment(), MenuProvider {
     private fun changeLayout(menuItem: MenuItem?) {
         if (menuItem == null) return
 
-        menuItem.icon = if (viewModel.state.value.isLinearLayout) {
+        menuItem.icon = if (viewModel.noteListState.value.isLinearLayout) {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_view_agenda)
         } else {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_dashboard)
         }
-        viewModel.onEvent(NoteEvent.ChangeLayout)
+        viewModel.changeLayout()
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -134,7 +132,7 @@ class NoteListFragment : Fragment(), MenuProvider {
                     positiveText = R.string.delete,
                     negativeText = R.string.cancel
                 ) {
-                    viewModel.onEvent(NoteEvent.DeleteAllNotes)
+                    viewModel.deleteAllnotes()
                     StorageManager.deleteEverythingFromAppDirectory(requireContext())
                 }
                 true

@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
 import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
-import com.example.seton.feature_notes.presentation.note_list.state.NoteEvent
 import com.example.seton.feature_notes.presentation.note_list.state.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,9 +19,8 @@ class NoteListViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(NoteListState())
-    val state: StateFlow<NoteListState>
-        get() = _state
+    private val _noteListState = MutableStateFlow(NoteListState())
+    val noteListState = _noteListState.asStateFlow()
 
     private var getAllNotesJob: Job? = null
 
@@ -30,38 +28,34 @@ class NoteListViewModel @Inject constructor(
         getAllNotes()
     }
 
-    fun onEvent(event: NoteEvent) {
-        when (event) {
-            is NoteEvent.ChangeLayout -> {
-                _state.value = state.value.copy(
-                    isLinearLayout = !state.value.isLinearLayout
-                )
-            }
-            is NoteEvent.EnableCheckMode -> {
-                _state.value = state.value.copy(
-                    isCheckMode = !state.value.isCheckMode
-                )
-            }
-            is NoteEvent.SelectNote -> {
+    fun changeLayout() {
+        _noteListState.value = noteListState.value.copy(
+            isLinearLayout = !noteListState.value.isLinearLayout
+        )
+    }
 
-            }
-
-            is NoteEvent.DeleteAllNotes -> {
-                viewModelScope.launch {
-                    noteUseCases.deleteAllNotes()
-                }
-            }
+    fun deleteAllnotes() {
+        viewModelScope.launch {
+            noteUseCases.deleteAllNotes()
         }
+    }
+
+    fun enableSelectionMode() {
+        TODO()
+    }
+
+    fun selectNote() {
+        TODO()
     }
 
     private fun getAllNotes() {
         getAllNotesJob?.cancel()
         getAllNotesJob = noteUseCases.getAllNotes()
             .onEach { noteList ->
-                _state.value = state.value.copy(
+                _noteListState.value = noteListState.value.copy(
                     noteList = noteList.map { note ->
                         NoteCardState(
-                            id = note.noteId?: 0,
+                            id = note.noteId ?: 0,
                             isChecked = false,
                             title = note.title,
                             content = note.content,
@@ -75,8 +69,8 @@ class NoteListViewModel @Inject constructor(
     }
 
     private fun onNoteLongClick(id: Int) {
-        _state.value = state.value.copy(
-            noteList = state.value.noteList.map {  noteItemState ->
+        _noteListState.value = noteListState.value.copy(
+            noteList = noteListState.value.noteList.map { noteItemState ->
                 if (id == noteItemState.id) {
                     noteItemState.copy(
                         isChecked = !noteItemState.isChecked

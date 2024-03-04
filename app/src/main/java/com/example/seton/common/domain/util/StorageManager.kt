@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import java.io.File
 import java.io.FileInputStream
 
-private const val TAG = "storage_manager"
 class StorageManager {
     companion object {
         fun saveToInternalStorage(
