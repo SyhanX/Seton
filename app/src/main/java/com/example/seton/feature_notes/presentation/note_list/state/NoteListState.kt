@@ -2,7 +2,7 @@ package com.example.seton.feature_notes.presentation.note_list.state
 
 data class NoteListState(
     val noteList: List<NoteCardState> = emptyList(),
-    val isLinearLayout: Boolean = true,
-    val isSelectionMode: Boolean = false
+    val selectedNoteList: Set<Int> = emptySet(),
+    val isLinearLayout: Boolean = true
 )
 

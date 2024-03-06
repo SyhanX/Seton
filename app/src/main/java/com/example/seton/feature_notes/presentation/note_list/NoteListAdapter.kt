@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.seton.databinding.NoteCardBinding
 import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
 
+private const val TAG = "ListAdapter"
+
 class NoteListAdapter :
     ListAdapter<NoteCardState, NoteListAdapter.NoteStateViewHolder>(NoteListDiffCallback) {
 
@@ -17,8 +19,8 @@ class NoteListAdapter :
 
         fun bind(item: NoteCardState) {
             binding.apply {
-                noteTitle.text = item.title
-                noteContent.text = item.content
+                cardTitle.text = item.title
+                cardContent.text = item.content
                 noteCard.isChecked = item.isChecked
             }
         }
@@ -34,16 +36,17 @@ class NoteListAdapter :
         holder.bind(item)
 
         holder.binding.noteCard.setOnClickListener {
-            val action =
-                NoteListFragmentDirections.actionNotesFragmentToEditNoteFragment(item.id)
-            holder.itemView.findNavController().navigate(action)
+            item.onClick(item.id) {
+                val direction =
+                    NoteListFragmentDirections.actionNotesFragmentToEditNoteFragment(item.id)
+                holder.itemView.findNavController().navigate(direction)
+            }
         }
 
         holder.binding.noteCard.setOnLongClickListener {
             item.onLongClick(item.id)
             true
         }
-
     }
 
     override fun getItemViewType(position: Int): Int = position
@@ -56,7 +59,6 @@ private object NoteListDiffCallback : DiffUtil.ItemCallback<NoteCardState>() {
     override fun areContentsTheSame(oldItem: NoteCardState, newItem: NoteCardState): Boolean =
         oldItem.hashCode() == newItem.hashCode() && oldItem == newItem
 
-    override fun getChangePayload(oldItem: NoteCardState, newItem: NoteCardState): Any? {
-        return if (oldItem.isChecked != newItem.isChecked) true else null
-    }
+    override fun getChangePayload(oldItem: NoteCardState, newItem: NoteCardState): Any? =
+        if (oldItem.isChecked != newItem.isChecked) true else null
 }

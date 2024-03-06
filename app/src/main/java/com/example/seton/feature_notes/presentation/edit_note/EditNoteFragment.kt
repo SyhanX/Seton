@@ -77,7 +77,7 @@ class EditNoteFragment : Fragment(), MenuProvider {
         if (args.currentNoteId != -1) {
             lifecycleScope.launch {
                 viewModel.noteState.takeWhile {
-                    TextUtils.isEmpty(binding.addTitle.text) || TextUtils.isEmpty(binding.addContent.text) || binding.noteImage.isGone
+                    TextUtils.isEmpty(binding.etTitle.text) || TextUtils.isEmpty(binding.etContent.text) || binding.noteImage.isGone
                 }.collectLatest { state ->
                     restoreState(
                         title = state.title,
@@ -88,11 +88,11 @@ class EditNoteFragment : Fragment(), MenuProvider {
             }
         }
         binding.apply {
-            addTitle.doAfterTextChanged {
+            etTitle.doAfterTextChanged {
                 viewModel.enterTitle(it.toString())
             }
-            addContent.movementMethod = ScrollingMovementMethod()
-            addContent.doAfterTextChanged {
+            etContent.movementMethod = ScrollingMovementMethod()
+            etContent.doAfterTextChanged {
                 viewModel.enterContent(it.toString())
             }
             btnSave.setOnClickListener {
@@ -111,6 +111,11 @@ class EditNoteFragment : Fragment(), MenuProvider {
                     }
 
                     R.id.action_add_reminder -> {
+                        Snackbar.make(
+                            binding.root,
+                            "Work in progress",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                         true
                     }
 
@@ -130,13 +135,13 @@ class EditNoteFragment : Fragment(), MenuProvider {
                 setImageBitmap(bitmap)
             }
         }
-        binding.addTitle.setText(title)
-        binding.addContent.setText(content)
+        binding.etTitle.setText(title)
+        binding.etContent.setText(content)
     }
 
     private fun saveNote() {
-        val isTitleEmpty = TextUtils.isEmpty(binding.addTitle.text)
-        val isContentEmpty = TextUtils.isEmpty(binding.addContent.text)
+        val isTitleEmpty = TextUtils.isEmpty(binding.etTitle.text)
+        val isContentEmpty = TextUtils.isEmpty(binding.etContent.text)
 
         if (isTitleEmpty || isContentEmpty) {
             Snackbar.make(

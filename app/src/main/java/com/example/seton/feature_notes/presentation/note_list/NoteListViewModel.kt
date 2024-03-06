@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "NoteListVM"
+
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases
@@ -23,6 +25,8 @@ class NoteListViewModel @Inject constructor(
     val noteListState = _noteListState.asStateFlow()
 
     private var getAllNotesJob: Job? = null
+
+    private val selectedNotesList = mutableSetOf<Int>()
 
     init {
         getAllNotes()
@@ -34,18 +38,42 @@ class NoteListViewModel @Inject constructor(
         )
     }
 
-    fun deleteAllnotes() {
+    fun deleteAllNotes() {
         viewModelScope.launch {
             noteUseCases.deleteAllNotes()
         }
     }
 
-    fun enableSelectionMode() {
-        TODO()
+    fun uncheckAllNotes() {
+        selectedNotesList.clear()
+        _noteListState.value = noteListState.value.copy(
+            noteList = noteListState.value.noteList.map { cardState ->
+                cardState.copy(isChecked = false)
+            },
+            selectedNoteList = selectedNotesList
+        )
     }
 
-    fun selectNote() {
-        TODO()
+    private fun checkOrUncheckNote(noteId: Int) {
+        _noteListState.value = noteListState.value.copy(
+            noteList = noteListState.value.noteList.map { cardState ->
+                if (noteId == cardState.id) {
+                    cardState.copy(isChecked = !cardState.isChecked).also {
+                        if (it.isChecked) {
+                            selectedNotesList.add(it.id)
+                        } else {
+                            selectedNotesList.remove(it.id)
+                        }
+                    }
+                } else cardState
+            },
+            selectedNoteList = selectedNotesList
+        )
+    }
+
+
+    private fun onLongNoteClick(noteId: Int) {
+        checkOrUncheckNote(noteId)
     }
 
     private fun getAllNotes() {
@@ -59,26 +87,19 @@ class NoteListViewModel @Inject constructor(
                             isChecked = false,
                             title = note.title,
                             content = note.content,
-                            onLongClick = { noteId ->
-                                onNoteLongClick(noteId)
+                            onClick = { id, customAction ->
+                                if (selectedNotesList.isNotEmpty()) {
+                                    checkOrUncheckNote(id)
+                                } else {
+                                    customAction()
+                                }
+                            },
+                            onLongClick = { id ->
+                                onLongNoteClick(id)
                             }
                         )
                     }
                 )
             }.launchIn(viewModelScope)
-    }
-
-    private fun onNoteLongClick(id: Int) {
-        _noteListState.value = noteListState.value.copy(
-            noteList = noteListState.value.noteList.map { noteItemState ->
-                if (id == noteItemState.id) {
-                    noteItemState.copy(
-                        isChecked = !noteItemState.isChecked
-                    )
-                } else {
-                    noteItemState
-                }
-            }
-        )
     }
 }
