@@ -35,34 +35,27 @@ class EditNoteViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
                         currentNoteId = note.noteId
-                        _noteState.value = noteState.value.copy(
-                            title = note.title
-                        )
-                        _noteState.value = noteState.value.copy(
-                            content = note.content
-                        )
-                        _noteState.value = noteState.value.copy(
-                            imageFileName = note.imageFileName
-                        )
+                        saveTitleToState(note.title)
+                        saveContentToState(note.content)
+                        saveImageToState(note.imageFileName)
                     }
                 }
             }
         }
     }
-
-    fun enterTitle(title: String) {
+    fun saveTitleToState(title: String) {
         _noteState.value = noteState.value.copy(
             title = title
         )
     }
 
-    fun enterContent(content: String) {
+    fun saveContentToState(content: String) {
         _noteState.value = noteState.value.copy(
             content = content
         )
     }
 
-    fun insertImage(fileName: String) {
+    fun saveImageToState(fileName: String?) {
         _noteState.value = noteState.value.copy(
             imageFileName = fileName
         )

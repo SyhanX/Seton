@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -18,8 +19,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.isGone
-import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -32,8 +32,8 @@ import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.databinding.FragmentEditNoteBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 
 private const val TAG = "edit_note_fragment"
@@ -74,58 +74,75 @@ class EditNoteFragment : Fragment(), MenuProvider {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        if (args.currentNoteId != -1) {
-            lifecycleScope.launch {
-                viewModel.noteState.takeWhile {
-                    TextUtils.isEmpty(binding.etTitle.text) || TextUtils.isEmpty(binding.etContent.text) || binding.noteImage.isGone
-                }.collectLatest { state ->
-                    restoreState(
-                        title = state.title,
-                        content = state.content,
-                        imageFileName = state.imageFileName
-                    )
-                }
+        getVMState()
+        onInitView()
+
+    }
+
+    private fun onInitView() {
+        binding.etTitle.doOnTextChanged { text, _, _, _ ->
+            viewModel.saveTitleToState(text.toString())
+        }
+        binding.etContent.apply {
+            doOnTextChanged { text, _, _, _ ->
+                viewModel.saveContentToState(text.toString())
+            }
+            movementMethod = ScrollingMovementMethod()
+        }
+        binding.btnSave.setOnClickListener {
+            if (pickedBitmap != null) {
+                savePickedImage()
+                saveNote()
+            } else {
+                saveNote()
             }
         }
-        binding.apply {
-            etTitle.doAfterTextChanged {
-                viewModel.enterTitle(it.toString())
-            }
-            etContent.movementMethod = ScrollingMovementMethod()
-            etContent.doAfterTextChanged {
-                viewModel.enterContent(it.toString())
-            }
-            btnSave.setOnClickListener {
-                if (pickedBitmap != null) {
-                    savePickedImage()
-                    saveNote()
-                } else {
-                    saveNote()
+        binding.bottomBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_add_image -> {
+                    pickerMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    true
                 }
+
+                R.id.action_add_reminder -> {
+                    Snackbar.make(
+                        binding.root,
+                        "Work in progress",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+
+                else -> false
             }
-            bottomBar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.action_add_image -> {
-                        pickerMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        true
-                    }
+        }
+    }
 
-                    R.id.action_add_reminder -> {
-                        Snackbar.make(
-                            binding.root,
-                            "Work in progress",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                        true
+    //Call restoreState() only when state isn't empty and cancel the coroutine
+    private fun getVMState() {
+        if (args.currentNoteId != -1) {
+            lifecycleScope.launch {
+                viewModel.noteState.collectLatest { state ->
+                    if (state.title.isNotBlank() && state.content.isNotBlank()) {
+                        restoreState(
+                            title = state.title,
+                            content = state.content,
+                            imageFileName = state.imageFileName.toString()
+                        )
+                        cancel()
                     }
-
-                    else -> false
                 }
             }
         }
     }
 
-    private fun restoreState(title: String, content: String, imageFileName: String?) {
+    private fun restoreState(
+        title: String,
+        content: String,
+        imageFileName: String
+    ) {
+        binding.etTitle.setText(title)
+        binding.etContent.setText(content)
         viewModel.getBitmapFromDevice(
             context = requireContext(),
             fileName = imageFileName
@@ -135,8 +152,7 @@ class EditNoteFragment : Fragment(), MenuProvider {
                 setImageBitmap(bitmap)
             }
         }
-        binding.etTitle.setText(title)
-        binding.etContent.setText(content)
+        Log.d(TAG, "State restored")
     }
 
     private fun saveNote() {
@@ -186,7 +202,7 @@ class EditNoteFragment : Fragment(), MenuProvider {
             bitmap = pickedBitmap,
             fileName = fileName
         )
-        viewModel.insertImage(fileName)
+        viewModel.saveImageToState(fileName)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

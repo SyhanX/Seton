@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -25,7 +24,6 @@ import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.common.domain.util.observeWithLifecycle
 import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.databinding.FragmentNotesBinding
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "NotesFragment"
@@ -59,7 +57,6 @@ class NoteListFragment : Fragment(), MenuProvider {
         recyclerView = binding.noteRecycler
 
         setUpRecyclerView()
-//        manageGestures()
         submitData()
         changeListVisibility()
 
@@ -67,40 +64,6 @@ class NoteListFragment : Fragment(), MenuProvider {
             findNavController().navigate(R.id.action_NotesFragment_to_EditNoteFragment)
         }
 
-    }
-
-    private fun manageGestures() {
-        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                when (direction) {
-                    ItemTouchHelper.LEFT -> {
-                        showAlertDialog(
-                            context = requireContext(),
-                            title = R.string.yes,
-                            message = R.string.no
-                        ) {
-                            Snackbar.make(
-                                binding.root,
-                                "Work in progress",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
-        }
-
-        ItemTouchHelper(itemTouchHelper).apply {
-            attachToRecyclerView(recyclerView)
-        }
     }
 
     private fun submitData() {
