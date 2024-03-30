@@ -31,6 +31,7 @@
     <string name="delete_all_notes">Delete all notes</string>
     <string name="ask_delete_all_notes">Delete all notes? This action cannot be undone.</string>
     <string name="selected_items_count">%1$d selected</string>
+    <string name="select_all">Select all</string>
     <string name="delete_notes">Delete notes</string>
     <string name="ask_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
     <!-- Edit note fragment -->

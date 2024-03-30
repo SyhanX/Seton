@@ -1,5 +1,6 @@
 package com.example.seton.feature_notes.presentation.note_list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
@@ -44,6 +45,14 @@ class NoteListViewModel @Inject constructor(
         }
     }
 
+    fun checkAllNotes() {
+        _noteListState.value.noteList.forEach {
+            if (!it.isChecked) {
+                checkOrUncheckNote(it.id)
+            }
+        }
+    }
+
     fun uncheckAllNotes() {
         selectedNotesList.clear()
         _noteListState.value = noteListState.value.copy(
@@ -52,6 +61,7 @@ class NoteListViewModel @Inject constructor(
             },
             selectedNoteList = selectedNotesList
         )
+        Log.d(TAG, "SELECTED NOTES: $selectedNotesList")
     }
 
     private fun checkOrUncheckNote(noteId: Int) {
@@ -69,6 +79,7 @@ class NoteListViewModel @Inject constructor(
             },
             selectedNoteList = selectedNotesList
         )
+        Log.d(TAG, "SELECTED NOTES: $selectedNotesList")
     }
 
 

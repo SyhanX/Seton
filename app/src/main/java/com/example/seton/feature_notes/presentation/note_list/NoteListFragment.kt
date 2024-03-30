@@ -69,18 +69,37 @@ class NoteListFragment : Fragment(), MenuProvider {
     }
 
     private fun toggleSelectionMode() {
+        val defaultToolbar =
+            requireActivity().findViewById<MaterialToolbar>(R.id.default_toolbar)
+        val selectionToolbar =
+            requireActivity().findViewById<MaterialToolbar>(R.id.selection_mode_toolbar)
+
+        selectionToolbar.setNavigationOnClickListener {
+            viewModel.uncheckAllNotes()
+        }
+
         viewModel.noteListState.observeWithLifecycle(this) { state ->
-            val defaultToolbar =
-                requireActivity().findViewById<MaterialToolbar>(R.id.default_toolbar)
-            val selectionToolbar =
-                requireActivity().findViewById<MaterialToolbar>(R.id.selection_mode_toolbar)
-
-            selectionToolbar.setNavigationOnClickListener {
-                viewModel.uncheckAllNotes()
+            val areListsEqualSize = state.noteList.size == state.selectedNoteList.size
+            selectionToolbar.menu.findItem(R.id.action_select_all).also {
+                if (!areListsEqualSize) {
+                    it.isChecked = false
+                    it.setIcon(R.drawable.ic_checkbox_empty)
+                } else {
+                    it.isChecked = true
+                    it.setIcon(R.drawable.ic_checkbox_filled)
+                }
             }
-
             selectionToolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
+                    R.id.action_select_all -> {
+                        if (it.isChecked) {
+                            viewModel.uncheckAllNotes()
+                        } else {
+                            viewModel.checkAllNotes()
+                        }
+                        true
+                    }
+
                     R.id.action_delete_selected -> {
                         showAlertDialog(
                             context = requireContext(),
