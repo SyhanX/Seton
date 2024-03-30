@@ -74,7 +74,7 @@
                 android:maxWidth="300dp"
                 android:maxHeight="500dp"
                 android:visibility="gone"
-                app:shapeAppearance="@style/roundedCornersImage"
+                app:shapeAppearance="@style/roundedCornersImageStyle"
                 tools:src="@drawable/ic_launcher_background" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -91,7 +91,7 @@
             android:layout_gravity="bottom"
             android:backgroundTint="?attr/colorSecondaryContainer"
             app:fabAnchorMode="cradle"
-            app:menu="@menu/note_list_bottom_menu" />
+            app:menu="@menu/edit_note_bottom_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_save"

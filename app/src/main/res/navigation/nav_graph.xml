@@ -9,7 +9,7 @@
         android:id="@+id/NotesFragment"
         android:name="com.example.seton.feature_notes.presentation.note_list.NoteListFragment"
         android:label="@string/notes"
-        tools:layout="@layout/fragment_notes">
+        tools:layout="@layout/fragment_note_list">
         <action
             android:id="@+id/action_NotesFragment_to_EditNoteFragment"
             app:destination="@id/EditNoteFragment" />

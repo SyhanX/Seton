@@ -25,11 +25,14 @@
     <string name="dark_theme">Dark</string>
     <string name="system_theme">System theme</string>
     <string name="use_dynamic_color">Use dynamic color</string>
-    <!-- Notes fragment -->
+    <!-- Note List fragment -->
     <string name="notes">Notes</string>
     <string name="no_notes">Your notes appear here</string>
     <string name="delete_all_notes">Delete all notes</string>
     <string name="ask_delete_all_notes">Delete all notes? This action cannot be undone.</string>
+    <string name="selected_items_count">%1$d selected</string>
+    <string name="delete_notes">Delete notes</string>
+    <string name="ask_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
     <!-- Edit note fragment -->
     <string name="note_title">Title</string>
     <string name="note_content">Note</string>

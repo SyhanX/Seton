@@ -23,14 +23,15 @@ import com.example.seton.R
 import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.common.domain.util.observeWithLifecycle
 import com.example.seton.common.domain.util.showAlertDialog
-import com.example.seton.databinding.FragmentNotesBinding
+import com.example.seton.databinding.FragmentNoteListBinding
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "NotesFragment"
 
 @AndroidEntryPoint
 class NoteListFragment : Fragment(), MenuProvider {
-    private var _binding: FragmentNotesBinding? = null
+    private var _binding: FragmentNoteListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
@@ -42,7 +43,7 @@ class NoteListFragment : Fragment(), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNotesBinding.inflate(inflater, container, false)
+        _binding = FragmentNoteListBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -59,11 +60,57 @@ class NoteListFragment : Fragment(), MenuProvider {
         setUpRecyclerView()
         submitData()
         changeListVisibility()
+        toggleSelectionMode()
 
         binding.fabCreateNote.setOnClickListener {
             findNavController().navigate(R.id.action_NotesFragment_to_EditNoteFragment)
         }
 
+    }
+
+    private fun toggleSelectionMode() {
+        viewModel.noteListState.observeWithLifecycle(this) { state ->
+            val defaultToolbar =
+                requireActivity().findViewById<MaterialToolbar>(R.id.default_toolbar)
+            val selectionToolbar =
+                requireActivity().findViewById<MaterialToolbar>(R.id.selection_mode_toolbar)
+
+            selectionToolbar.setNavigationOnClickListener {
+                viewModel.uncheckAllNotes()
+            }
+
+            selectionToolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_delete_selected -> {
+                        showAlertDialog(
+                            context = requireContext(),
+                            message = R.string.ask_delete_selected_notes,
+                            title = R.string.delete_notes,
+                            positiveText = R.string.delete,
+                            negativeText = R.string.cancel
+                        ) {
+                            state.selectedNoteList.forEach { noteId ->
+                                viewModel.deleteNoteById(noteId)
+                            }
+                            viewModel.uncheckAllNotes()
+                        }
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+            if (state.selectedNoteList.isNotEmpty()) {
+                defaultToolbar.visibility = View.INVISIBLE
+                selectionToolbar.visibility = View.VISIBLE
+                selectionToolbar.title =
+                    getString(R.string.selected_items_count, state.selectedNoteList.size)
+            } else {
+                defaultToolbar.visibility = View.VISIBLE
+                selectionToolbar.visibility = View.INVISIBLE
+            }
+        }
     }
 
     private fun submitData() {

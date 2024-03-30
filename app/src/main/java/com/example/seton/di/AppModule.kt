@@ -7,6 +7,7 @@ import com.example.seton.feature_notes.data.repository.NoteRepositoryImpl
 import com.example.seton.feature_notes.domain.repository.NoteRepository
 import com.example.seton.feature_notes.domain.use_case.DeleteAllNotes
 import com.example.seton.feature_notes.domain.use_case.DeleteNote
+import com.example.seton.feature_notes.domain.use_case.DeleteNoteById
 import com.example.seton.feature_notes.domain.use_case.GetAllNotes
 import com.example.seton.feature_notes.domain.use_case.GetNoteById
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
@@ -45,7 +46,8 @@ object AppModule {
             deleteNote = DeleteNote(repository),
             deleteAllNotes = DeleteAllNotes(repository),
             upsertNote = UpsertNote(repository),
-            getNoteById = GetNoteById(repository)
+            getNoteById = GetNoteById(repository),
+            deleteNoteById = DeleteNoteById(repository)
         )
     }
 }

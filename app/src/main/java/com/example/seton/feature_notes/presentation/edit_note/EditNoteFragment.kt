@@ -75,11 +75,11 @@ class EditNoteFragment : Fragment(), MenuProvider {
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         getVMState()
-        onInitView()
+        manageViewBinding()
 
     }
 
-    private fun onInitView() {
+    private fun manageViewBinding() {
         binding.etTitle.doOnTextChanged { text, _, _, _ ->
             viewModel.saveTitleToState(text.toString())
         }

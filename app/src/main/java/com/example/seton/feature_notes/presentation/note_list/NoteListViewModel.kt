@@ -102,4 +102,10 @@ class NoteListViewModel @Inject constructor(
                 )
             }.launchIn(viewModelScope)
     }
+
+    fun deleteNoteById(id: Int) {
+        viewModelScope.launch {
+            noteUseCases.deleteNoteById(id)
+        }
+    }
 }
