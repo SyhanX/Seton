@@ -32,7 +32,7 @@ class NoteListAdapter :
     }
 
     override fun onBindViewHolder(holder: NoteStateViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = currentList[position]
         holder.bind(item)
 
         holder.binding.noteCard.setOnClickListener {
@@ -50,6 +50,7 @@ class NoteListAdapter :
     }
 
     override fun getItemViewType(position: Int): Int = position
+
 }
 
 private object NoteListDiffCallback : DiffUtil.ItemCallback<NoteCardState>() {

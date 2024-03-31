@@ -35,79 +35,54 @@ class EditNoteViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
                         currentNoteId = note.noteId
-                        saveTitleToState(note.title)
-                        saveContentToState(note.content)
-                        saveImageToState(note.imageFileName)
+                        _noteState.value = noteState.value.copy(
+                            title = note.title,
+                            content = note.content,
+                            imageFileName = note.imageFileName
+                        )
                     }
                 }
             }
         }
     }
-    fun saveTitleToState(title: String) {
-        _noteState.value = noteState.value.copy(
-            title = title
-        )
-    }
 
-    fun saveContentToState(content: String) {
-        _noteState.value = noteState.value.copy(
-            content = content
-        )
-    }
-
-    fun saveImageToState(fileName: String?) {
-        _noteState.value = noteState.value.copy(
-            imageFileName = fileName
-        )
-    }
-
-    fun saveNote() {
+    fun saveNote(
+        title: String,
+        content: String,
+        imageFileName: String?
+    ) {
         viewModelScope.launch {
             try {
-                if (noteState.value.imageFileName != null) {
-                    noteUseCases.upsertNote(
-                        Note(
-                            title = noteState.value.title,
-                            content = noteState.value.content,
-                            imageFileName = noteState.value.imageFileName,
-                            noteId = currentNoteId
-                        )
+                noteUseCases.upsertNote(
+                    Note(
+                        title = title,
+                        content = content,
+                        imageFileName = imageFileName ?: _noteState.value.imageFileName,
+                        noteId = currentNoteId
                     )
-                } else {
-                    noteUseCases.upsertNote(
-                        Note(
-                            title = noteState.value.title,
-                            content = noteState.value.content,
-                            noteId = currentNoteId
-                        )
-                    )
-                }
+                )
             } catch (e: InvalidNoteException) {
                 Log.e(TAG, "Error saving note.")
             }
         }
     }
 
+    fun deleteNoteById(id: Int) {
+        viewModelScope.launch {
+            noteUseCases.deleteNoteById(id)
+        }
+    }
+
     fun deleteNote() {
         viewModelScope.launch {
-            if (noteState.value.imageFileName != null) {
-                noteUseCases.deleteNote(
-                    Note(
-                        title = noteState.value.title,
-                        content = noteState.value.content,
-                        imageFileName = noteState.value.imageFileName,
-                        noteId = currentNoteId
-                    )
+            noteUseCases.deleteNote(
+                Note(
+                    title = noteState.value.title,
+                    content = noteState.value.content,
+                    imageFileName = noteState.value.imageFileName,
+                    noteId = currentNoteId
                 )
-            } else {
-                noteUseCases.deleteNote(
-                    Note(
-                        title = noteState.value.title,
-                        content = noteState.value.content,
-                        noteId = currentNoteId
-                    )
-                )
-            }
+            )
         }
     }
 
@@ -125,21 +100,20 @@ class EditNoteViewModel @Inject constructor(
     }
 
     fun getBitmapFromDevice(context: Context, fileName: String?): Bitmap? {
-        if (fileName != null) {
-            return try {
-                val bitmap = StorageManager.getImageFromInternalStorage(
+        return if (fileName != null) {
+            try {
+                Log.i(TAG, "Got bitmap successfully: $fileName")
+                StorageManager.getImageFromInternalStorage(
                     context = context,
                     imageFileName = fileName
                 )
-                Log.i(TAG, "Got bitmap successfully: $fileName")
-                bitmap
             } catch (exception: Exception) {
                 Log.e(TAG, "Couldn't get bitmap $fileName because it doesn't exist.")
                 null
             }
         } else {
             Log.e(TAG, "Couldn't get bitmap because it doesn't exist.")
-            return null
+            null
         }
     }
 
