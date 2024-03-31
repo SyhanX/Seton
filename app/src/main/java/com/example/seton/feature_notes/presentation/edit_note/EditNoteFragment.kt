@@ -191,11 +191,6 @@ class EditNoteFragment : Fragment(), MenuProvider {
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
-            android.R.id.home -> {
-                saveNote()
-                true
-            }
-
             R.id.action_delete -> {
                 deleteNote()
                 true
