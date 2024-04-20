@@ -36,4 +36,20 @@
         <item name="contentPadding">8dp</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
+    <style name="editTextTitle" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="fontFamily">@font/nunito_semibold</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="maxLines">1</item>
+    </style>
+
+    <style name="editTextContent" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:background">@drawable/edit_text_background</item>
+        <item name="fontFamily">@font/nunito_regular</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:inputType">textMultiLine</item>
+    </style>
 </resources>
