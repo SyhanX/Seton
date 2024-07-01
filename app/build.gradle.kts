@@ -55,6 +55,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.media3:media3-test-utils:1.3.1")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
     testImplementation("junit:junit:4.13.2")
 
     androidTestImplementation("androidx.test:runner:1.6.1")
