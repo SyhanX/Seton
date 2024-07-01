@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Seton</string>
-    <string name="app_description_1">(Formerly known as YANA)</string>
-    <string name="app_description_2">A simple app for taking notes and whatnot</string>
+    <string name="app_name" translatable="false">Seton</string>
+    <string name="app_description_1" translatable="false">(Formerly known as YANA)</string>
+    <string name="app_description_2" translatable="false">A simple app for taking notes and whatnot</string>
     <!-- Navigation destinations -->
     <string name="fragment_notes">Notes</string>
     <string name="fragment_about">About</string>
