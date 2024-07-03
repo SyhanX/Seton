@@ -15,7 +15,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -63,7 +62,7 @@ class NoteListFragment : Fragment(), MenuProvider {
         toggleSelectionMode()
 
         binding.fabCreateNote.setOnClickListener {
-            findNavController().navigate(R.id.action_NotesFragment_to_EditNoteFragment)
+//            findNavController().navigate(R.id.action_NotesFragment_to_EditNoteFragment)
         }
 
     }
@@ -181,12 +180,12 @@ class NoteListFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.action_settings -> {
-                findNavController().navigate(R.id.action_NotesFragment_to_settingsFragment)
+//                findNavController().navigate(R.id.action_NotesFragment_to_settingsFragment)
                 true
             }
 
             R.id.action_about -> {
-                findNavController().navigate(R.id.action_NotesFragment_to_aboutFragment)
+//                findNavController().navigate(R.id.action_NotesFragment_to_aboutFragment)
                 true
             }
 

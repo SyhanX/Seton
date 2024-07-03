@@ -1,5 +1,6 @@
 package com.example.seton.feature_notes.presentation.edit_note
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -8,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,12 +18,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.seton.R
 
+private const val TAG = "edit_note_screen"
+
 @Composable
 fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit
 ) {
-    EditNoteContent(onNavigateBack) {
+    val note = viewModel.noteState.collectAsState()
+    Log.d(TAG, "EditNoteScreen: $note")
+    EditNoteContent(
+        title = note.value.title,
+        content = note.value.content,
+        onNavigateBack = onNavigateBack
+    ) {
         viewModel.saveNote(
             title = it.title,
             content = it.content,
@@ -32,11 +42,18 @@ fun EditNoteScreen(
 
 @Composable
 private fun EditNoteContent(
+    title: String,
+    content: String,
     onNavigateBack: () -> Unit,
     onFabCLick: (NoteState) -> Unit
 ) {
-    val title = remember { mutableStateOf("") }
-    val content = remember { mutableStateOf("") }
+    val titleState = remember { mutableStateOf("") }
+    val contentState = remember { mutableStateOf("") }
+    if (title.isNotBlank() && content.isNotBlank()) {
+        titleState.value = title
+        contentState.value = content
+    }
+    Log.d(TAG, "EditNoteContent: ${titleState.value} \n ${contentState.value}")
 
     Scaffold(
         topBar = {
@@ -49,8 +66,8 @@ private fun EditNoteContent(
                 onClick = {
                     onFabCLick(
                         NoteState(
-                            title.value,
-                            content.value
+                            titleState.value,
+                            contentState.value
                         )
                     )
                     onNavigateBack()
@@ -68,13 +85,13 @@ private fun EditNoteContent(
                 .padding(padding)
         ) {
             TextField(
-                value = title.value,
-                onValueChange = { title.value = it }
+                value = titleState.value,
+                onValueChange = { titleState.value = it }
             )
 
             TextField(
-                value = content.value,
-                onValueChange = { content.value = it }
+                value = contentState.value,
+                onValueChange = { contentState.value = it }
             )
         }
     }

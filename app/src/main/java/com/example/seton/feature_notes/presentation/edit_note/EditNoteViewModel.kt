@@ -31,6 +31,7 @@ class EditNoteViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<Int>("currentNoteId")?.let { noteId ->
+            Log.d(TAG, "vm id: $noteId ")
             if (noteId != -1) {
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->

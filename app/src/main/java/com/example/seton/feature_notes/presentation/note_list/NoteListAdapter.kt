@@ -2,7 +2,6 @@ package com.example.seton.feature_notes.presentation.note_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -37,9 +36,9 @@ class NoteListAdapter :
 
         holder.binding.noteCard.setOnClickListener {
             item.onClick(item.id) {
-                val direction =
-                    NoteListFragmentDirections.actionNotesFragmentToEditNoteFragment(item.id)
-                holder.itemView.findNavController().navigate(direction)
+//                val direction =
+//                    NoteListFragmentDirections.actionNotesFragmentToEditNoteFragment(item.id)
+//                holder.itemView.findNavController().navigate(direction)
             }
         }
 

@@ -21,7 +21,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.seton.R
 import com.example.seton.common.domain.util.observeWithLifecycle
@@ -159,7 +158,7 @@ class EditNoteFragment : Fragment(), MenuProvider {
                 )
             }
         }
-        findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
+//        findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
     }
 
     private fun savePickedImageToDevice() {
@@ -185,7 +184,7 @@ class EditNoteFragment : Fragment(), MenuProvider {
                 }
             }
             viewModel.deleteNoteById(args.currentNoteId)
-            findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
+//            findNavController().navigate(R.id.action_EditNoteFragment_to_NotesFragment)
         }
     }
 
