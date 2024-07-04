@@ -1,11 +1,13 @@
 package com.example.seton.feature_notes.presentation.edit_note
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,7 +28,6 @@ fun EditNoteScreen(
     onNavigateBack: () -> Unit
 ) {
     val note = viewModel.noteState.collectAsState()
-    Log.d(TAG, "EditNoteScreen: $note")
     EditNoteContent(
         title = note.value.title,
         content = note.value.content,
@@ -53,12 +54,19 @@ private fun EditNoteContent(
         titleState.value = title
         contentState.value = content
     }
-    Log.d(TAG, "EditNoteContent: ${titleState.value} \n ${contentState.value}")
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { /*TODO*/ }
+                title = { /*TODO*/ },
+                navigationIcon = {
+                    IconButton(onClick = { onNavigateBack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                },
             )
         },
         floatingActionButton = {

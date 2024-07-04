@@ -1,6 +1,5 @@
 package com.example.seton.feature_notes.presentation.note_list
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -9,9 +8,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,9 +45,8 @@ fun NoteListScreen(
 ) {
     val notes = viewModel.noteListState.collectAsState().value.noteList
     NoteListContent(notes = notes, onFabClick) { id ->
-        onCardClick(id).also {
-        Log.d(TAG, "NoteListScreen: $id")
-    } }
+        onCardClick(id)
+    }
 }
 
 @Composable
@@ -53,6 +56,7 @@ private fun NoteListContent(
     onCardClick: (Int) -> Unit,
 ) {
     val isLinearLayout = remember { mutableStateOf(true) }
+    val isMenuExpanded = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -77,6 +81,32 @@ private fun NoteListContent(
                             ),
                             contentDescription = stringResource(R.string.change_layout),
                             tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    IconButton(onClick = { isMenuExpanded.value = true }) {
+                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null)
+                    }
+                    DropdownMenu(
+                        expanded = isMenuExpanded.value,
+                        onDismissRequest = { isMenuExpanded.value = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(R.string.fragment_settings))
+                            },
+                            onClick = { /*TODO*/ },
+                            leadingIcon = {
+                                Icon(painter = painterResource(R.drawable.ic_settings), null)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(R.string.fragment_about))
+                            },
+                            onClick = { /*TODO*/ },
+                            leadingIcon = {
+                                Icon(painter = painterResource(R.drawable.ic_info), null)
+                            }
                         )
                     }
                 }
