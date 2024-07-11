@@ -36,7 +36,7 @@
     <string name="ask_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
     <!-- Edit note fragment -->
     <string name="note_title">Title</string>
-    <string name="note_content">Note</string>
+    <string name="note_content">Write something down…</string>
     <string name="add_image">Add image</string>
     <string name="add_reminder">Add reminder</string>
     <string name="ask_delete_note">Delete note?</string>

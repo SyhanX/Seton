@@ -31,7 +31,6 @@ class EditNoteViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<Int>("currentNoteId")?.let { noteId ->
-            Log.d(TAG, "vm id: $noteId ")
             if (noteId != -1) {
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
@@ -45,6 +44,22 @@ class EditNoteViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun saveTitleState(
+        title: String
+    ) {
+        _noteState.value = noteState.value.copy(
+            title = title
+        )
+    }
+
+    fun saveContentState(
+        content: String
+    ) {
+        _noteState.value = noteState.value.copy(
+            content = content
+        )
     }
 
     fun saveNote(
