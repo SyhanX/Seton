@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.seton.common.presentation.components.slideFromBottomAnimation
+import com.example.seton.common.presentation.components.slideToBottomAnimation
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
 import kotlinx.serialization.Serializable
@@ -24,7 +26,11 @@ fun AppScreen(
 private fun AppContent(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = NoteListRoute
+        startDestination = NoteListRoute,
+        enterTransition = {  slideFromBottomAnimation() },
+        exitTransition = { slideToBottomAnimation() },
+        popEnterTransition = { slideFromBottomAnimation() },
+        popExitTransition = { slideToBottomAnimation() },
     ) {
         composable<NoteListRoute> {
             NoteListScreen(
