@@ -35,7 +35,7 @@ class NoteListViewModel @Inject constructor(
 
     fun changeLayout() {
         _noteListState.value = noteListState.value.copy(
-            isLinearLayout = !noteListState.value.isLinearLayout
+            isGridLayout = !noteListState.value.isGridLayout
         )
     }
 

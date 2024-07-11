@@ -55,7 +55,7 @@ private fun NoteListContent(
     onFabClick: () -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
-    val isLinearLayout = remember { mutableStateOf(true) }
+    val isGridLayout = remember { mutableStateOf(true) }
     val isMenuExpanded = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -70,14 +70,14 @@ private fun NoteListContent(
                 },
                 actions = {
                     IconToggleButton(
-                        checked = isLinearLayout.value,
-                        onCheckedChange = { isLinearLayout.value = it }
+                        checked = isGridLayout.value,
+                        onCheckedChange = { isGridLayout.value = it }
                     ) {
                         Icon(
                             painter = painterResource(
-                                if (isLinearLayout.value) {
-                                    R.drawable.ic_dashboard
-                                } else R.drawable.ic_view_agenda
+                                if (isGridLayout.value) {
+                                    R.drawable.ic_view_agenda
+                                } else R.drawable.ic_dashboard
                             ),
                             contentDescription = stringResource(R.string.change_layout),
                             tint = MaterialTheme.colorScheme.onSurface
@@ -122,7 +122,7 @@ private fun NoteListContent(
         }
     ) { innerPadding ->
         DynamicLazyLayout(
-            isLinearLayout = isLinearLayout.value,
+            isGridLayout = isGridLayout.value,
             innerPadding = innerPadding,
             items = notes
         ) { onCardClick(it) }
@@ -131,14 +131,16 @@ private fun NoteListContent(
 
 @Composable
 fun DynamicLazyLayout(
-    isLinearLayout: Boolean,
+    isGridLayout: Boolean,
     innerPadding: PaddingValues,
     items: List<NoteCardState>,
     onCardClick: (Int) -> Unit
 ) {
-    if (isLinearLayout) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+    if (isGridLayout) {
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(130.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalItemSpacing = 12.dp,
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
@@ -154,10 +156,8 @@ fun DynamicLazyLayout(
             }
         }
     } else {
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(130.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalItemSpacing = 12.dp,
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)

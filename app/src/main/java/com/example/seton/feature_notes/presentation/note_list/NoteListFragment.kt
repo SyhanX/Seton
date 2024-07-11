@@ -141,7 +141,7 @@ class NoteListFragment : Fragment(), MenuProvider {
         recyclerView.apply {
             adapter = notesAdapter
             viewModel.noteListState.observeWithLifecycle(this@NoteListFragment) {
-                layoutManager = if (it.isLinearLayout) {
+                layoutManager = if (it.isGridLayout) {
                     LinearLayoutManager(requireContext())
                 } else {
                     StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -165,7 +165,7 @@ class NoteListFragment : Fragment(), MenuProvider {
     private fun changeLayout(menuItem: MenuItem?) {
         if (menuItem == null) return
 
-        menuItem.icon = if (viewModel.noteListState.value.isLinearLayout) {
+        menuItem.icon = if (viewModel.noteListState.value.isGridLayout) {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_view_agenda)
         } else {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_dashboard)
