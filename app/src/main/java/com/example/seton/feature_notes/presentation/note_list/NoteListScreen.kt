@@ -168,7 +168,7 @@ fun DynamicLazyLayout(
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@AnimatedContent
                 ) {
-
+                    onCardClick(it)
                 }
             } else {
                 NoteList(
@@ -176,7 +176,7 @@ fun DynamicLazyLayout(
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@AnimatedContent
                 ) {
-
+                    onCardClick(it)
                 }
             }
         }
