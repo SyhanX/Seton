@@ -17,23 +17,21 @@ lifecycleExtensions = "2.2.0"
 lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
-material = "1.12.0"
 media3TestUtils = "1.3.1"
 navigationFragmentKtx = "2.7.7"
 room = "2.6.1"
+material = "1.12.0"
 ksp = "2.0.0-1.0.21"
-koinBom = "3.5.6"
 runner = "1.6.1"
 serializationPlugin = "2.0.0"
 serialization = "1.6.3"
-composeNavigation = "2.8.0-beta04"
+composeNavigation = "2.8.0-beta05"
 uiTextGoogleFonts = "1.6.8"
-hiltComposeNavigation = "1.0.0"
-#hopefully delete later
+hiltComposeNavigation = "1.2.0"
 safeargs = "2.7.7"
 daggerHilt = "2.48.1"
 workRuntimeKtx = "2.9.0"
-
+material3beta = "1.3.0-beta04"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -55,6 +53,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-rules = { module = "androidx.test:rules", version.ref = "runner" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3beta"}
 coil = { module = "io.coil-kt:coil", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "hiltAndroid" }
@@ -71,12 +70,7 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-material = { module = "com.google.android.material:material", version.ref = "material" }
-material3 = { module = "androidx.compose.material3:material3" }
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
-koin-core = { module = "io.insert-koin:koin-core" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinBom" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinBom" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
@@ -84,6 +78,7 @@ ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

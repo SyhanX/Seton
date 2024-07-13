@@ -1,13 +1,23 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.example.seton.feature_notes.presentation.note_list
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -88,7 +98,12 @@ private fun NoteListContent(
                     }
                     DropdownMenu(
                         expanded = isMenuExpanded.value,
-                        onDismissRequest = { isMenuExpanded.value = false }
+                        onDismissRequest = { isMenuExpanded.value = false },
+                        shape = RoundedCornerShape(16.dp),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     ) {
                         DropdownMenuItem(
                             text = {
@@ -129,6 +144,7 @@ private fun NoteListContent(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DynamicLazyLayout(
     isGridLayout: Boolean,
@@ -136,13 +152,50 @@ fun DynamicLazyLayout(
     items: List<NoteCardState>,
     onCardClick: (Int) -> Unit
 ) {
-    if (isGridLayout) {
+
+    SharedTransitionLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
+        AnimatedContent(
+            targetState = isGridLayout,
+            label = "transition"
+        ) { targetState ->
+            if (!targetState) {
+                NoteGrid(
+                    items = items,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@AnimatedContent
+                ) {
+
+                }
+            } else {
+                NoteList(
+                    items = items,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@AnimatedContent
+                ) {
+
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NoteGrid(
+    items: List<NoteCardState>,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onCardClick: (Int) -> Unit
+) {
+    with(sharedTransitionScope) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(130.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalItemSpacing = 12.dp,
             modifier = Modifier
-                .padding(innerPadding)
                 .padding(16.dp)
         ) {
             items(
@@ -151,24 +204,43 @@ fun DynamicLazyLayout(
             ) { note ->
                 NoteCard(
                     title = note.title,
-                    content = note.content
+                    content = note.content,
+                    modifier = Modifier
+                        .sharedElement(
+                            rememberSharedContentState(key = note.id),
+                            animatedVisibilityScope
+                        )
                 ) { onCardClick(note.id) }
             }
         }
-    } else {
+    }
+}
+
+@Composable
+fun NoteList(
+    items: List<NoteCardState>,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onCardClick: (Int) -> Unit
+) {
+    with(sharedTransitionScope) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
-                .padding(innerPadding)
                 .padding(16.dp)
         ) {
             items(
                 items = items,
-                key = { item: NoteCardState -> item.id }
+                key = { item: NoteCardState -> item.id },
             ) { note ->
                 NoteCard(
                     title = note.title,
-                    content = note.content
+                    content = note.content,
+                    modifier = Modifier
+                        .sharedElement(
+                            rememberSharedContentState(key = note.id),
+                            animatedVisibilityScope
+                        )
                 ) { onCardClick(note.id) }
             }
         }

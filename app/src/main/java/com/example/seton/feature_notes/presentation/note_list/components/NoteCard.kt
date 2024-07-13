@@ -1,6 +1,5 @@
 package com.example.seton.feature_notes.presentation.note_list.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,21 +23,20 @@ import com.example.seton.common.presentation.ui.SetonTheme
 
 @Composable
 fun NoteCard(
+    modifier: Modifier = Modifier,
     title: String,
     content: String,
     onClick: () -> Unit,
 ) {
     Card(
+        onClick = onClick,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
-        modifier = Modifier
+        modifier = modifier
             .widthIn(max = 400.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .clickable {
-                onClick()
-            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -51,6 +51,8 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -65,12 +67,12 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    implementation(libs.material3)
     implementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.tooling)
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.test.manifest)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
 
     implementation (libs.kotlinx.coroutines.android)
     implementation (libs.kotlinx.coroutines.core)
