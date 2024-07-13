@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.example.seton.common.presentation
 
-import android.util.Log
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -24,27 +27,32 @@ fun AppScreen(
 
 @Composable
 private fun AppContent(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = NoteListRoute,
-        enterTransition = {  slideFromBottomAnimation() },
-        exitTransition = { slideToBottomAnimation() },
-        popEnterTransition = { slideFromBottomAnimation() },
-        popExitTransition = { slideToBottomAnimation() },
-    ) {
-        composable<NoteListRoute> {
-            NoteListScreen(
-                onFabClick = { navController.navigate(EditNoteRoute(-1)) }
-            ) { id ->
-                Log.d(TAG, "note id: $id ")
-                navController.navigate(EditNoteRoute(id))
+    SharedTransitionLayout {
+        NavHost(
+            navController = navController,
+            startDestination = NoteListRoute,
+            enterTransition = { slideFromBottomAnimation() },
+            exitTransition = { slideToBottomAnimation() },
+            popEnterTransition = { slideFromBottomAnimation() },
+            popExitTransition = { slideToBottomAnimation() },
+        ) {
+            composable<NoteListRoute> {
+                NoteListScreen(
+                    onFabClick = { navController.navigate(EditNoteRoute(-1)) },
+                    cardTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable
+                ) { id ->
+                    navController.navigate(EditNoteRoute(id))
+                }
             }
-        }
-        composable<EditNoteRoute> {
-            val args = it.toRoute<EditNoteRoute>()
-            Log.d(TAG, "args: $args")
-            EditNoteScreen {
-                navController.navigateUp()
+            composable<EditNoteRoute> {
+                val args = it.toRoute<EditNoteRoute>()
+                EditNoteScreen(
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable
+                ) {
+                    navController.navigateUp()
+                }
             }
         }
     }

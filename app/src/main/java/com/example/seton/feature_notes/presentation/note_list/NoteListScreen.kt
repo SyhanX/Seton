@@ -3,6 +3,7 @@
 package com.example.seton.feature_notes.presentation.note_list
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -50,11 +51,18 @@ private const val TAG = "note_list_screen"
 @Composable
 fun NoteListScreen(
     viewModel: NoteListViewModel = hiltViewModel(),
+    cardTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     onFabClick: () -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
     val notes = viewModel.noteListState.collectAsState().value.noteList
-    NoteListContent(notes = notes, onFabClick) { id ->
+    NoteListContent(
+        notes = notes,
+        onFabClick = onFabClick,
+        cardTransitionScope = cardTransitionScope,
+        animatedContentScope = animatedContentScope
+    ) { id ->
         onCardClick(id)
     }
 }
@@ -62,6 +70,8 @@ fun NoteListScreen(
 @Composable
 private fun NoteListContent(
     notes: List<NoteCardState>,
+    cardTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     onFabClick: () -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
@@ -139,7 +149,9 @@ private fun NoteListContent(
         DynamicLazyLayout(
             isGridLayout = isGridLayout.value,
             innerPadding = innerPadding,
-            items = notes
+            items = notes,
+            cardTransitionScope = cardTransitionScope,
+            animatedContentScope = animatedContentScope
         ) { onCardClick(it) }
     }
 }
@@ -150,6 +162,8 @@ fun DynamicLazyLayout(
     isGridLayout: Boolean,
     innerPadding: PaddingValues,
     items: List<NoteCardState>,
+    cardTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     onCardClick: (Int) -> Unit
 ) {
 
@@ -166,7 +180,9 @@ fun DynamicLazyLayout(
                 NoteGrid(
                     items = items,
                     sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent
+                    animatedVisibilityScope = this@AnimatedContent,
+                    cardTransitionScope = cardTransitionScope,
+                    animatedContentScope = animatedContentScope
                 ) {
                     onCardClick(it)
                 }
@@ -174,7 +190,9 @@ fun DynamicLazyLayout(
                 NoteList(
                     items = items,
                     sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent
+                    animatedVisibilityScope = this@AnimatedContent,
+                    cardTransitionScope = cardTransitionScope,
+                    animatedContentScope = animatedContentScope
                 ) {
                     onCardClick(it)
                 }
@@ -187,24 +205,28 @@ fun DynamicLazyLayout(
 fun NoteGrid(
     items: List<NoteCardState>,
     sharedTransitionScope: SharedTransitionScope,
+    cardTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    animatedContentScope: AnimatedContentScope,
     onCardClick: (Int) -> Unit
 ) {
-    with(sharedTransitionScope) {
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(130.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalItemSpacing = 12.dp,
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            items(
-                items = items,
-                key = { item: NoteCardState -> item.id }
-            ) { note ->
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Adaptive(130.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalItemSpacing = 12.dp,
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        items(
+            items = items,
+            key = { item: NoteCardState -> item.id }
+        ) { note ->
+            with(sharedTransitionScope) {
                 NoteCard(
                     title = note.title,
                     content = note.content,
+                    animatedContentScope = animatedContentScope,
+                    sharedTransitionScope = cardTransitionScope,
                     modifier = Modifier
                         .sharedElement(
                             rememberSharedContentState(key = note.id),
@@ -220,7 +242,9 @@ fun NoteGrid(
 fun NoteList(
     items: List<NoteCardState>,
     sharedTransitionScope: SharedTransitionScope,
+    cardTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    animatedContentScope: AnimatedContentScope,
     onCardClick: (Int) -> Unit
 ) {
     with(sharedTransitionScope) {
@@ -236,6 +260,8 @@ fun NoteList(
                 NoteCard(
                     title = note.title,
                     content = note.content,
+                    animatedContentScope = animatedContentScope,
+                    sharedTransitionScope = cardTransitionScope,
                     modifier = Modifier
                         .sharedElement(
                             rememberSharedContentState(key = note.id),

@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.example.seton.feature_notes.presentation.edit_note
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +34,8 @@ private const val TAG = "edit_note_screen"
 @Composable
 fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     onNavigateBack: () -> Unit
 ) {
     val note = viewModel.noteState.collectAsState()
@@ -69,25 +76,36 @@ fun EditNoteScreen(
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-        ) {
-            CustomTextField(
-                text = note.value.title,
-                placeholderText = stringResource(R.string.note_title),
-                modifier = Modifier.fillMaxWidth(),
-                isSingleLine = true,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold
-            ) { viewModel.saveTitleState(it) }
-            CustomTextField(
-                text = note.value.content,
-                placeholderText = stringResource(R.string.note_content),
+        with(sharedTransitionScope) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) { viewModel.saveContentState(it) }
+                    .padding(padding)
+            ) {
+                CustomTextField(
+                    text = note.value.title,
+                    placeholderText = stringResource(R.string.note_title),
+                    isSingleLine = true,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .sharedElement(
+                            sharedTransitionScope.rememberSharedContentState(key = note.value.title),
+                            animatedVisibilityScope = animatedContentScope
+                        )
+                ) { viewModel.saveTitleState(it) }
+                CustomTextField(
+                    text = note.value.content,
+                    placeholderText = stringResource(R.string.note_content),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .sharedElement(
+                            sharedTransitionScope.rememberSharedContentState(key = note.value.content),
+                            animatedVisibilityScope = animatedContentScope
+                        )
+                ) { viewModel.saveContentState(it) }
+            }
         }
     }
 }

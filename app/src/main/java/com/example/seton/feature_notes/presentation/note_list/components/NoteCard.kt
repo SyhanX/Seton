@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.example.seton.feature_notes.presentation.note_list.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,16 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.seton.common.presentation.ui.SetonTheme
 
 @Composable
 fun NoteCard(
     modifier: Modifier = Modifier,
     title: String,
     content: String,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedVisibilityScope,
     onClick: () -> Unit,
 ) {
     Card(
@@ -43,37 +48,38 @@ fun NoteCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .padding(12.dp, 16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = content,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                    maxLines = 5
-                )
+            with(sharedTransitionScope) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .padding(12.dp, 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .sharedElement(
+                                sharedTransitionScope.rememberSharedContentState(key = title),
+                                animatedVisibilityScope = animatedContentScope
+                            )
+                    )
+                    Text(
+                        text = content,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 18.sp,
+                        maxLines = 5,
+                        modifier = Modifier
+                            .sharedElement(
+                                sharedTransitionScope.rememberSharedContentState(key = content),
+                                animatedVisibilityScope = animatedContentScope
+                            )
+                    )
+                }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun CardPreview() {
-    SetonTheme(darkTheme = true) {
-        NoteCard(
-            title = "Note title",
-            content = "Note content gyatt",
-        ) { }
     }
 }

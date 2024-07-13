@@ -2,6 +2,7 @@ package com.example.seton.common.presentation.components
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
@@ -22,4 +23,10 @@ fun slideFromLeftAnimation(): EnterTransition {
 
 fun slideToRightAnimation(): ExitTransition {
     return slideOutHorizontally() + fadeOut()
+}
+
+fun fadeInAnimation(): EnterTransition {
+    return fadeIn(
+
+    )
 }
