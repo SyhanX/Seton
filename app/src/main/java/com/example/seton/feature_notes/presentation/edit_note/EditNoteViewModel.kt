@@ -36,6 +36,7 @@ class EditNoteViewModel @Inject constructor(
                     noteUseCases.getNoteById(noteId)?.also { note ->
                         currentNoteId = note.noteId
                         _noteState.value = noteState.value.copy(
+                            id = noteId,
                             title = note.title,
                             content = note.content,
                             imageFileName = note.imageFileName

@@ -24,10 +24,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seton.feature_notes.data.NoteSharedElementKey
+import com.example.seton.feature_notes.data.NoteTextType
 
 @Composable
 fun NoteCard(
     modifier: Modifier = Modifier,
+    id: Int,
     title: String,
     content: String,
     sharedTransitionScope: SharedTransitionScope,
@@ -63,7 +66,9 @@ fun NoteCard(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
                             .sharedElement(
-                                sharedTransitionScope.rememberSharedContentState(key = title),
+                                sharedTransitionScope.rememberSharedContentState(
+                                    key = NoteSharedElementKey(id, title, NoteTextType.Title)
+                                ),
                                 animatedVisibilityScope = animatedContentScope
                             )
                     )
@@ -74,7 +79,9 @@ fun NoteCard(
                         maxLines = 5,
                         modifier = Modifier
                             .sharedElement(
-                                sharedTransitionScope.rememberSharedContentState(key = content),
+                                sharedTransitionScope.rememberSharedContentState(
+                                    key = NoteSharedElementKey(id, content, NoteTextType.Content)
+                                ),
                                 animatedVisibilityScope = animatedContentScope
                             )
                     )

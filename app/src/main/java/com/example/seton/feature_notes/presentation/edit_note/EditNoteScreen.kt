@@ -2,6 +2,7 @@
 
 package com.example.seton.feature_notes.presentation.edit_note
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -26,11 +27,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.seton.R
+import com.example.seton.feature_notes.data.NoteSharedElementKey
+import com.example.seton.feature_notes.data.NoteTextType
 import com.example.seton.feature_notes.presentation.components.CustomTextField
 
 private const val TAG = "edit_note_screen"
@@ -42,6 +46,7 @@ fun EditNoteScreen(
     animatedContentScope: AnimatedContentScope,
     onNavigateBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val note = viewModel.noteState.collectAsState()
     var isTitleBlank by remember { mutableStateOf(true) }
     var isContentBlank by remember { mutableStateOf(true) }
@@ -61,11 +66,19 @@ fun EditNoteScreen(
                 actions = {
                     Button(
                         onClick = {
-                            viewModel.saveNote(
-                                note.value.title,
-                                note.value.content,
-                                note.value.imageFileName
-                            )
+                            if (isTitleBlank || isContentBlank) {
+                                Toast.makeText(
+                                    context,
+                                    "Please fill out both fields",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                viewModel.saveNote(
+                                    note.value.title,
+                                    note.value.content,
+                                    note.value.imageFileName
+                                )
+                            }
                             onNavigateBack()
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -98,7 +111,13 @@ fun EditNoteScreen(
                         .then(
                             if (note.value.title.isNotBlank() || !isTitleBlank) {
                                 Modifier.sharedElement(
-                                    sharedTransitionScope.rememberSharedContentState(key = note.value.title),
+                                    sharedTransitionScope.rememberSharedContentState(
+                                        key = NoteSharedElementKey(
+                                            note.value.id,
+                                            note.value.title,
+                                            NoteTextType.Title
+                                        )
+                                    ),
                                     animatedVisibilityScope = animatedContentScope
                                 )
                             } else Modifier
@@ -117,7 +136,13 @@ fun EditNoteScreen(
                         .then(
                             if (note.value.content.isNotBlank() || !isContentBlank) {
                                 Modifier.sharedElement(
-                                    sharedTransitionScope.rememberSharedContentState(key = note.value.content),
+                                    sharedTransitionScope.rememberSharedContentState(
+                                        key = NoteSharedElementKey(
+                                            note.value.id,
+                                            note.value.content,
+                                            NoteTextType.Content
+                                        )
+                                    ),
                                     animatedVisibilityScope = animatedContentScope
                                 )
                             } else Modifier

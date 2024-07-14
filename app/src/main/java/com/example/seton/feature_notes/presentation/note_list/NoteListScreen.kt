@@ -226,6 +226,7 @@ fun NoteGrid(
         ) { note ->
             with(sharedTransitionScope) {
                 NoteCard(
+                    id = note.id,
                     title = note.title,
                     content = note.content,
                     animatedContentScope = animatedContentScope,
@@ -259,6 +260,7 @@ fun NoteList(
                 key = { item: NoteCardState -> item.id },
             ) { note ->
                 NoteCard(
+                    id = note.id,
                     title = note.title,
                     content = note.content,
                     animatedContentScope = animatedContentScope,
