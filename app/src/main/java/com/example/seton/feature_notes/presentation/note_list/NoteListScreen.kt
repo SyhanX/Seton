@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class)
+@file:OptIn(ExperimentalSharedTransitionApi::class, ExperimentalSharedTransitionApi::class)
 
 package com.example.seton.feature_notes.presentation.note_list
 
@@ -11,7 +11,9 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -57,6 +59,7 @@ fun NoteListScreen(
     onCardClick: (Int) -> Unit,
 ) {
     val notes = viewModel.noteListState.collectAsState().value.noteList
+
     NoteListContent(
         notes = notes,
         onFabClick = onFabClick,
@@ -171,12 +174,13 @@ fun DynamicLazyLayout(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
+            .padding(horizontal = 16.dp)
     ) {
         AnimatedContent(
             targetState = isGridLayout,
             label = "transition"
         ) { targetState ->
-            if (!targetState) {
+            if (targetState) {
                 NoteGrid(
                     items = items,
                     sharedTransitionScope = this@SharedTransitionLayout,
@@ -198,6 +202,7 @@ fun DynamicLazyLayout(
                 }
             }
         }
+        Spacer(Modifier.height(32.dp))
     }
 }
 
@@ -214,8 +219,6 @@ fun NoteGrid(
         columns = StaggeredGridCells.Adaptive(130.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalItemSpacing = 12.dp,
-        modifier = Modifier
-            .padding(16.dp)
     ) {
         items(
             items = items,
@@ -250,8 +253,6 @@ fun NoteList(
     with(sharedTransitionScope) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier
-                .padding(16.dp)
         ) {
             items(
                 items = items,

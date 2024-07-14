@@ -9,9 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import com.example.seton.common.presentation.components.slideFromBottomAnimation
-import com.example.seton.common.presentation.components.slideToBottomAnimation
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
 import kotlinx.serialization.Serializable
@@ -31,10 +28,10 @@ private fun AppContent(navController: NavHostController) {
         NavHost(
             navController = navController,
             startDestination = NoteListRoute,
-            enterTransition = { slideFromBottomAnimation() },
-            exitTransition = { slideToBottomAnimation() },
-            popEnterTransition = { slideFromBottomAnimation() },
-            popExitTransition = { slideToBottomAnimation() },
+//            enterTransition = { slideFromBottomAnimation() },
+//            exitTransition = { slideToBottomAnimation() },
+//            popEnterTransition = { slideFromBottomAnimation() },
+//            popExitTransition = { slideToBottomAnimation() },
         ) {
             composable<NoteListRoute> {
                 NoteListScreen(
@@ -46,7 +43,7 @@ private fun AppContent(navController: NavHostController) {
                 }
             }
             composable<EditNoteRoute> {
-                val args = it.toRoute<EditNoteRoute>()
+//                val args = it.toRoute<EditNoteRoute>()
                 EditNoteScreen(
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable
@@ -58,6 +55,7 @@ private fun AppContent(navController: NavHostController) {
     }
 }
 
+//TODO: create a wrapper for nav destinations
 @Serializable
 object NoteListRoute
 

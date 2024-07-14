@@ -20,6 +20,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -39,6 +43,8 @@ fun EditNoteScreen(
     onNavigateBack: () -> Unit
 ) {
     val note = viewModel.noteState.collectAsState()
+    var isTitleBlank by remember { mutableStateOf(true) }
+    var isContentBlank by remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
@@ -89,22 +95,37 @@ fun EditNoteScreen(
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .sharedElement(
-                            sharedTransitionScope.rememberSharedContentState(key = note.value.title),
-                            animatedVisibilityScope = animatedContentScope
+                        .then(
+                            if (note.value.title.isNotBlank() || !isTitleBlank) {
+                                Modifier.sharedElement(
+                                    sharedTransitionScope.rememberSharedContentState(key = note.value.title),
+                                    animatedVisibilityScope = animatedContentScope
+                                )
+                            } else Modifier
                         )
-                ) { viewModel.saveTitleState(it) }
+
+                ) {
+                    isTitleBlank = it.isBlank()
+                    viewModel.saveTitleState(it)
+                }
                 CustomTextField(
                     text = note.value.content,
                     placeholderText = stringResource(R.string.note_content),
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .sharedElement(
-                            sharedTransitionScope.rememberSharedContentState(key = note.value.content),
-                            animatedVisibilityScope = animatedContentScope
+                        .then(
+                            if (note.value.content.isNotBlank() || !isContentBlank) {
+                                Modifier.sharedElement(
+                                    sharedTransitionScope.rememberSharedContentState(key = note.value.content),
+                                    animatedVisibilityScope = animatedContentScope
+                                )
+                            } else Modifier
                         )
-                ) { viewModel.saveContentState(it) }
+                ) {
+                    isContentBlank = it.isBlank()
+                    viewModel.saveContentState(it)
+                }
             }
         }
     }

@@ -32,12 +32,12 @@ fun CustomTextField(
             fontWeight = fontWeight,
             fontSize = fontSize
         ),
-        modifier = modifier,
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
-        )
+        ),
+        modifier = modifier
     )
 }
