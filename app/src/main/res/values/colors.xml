@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="start_gradient">#db1d69</color>
+    <color name="end_gradient">#800524</color>
     <color name="seed">#e3145d</color>
     <color name="md_theme_light_primary">#BD004A</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>

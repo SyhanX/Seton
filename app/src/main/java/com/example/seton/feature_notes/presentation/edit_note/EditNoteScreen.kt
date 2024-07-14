@@ -32,7 +32,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.seton.R
+import com.example.seton.common.presentation.NoteListRoute
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
 import com.example.seton.feature_notes.presentation.components.CustomTextField
@@ -44,7 +46,7 @@ fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    onNavigateBack: () -> Unit
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val note = viewModel.noteState.collectAsState()
@@ -56,7 +58,7 @@ fun EditNoteScreen(
             CenterAlignedTopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = { onNavigateBack() }) {
+                    IconButton(onClick = { navController.navigate(NoteListRoute) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = null
@@ -69,7 +71,7 @@ fun EditNoteScreen(
                             if (isTitleBlank || isContentBlank) {
                                 Toast.makeText(
                                     context,
-                                    "Please fill out both fields",
+                                    context.getText(R.string.must_fill_all_fields),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
@@ -78,8 +80,8 @@ fun EditNoteScreen(
                                     note.value.content,
                                     note.value.imageFileName
                                 )
+                                navController.navigate(NoteListRoute)
                             }
-                            onNavigateBack()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent,
@@ -88,7 +90,7 @@ fun EditNoteScreen(
                         Text(
                             text = stringResource(R.string.save),
                             fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

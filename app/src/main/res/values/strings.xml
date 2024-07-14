@@ -43,5 +43,5 @@
     <string name="save_note">Save note</string>
     <string name="note_saved">Note saved</string>
     <string name="ask_leave_without_saving">Leave without saving note?</string>
-    <string name="must_fill_all_fields">All fields must be filled</string>
+    <string name="must_fill_all_fields">Please fill out all fields</string>
 </resources>

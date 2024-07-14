@@ -28,10 +28,10 @@ private fun AppContent(navController: NavHostController) {
         NavHost(
             navController = navController,
             startDestination = NoteListRoute,
-//            enterTransition = { slideFromBottomAnimation() },
-//            exitTransition = { slideToBottomAnimation() },
-//            popEnterTransition = { slideFromBottomAnimation() },
-//            popExitTransition = { slideToBottomAnimation() },
+//            enterTransition = { scaleIn() },
+//            exitTransition = { scaleOut() + fadeOut() },
+//            popEnterTransition = { scaleIn() },
+//            popExitTransition = { scaleOut() + fadeOut() },
         ) {
             composable<NoteListRoute> {
                 NoteListScreen(
@@ -43,13 +43,11 @@ private fun AppContent(navController: NavHostController) {
                 }
             }
             composable<EditNoteRoute> {
-//                val args = it.toRoute<EditNoteRoute>()
                 EditNoteScreen(
                     sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedContentScope = this@composable
-                ) {
-                    navController.navigateUp()
-                }
+                    animatedContentScope = this@composable,
+                    navController = navController
+                )
             }
         }
     }

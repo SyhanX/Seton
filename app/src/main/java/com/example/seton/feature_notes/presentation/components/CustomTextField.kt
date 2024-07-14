@@ -26,7 +26,10 @@ fun CustomTextField(
         singleLine = isSingleLine,
         onValueChange = { onValueChange(it) },
         placeholder = {
-            Text(text = placeholderText)
+            Text(
+                text = placeholderText,
+                fontSize = fontSize
+            )
         },
         textStyle = TextStyle(
             fontWeight = fontWeight,

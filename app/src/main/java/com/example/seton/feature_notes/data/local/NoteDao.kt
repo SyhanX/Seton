@@ -1,4 +1,4 @@
-package com.example.seton.feature_notes.data.datasource
+package com.example.seton.feature_notes.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete

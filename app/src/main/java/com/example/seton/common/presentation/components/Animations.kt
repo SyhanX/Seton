@@ -26,7 +26,5 @@ fun slideToRightAnimation(): ExitTransition {
 }
 
 fun fadeInAnimation(): EnterTransition {
-    return fadeIn(
-
-    )
+    return fadeIn()
 }
