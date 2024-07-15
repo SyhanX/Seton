@@ -34,6 +34,7 @@
     <string name="select_all">Select all</string>
     <string name="delete_notes">Delete notes</string>
     <string name="ask_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
+    <string name="prepopulate_db">Fill database</string>
     <!-- Edit note fragment -->
     <string name="note_title">Title</string>
     <string name="note_content">Write something down…</string>

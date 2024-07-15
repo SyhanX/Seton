@@ -29,6 +29,7 @@ import com.example.seton.R
 @Composable
 fun RegularAppBar(
     isGridLayout: Boolean,
+    onFillDb: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val isMenuExpanded = remember { mutableStateOf(false) }
@@ -84,6 +85,17 @@ fun RegularAppBar(
                     onClick = { /*TODO*/ },
                     leadingIcon = {
                         Icon(painter = painterResource(R.drawable.ic_info), null)
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(R.string.prepopulate_db)
+                        )
+                    },
+                    onClick = onFillDb,
+                    leadingIcon = {
+                        Icon(painter = painterResource(R.drawable.ic_bug), null)
                     }
                 )
             }

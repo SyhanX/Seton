@@ -84,6 +84,9 @@ fun NoteListScreen(
                 }
                 viewModel.uncheckAllNotes()
             }
+        },
+        onFillDb = {
+            viewModel.fillDatabase()
         }
     ) { id ->
         if (notes.value.selectedNoteList.isNotEmpty()) {
@@ -104,6 +107,7 @@ private fun NoteListContent(
     onDelete: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
     onFabClick: () -> Unit,
+    onFillDb: () -> Unit,
     onLongCardClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
@@ -123,7 +127,10 @@ private fun NoteListContent(
                     onCheckedChange(it)
                 }
             } else {
-                RegularAppBar(isGridLayout = isGridLayout.value) {
+                RegularAppBar(
+                    isGridLayout = isGridLayout.value,
+                    onFillDb = onFillDb
+                ) {
                     isGridLayout.value = it
                 }
             }
