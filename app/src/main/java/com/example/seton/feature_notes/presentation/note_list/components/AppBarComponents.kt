@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
@@ -94,6 +95,7 @@ fun RegularAppBar(
 fun SelectionAppBar(
     selectedItemCount: Int,
     onClear: () -> Unit,
+    onDelete: () -> Unit,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
@@ -115,6 +117,12 @@ fun SelectionAppBar(
                 checked = isChecked,
                 onCheckedChange = { onCheckedChange(it) }
             )
+            IconButton(onClick = onDelete) {
+                Icon(
+                    imageVector = Icons.Rounded.Delete,
+                    null
+                )
+            }
         }
     )
 }

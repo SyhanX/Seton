@@ -27,12 +27,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.seton.R
+import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.common.presentation.EditNoteRoute
 import com.example.seton.feature_notes.presentation.note_list.components.NoteCard
 import com.example.seton.feature_notes.presentation.note_list.components.RegularAppBar
@@ -50,6 +52,7 @@ fun NoteListScreen(
     navController: NavHostController,
 ) {
     val notes = viewModel.noteListState.collectAsState()
+    val context = LocalContext.current
 
     NoteListContent(
         notes = notes.value.noteList,
@@ -68,6 +71,20 @@ fun NoteListScreen(
             }
         },
         onClear = { viewModel.uncheckAllNotes() },
+        onDelete = {
+            showAlertDialog(
+                context = context,
+                message = R.string.ask_delete_selected_notes,
+                title = R.string.delete_notes,
+                positiveText = R.string.delete,
+                negativeText = R.string.cancel
+            ) {
+                notes.value.selectedNoteList.forEach { noteId ->
+                    viewModel.deleteNoteById(noteId)
+                }
+                viewModel.uncheckAllNotes()
+            }
+        }
     ) { id ->
         if (notes.value.selectedNoteList.isNotEmpty()) {
             viewModel.onLongNoteClick(id)
@@ -84,6 +101,7 @@ private fun NoteListContent(
     cardTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     onClear: () -> Unit,
+    onDelete: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
     onFabClick: () -> Unit,
     onLongCardClick: (Int) -> Unit,
@@ -99,7 +117,8 @@ private fun NoteListContent(
                 SelectionAppBar(
                     selectedItemCount = selectedNotes.size,
                     onClear = onClear,
-                    isChecked = areListsTheSame.value
+                    isChecked = areListsTheSame.value,
+                    onDelete = onDelete
                 ) {
                     onCheckedChange(it)
                 }
@@ -214,6 +233,7 @@ fun NoteGrid(
                     animatedContentScope = animatedContentScope,
                     sharedTransitionScope = cardTransitionScope,
                     modifier = Modifier
+                        .animateItem()
                         .sharedElement(
                             rememberSharedContentState(key = note.id),
                             animatedVisibilityScope
@@ -253,6 +273,7 @@ fun NoteList(
                     sharedTransitionScope = cardTransitionScope,
                     animatedContentScope = animatedContentScope,
                     modifier = Modifier
+                        .animateItem()
                         .sharedElement(
                             rememberSharedContentState(key = note.id),
                             animatedVisibilityScope
