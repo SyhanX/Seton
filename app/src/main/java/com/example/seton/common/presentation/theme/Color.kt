@@ -1,4 +1,4 @@
-package com.example.seton.common.presentation.ui
+package com.example.seton.common.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

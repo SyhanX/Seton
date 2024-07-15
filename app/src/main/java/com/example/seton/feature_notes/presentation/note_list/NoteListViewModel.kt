@@ -83,7 +83,7 @@ class NoteListViewModel @Inject constructor(
     }
 
 
-    private fun onLongNoteClick(noteId: Int) {
+    fun onLongNoteClick(noteId: Int) {
         checkOrUncheckNote(noteId)
     }
 

@@ -2,9 +2,13 @@
 
 package com.example.seton.feature_notes.presentation.note_list.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,39 +16,63 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seton.R
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
 
+private const val TAG = "note_card"
+
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NoteCard(
     modifier: Modifier = Modifier,
     id: Int,
     title: String,
     content: String,
-    sharedTransitionScope: SharedTransitionScope,
+    onLongClick: () -> Unit,
+    isSelectionMode: Boolean,
+    isCardChecked: Boolean,
     animatedContentScope: AnimatedVisibilityScope,
+    sharedTransitionScope: SharedTransitionScope,
     onClick: () -> Unit,
 ) {
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+    OutlinedCard(
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = if (isCardChecked) {
+                MaterialTheme.colorScheme.secondaryContainer
+            } else {
+                MaterialTheme.colorScheme.onSecondary
+            },
         ),
+        border = if (isCardChecked) {
+            BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
+        } else {
+            BorderStroke(0.dp, Color.Transparent)
+        },
         shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .widthIn(max = 400.dp)
             .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -85,6 +113,18 @@ fun NoteCard(
                             )
                     )
                 }
+            }
+            AnimatedVisibility(visible = isSelectionMode) {
+                Icon(
+                    painter = painterResource(
+                        if (isCardChecked) {
+                            R.drawable.ic_check_circle
+                        } else {
+                            R.drawable.ic_radio_unchecked
+                        }
+                    ),
+                    contentDescription = null
+                )
             }
         }
     }

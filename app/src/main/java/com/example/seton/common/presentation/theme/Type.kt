@@ -1,4 +1,4 @@
-package com.example.seton.common.presentation.ui
+package com.example.seton.common.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily

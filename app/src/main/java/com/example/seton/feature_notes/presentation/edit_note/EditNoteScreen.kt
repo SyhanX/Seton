@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -68,7 +69,7 @@ fun EditNoteScreen(
                 actions = {
                     Button(
                         onClick = {
-                            if (isTitleBlank || isContentBlank) {
+                            if (note.value.title.isBlank() || note.value.content.isBlank()) {
                                 Toast.makeText(
                                     context,
                                     context.getText(R.string.must_fill_all_fields),
@@ -108,6 +109,7 @@ fun EditNoteScreen(
                     isSingleLine = true,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
+                    imeAction = ImeAction.Next,
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(

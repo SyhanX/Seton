@@ -37,10 +37,9 @@ private fun AppContent(navController: NavHostController) {
                 NoteListScreen(
                     onFabClick = { navController.navigate(EditNoteRoute(-1)) },
                     cardTransitionScope = this@SharedTransitionLayout,
-                    animatedContentScope = this@composable
-                ) { id ->
-                    navController.navigate(EditNoteRoute(id))
-                }
+                    animatedContentScope = this@composable,
+                    navController = navController
+                )
             }
             composable<EditNoteRoute> {
                 EditNoteScreen(
