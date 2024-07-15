@@ -67,6 +67,7 @@ fun EditNoteScreen(
                     }
                 },
                 actions = {
+                    //TODO: change to text button
                     Button(
                         onClick = {
                             if (note.value.title.isBlank() || note.value.content.isBlank()) {

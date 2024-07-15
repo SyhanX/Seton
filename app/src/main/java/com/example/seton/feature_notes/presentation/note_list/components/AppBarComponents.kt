@@ -71,7 +71,7 @@ fun RegularAppBar(
             ) {
                 DropdownMenuItem(
                     text = {
-                        Text(text = stringResource(R.string.fragment_settings))
+                        Text(text = stringResource(R.string.settings))
                     },
                     onClick = { /*TODO*/ },
                     leadingIcon = {
@@ -80,7 +80,7 @@ fun RegularAppBar(
                 )
                 DropdownMenuItem(
                     text = {
-                        Text(text = stringResource(R.string.fragment_about))
+                        Text(text = stringResource(R.string.about))
                     },
                     onClick = { /*TODO*/ },
                     leadingIcon = {

@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.seton.R
-import com.example.seton.common.domain.util.showAlertDialog
 import com.example.seton.common.presentation.EditNoteRoute
+import com.example.seton.common.presentation.components.DeleteSelectedNotesDialog
 import com.example.seton.feature_notes.presentation.note_list.components.NoteCard
 import com.example.seton.feature_notes.presentation.note_list.components.RegularAppBar
 import com.example.seton.feature_notes.presentation.note_list.components.SelectionAppBar
@@ -53,6 +53,7 @@ fun NoteListScreen(
 ) {
     val notes = viewModel.noteListState.collectAsState()
     val context = LocalContext.current
+    val openAlertDialog = remember { mutableStateOf(false) }
 
     NoteListContent(
         notes = notes.value.noteList,
@@ -72,18 +73,7 @@ fun NoteListScreen(
         },
         onClear = { viewModel.uncheckAllNotes() },
         onDelete = {
-            showAlertDialog(
-                context = context,
-                message = R.string.ask_delete_selected_notes,
-                title = R.string.delete_notes,
-                positiveText = R.string.delete,
-                negativeText = R.string.cancel
-            ) {
-                notes.value.selectedNoteList.forEach { noteId ->
-                    viewModel.deleteNoteById(noteId)
-                }
-                viewModel.uncheckAllNotes()
-            }
+           openAlertDialog.value = true
         },
         onFillDb = {
             viewModel.fillDatabase()
@@ -93,6 +83,18 @@ fun NoteListScreen(
             viewModel.onLongNoteClick(id)
         } else {
             navController.navigate(EditNoteRoute(id))
+        }
+    }
+
+    if (openAlertDialog.value) {
+        DeleteSelectedNotesDialog(
+            onDismiss = { openAlertDialog.value = false }
+        ) {
+            openAlertDialog.value = false
+            notes.value.selectedNoteList.forEach { noteId ->
+                viewModel.deleteNoteById(noteId)
+            }
+            viewModel.uncheckAllNotes()
         }
     }
 }
