@@ -10,7 +10,9 @@ import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.feature_notes.domain.model.InvalidNoteException
 import com.example.seton.feature_notes.domain.model.Note
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
+import com.example.seton.feature_notes.presentation.edit_note.components.SelectedColor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -62,11 +64,20 @@ class EditNoteViewModel @Inject constructor(
             content = content
         )
     }
-
+    
+    fun saveColorState(
+        color: SelectedColor
+    ) {
+        _noteState.value = noteState.value.copy(
+            color = color 
+        )
+    }
+    
     fun saveNote(
         title: String,
         content: String,
-        imageFileName: String?
+        imageFileName: String?,
+        color: SelectedColor, 
     ) {
         viewModelScope.launch {
             try {
@@ -75,7 +86,8 @@ class EditNoteViewModel @Inject constructor(
                         title = title,
                         content = content,
                         imageFileName = imageFileName ?: _noteState.value.imageFileName,
-                        noteId = currentNoteId
+                        noteId = currentNoteId,
+                        color = color
                     )
                 )
             } catch (e: InvalidNoteException) {
@@ -91,7 +103,7 @@ class EditNoteViewModel @Inject constructor(
     }
 
     fun deleteNote() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             noteUseCases.deleteNote(
                 Note(
                     title = noteState.value.title,

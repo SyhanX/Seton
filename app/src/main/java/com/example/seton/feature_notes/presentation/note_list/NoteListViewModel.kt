@@ -3,7 +3,7 @@ package com.example.seton.feature_notes.presentation.note_list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.feature_notes.data.fakeNote
+import com.example.seton.feature_notes.data.fakeNoteList
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
 import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
 import com.example.seton.feature_notes.presentation.note_list.state.NoteListState
@@ -99,6 +99,7 @@ class NoteListViewModel @Inject constructor(
                             isChecked = false,
                             title = note.title,
                             content = note.content,
+                            color = note.color,
                             onClick = { id, customAction ->
                                 if (selectedNotesList.isNotEmpty()) {
                                     checkOrUncheckNote(id)
@@ -123,10 +124,8 @@ class NoteListViewModel @Inject constructor(
 
     fun fillDatabase() {
         viewModelScope.launch {
-            repeat(7) {
-                noteUseCases.upsertNote(
-                    fakeNote
-                )
+            fakeNoteList.forEach {
+                noteUseCases.upsertNote(it)
             }
         }
     }

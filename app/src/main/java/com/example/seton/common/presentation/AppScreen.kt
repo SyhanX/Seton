@@ -9,9 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.seton.common.data.NavDestinations
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
-import kotlinx.serialization.Serializable
 
 private const val TAG = "app_screen"
 
@@ -27,21 +27,17 @@ private fun AppContent(navController: NavHostController) {
     SharedTransitionLayout {
         NavHost(
             navController = navController,
-            startDestination = NoteListRoute,
-//            enterTransition = { scaleIn() },
-//            exitTransition = { scaleOut() + fadeOut() },
-//            popEnterTransition = { scaleIn() },
-//            popExitTransition = { scaleOut() + fadeOut() },
+            startDestination = NavDestinations.NoteListScreen,
         ) {
-            composable<NoteListRoute> {
+            composable<NavDestinations.NoteListScreen> {
                 NoteListScreen(
-                    onFabClick = { navController.navigate(EditNoteRoute(-1)) },
+                    onFabClick = { navController.navigate(NavDestinations.EditNoteScreen(-1)) },
                     cardTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable,
                     navController = navController
                 )
             }
-            composable<EditNoteRoute> {
+            composable<NavDestinations.EditNoteScreen> {
                 EditNoteScreen(
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable,
@@ -51,13 +47,3 @@ private fun AppContent(navController: NavHostController) {
         }
     }
 }
-
-//TODO: create a wrapper for nav destinations
-@Serializable
-object NoteListRoute
-
-@Serializable
-data class EditNoteRoute(val currentNoteId: Int)
-
-@Serializable
-object SettingsRoute

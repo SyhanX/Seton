@@ -21,7 +21,7 @@
     <string name="system_theme">Системная тема</string>
     <string name="use_dynamic_color">Использовать dynamic color</string>
     <string name="notes">Заметки</string>
-    <string name="no_notes">Ваши заметки появятся здесь</string>
+    <string name="no_notes">Ваши заметки будут здесь</string>
     <string name="delete_all_notes">Удалить все заметки</string>
     <string name="ask_delete_all_notes">Удалить все заметки? Это действие нельзя отменить.</string>
     <string name="selected_items_count">%1$d выбрано</string>
@@ -38,4 +38,5 @@
     <string name="ask_leave_without_saving">Выйти, не сохранив заметку?</string>
     <string name="must_fill_all_fields">Все поля должны быть заполнены</string>
     <string name="prepopulate_db">Наполнить базу данных</string>
+    <string name="copy">Скопировать</string>
 </resources>

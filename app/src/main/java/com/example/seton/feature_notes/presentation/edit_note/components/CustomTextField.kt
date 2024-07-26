@@ -1,4 +1,4 @@
-package com.example.seton.feature_notes.presentation.components
+package com.example.seton.feature_notes.presentation.edit_note.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text

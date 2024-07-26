@@ -9,6 +9,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.example.seton.R
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
+import com.example.seton.feature_notes.presentation.edit_note.components.SelectedColor
 
 private const val TAG = "note_card"
 
@@ -47,17 +49,16 @@ fun NoteCard(
     onLongClick: () -> Unit,
     isSelectionMode: Boolean,
     isCardChecked: Boolean,
+    color: SelectedColor,
     animatedContentScope: AnimatedVisibilityScope,
     sharedTransitionScope: SharedTransitionScope,
     onClick: () -> Unit,
 ) {
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = if (isCardChecked) {
-                MaterialTheme.colorScheme.secondaryContainer
-            } else {
-                MaterialTheme.colorScheme.onSecondary
-            },
+            containerColor = if(isSystemInDarkTheme()) {
+                color.dark
+            } else color.light
         ),
         border = if (isCardChecked) {
             BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)

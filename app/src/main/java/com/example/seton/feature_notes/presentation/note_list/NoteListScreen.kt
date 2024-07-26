@@ -26,16 +26,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.seton.R
-import com.example.seton.common.presentation.EditNoteRoute
-import com.example.seton.common.presentation.components.DeleteSelectedNotesDialog
+import com.example.seton.common.data.NavDestinations
+import com.example.seton.common.presentation.components.CustomAlertDialog
 import com.example.seton.feature_notes.presentation.note_list.components.NoteCard
 import com.example.seton.feature_notes.presentation.note_list.components.RegularAppBar
 import com.example.seton.feature_notes.presentation.note_list.components.SelectionAppBar
@@ -52,7 +52,6 @@ fun NoteListScreen(
     navController: NavHostController,
 ) {
     val notes = viewModel.noteListState.collectAsState()
-    val context = LocalContext.current
     val openAlertDialog = remember { mutableStateOf(false) }
 
     NoteListContent(
@@ -82,12 +81,14 @@ fun NoteListScreen(
         if (notes.value.selectedNoteList.isNotEmpty()) {
             viewModel.onLongNoteClick(id)
         } else {
-            navController.navigate(EditNoteRoute(id))
+            navController.navigate(NavDestinations.EditNoteScreen(id))
         }
     }
 
     if (openAlertDialog.value) {
-        DeleteSelectedNotesDialog(
+        CustomAlertDialog(
+            title = R.string.delete_notes,
+            text = R.string.ask_delete_selected_notes,
             onDismiss = { openAlertDialog.value = false }
         ) {
             openAlertDialog.value = false
@@ -113,8 +114,8 @@ private fun NoteListContent(
     onLongCardClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
-    val isGridLayout = remember { mutableStateOf(true) }
-    val areListsTheSame = remember { mutableStateOf(false) }
+    val isGridLayout = rememberSaveable { mutableStateOf(true) }
+    val areListsTheSame = rememberSaveable { mutableStateOf(false) }
     areListsTheSame.value = notes.size == selectedNotes.size
 
     Scaffold(
@@ -241,6 +242,7 @@ fun NoteGrid(
                     onLongClick = { onLongCardClick(note.id) },
                     animatedContentScope = animatedContentScope,
                     sharedTransitionScope = cardTransitionScope,
+                    color = note.color,
                     modifier = Modifier
                         .animateItem()
                         .sharedElement(
@@ -281,6 +283,7 @@ fun NoteList(
                     onLongClick = { onLongCardClick(note.id) },
                     sharedTransitionScope = cardTransitionScope,
                     animatedContentScope = animatedContentScope,
+                    color = note.color,
                     modifier = Modifier
                         .animateItem()
                         .sharedElement(

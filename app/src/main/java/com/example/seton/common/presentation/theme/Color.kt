@@ -2,6 +2,33 @@ package com.example.seton.common.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
+/*For color picker*/
+val defaultColorDark = Color(0xFF43292D)
+val redDark = Color(0xFF77172E)
+val orangeDark = Color(0xFF692B17)
+val yellowDark = Color(0xFF7C4A03)
+val greenDark = Color(0xFF264D3B)
+val turquoiseDark = Color(0xFF0C625D)
+val blueDark = Color(0xFF256377)
+val darkBlueDark = Color(0xFF284255)
+val purpleDark = Color(0xFF472E5B)
+val pinkDark = Color(0xFF6C394F)
+val brownDark = Color(0xFF4B443A)
+val greyDark = Color(0xFF232427)
+
+val defaultColorLight = Color(0xFFFFFFFF)
+val redLight = Color(0xFFFAAFA8)
+val orangeLight = Color(0xFFF39F76)
+val yellowLight = Color(0xFFFFF8B8)
+val greenLight = Color(0xFFE2F6D3)
+val turquoiseLight = Color(0xFFB4DDD3)
+val blueLight = Color(0xFFD4E4ED)
+val darkBlueLight = Color(0xFFAECCDC)
+val purpleLight = Color(0xFFD3BFDB)
+val pinkLight = Color(0xFFF6E2DD)
+val brownLight = Color(0xFFE9E3D4)
+val greyLight = Color(0xFFEFEFF1)
+
 val primaryLight = Color(0xFF8E4956)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFFFD9DD)
