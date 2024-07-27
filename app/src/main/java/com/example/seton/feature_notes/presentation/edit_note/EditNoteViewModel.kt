@@ -41,7 +41,8 @@ class EditNoteViewModel @Inject constructor(
                             id = noteId,
                             title = note.title,
                             content = note.content,
-                            imageFileName = note.imageFileName
+                            imageFileName = note.imageFileName,
+                            color = note.color
                         )
                     }
                 }

@@ -149,7 +149,6 @@ private fun NoteListContent(
     ) { innerPadding ->
         DynamicLazyLayout(
             isGridLayout = isGridLayout.value,
-            isSelectionMode = selectedNotes.isNotEmpty(),
             innerPadding = innerPadding,
             items = notes,
             cardTransitionScope = cardTransitionScope,
@@ -163,7 +162,6 @@ private fun NoteListContent(
 @Composable
 fun DynamicLazyLayout(
     isGridLayout: Boolean,
-    isSelectionMode: Boolean,
     innerPadding: PaddingValues,
     items: List<NoteCardState>,
     cardTransitionScope: SharedTransitionScope,
@@ -186,7 +184,6 @@ fun DynamicLazyLayout(
                 NoteGrid(
                     items = items,
                     onLongCardClick = { onLongCardClick(it) },
-                    isSelectionMode = isSelectionMode,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@AnimatedContent,
                     cardTransitionScope = cardTransitionScope,
@@ -197,7 +194,6 @@ fun DynamicLazyLayout(
             } else {
                 NoteList(
                     items = items,
-                    isSelectionMode = isSelectionMode,
                     onLongCardClick = { onLongCardClick(it) },
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@AnimatedContent,
@@ -220,7 +216,6 @@ fun NoteGrid(
     animatedVisibilityScope: AnimatedVisibilityScope,
     animatedContentScope: AnimatedContentScope,
     onLongCardClick: (Int) -> Unit,
-    isSelectionMode: Boolean,
     onCardClick: (Int) -> Unit
 ) {
     LazyVerticalStaggeredGrid(
@@ -238,7 +233,6 @@ fun NoteGrid(
                     title = note.title,
                     content = note.content,
                     isCardChecked = note.isChecked,
-                    isSelectionMode = isSelectionMode,
                     onLongClick = { onLongCardClick(note.id) },
                     animatedContentScope = animatedContentScope,
                     sharedTransitionScope = cardTransitionScope,
@@ -262,7 +256,6 @@ fun NoteList(
     cardTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     animatedContentScope: AnimatedContentScope,
-    isSelectionMode: Boolean,
     onLongCardClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit
 ) {
@@ -279,7 +272,6 @@ fun NoteList(
                     title = note.title,
                     content = note.content,
                     isCardChecked = note.isChecked,
-                    isSelectionMode = isSelectionMode,
                     onLongClick = { onLongCardClick(note.id) },
                     sharedTransitionScope = cardTransitionScope,
                     animatedContentScope = animatedContentScope,

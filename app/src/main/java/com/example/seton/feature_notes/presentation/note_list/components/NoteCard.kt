@@ -2,7 +2,6 @@
 
 package com.example.seton.feature_notes.presentation.note_list.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -27,12 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.seton.R
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
 import com.example.seton.feature_notes.presentation.edit_note.components.SelectedColor
@@ -47,7 +43,6 @@ fun NoteCard(
     title: String,
     content: String,
     onLongClick: () -> Unit,
-    isSelectionMode: Boolean,
     isCardChecked: Boolean,
     color: SelectedColor,
     animatedContentScope: AnimatedVisibilityScope,
@@ -114,18 +109,6 @@ fun NoteCard(
                             )
                     )
                 }
-            }
-            AnimatedVisibility(visible = isSelectionMode) {
-                Icon(
-                    painter = painterResource(
-                        if (isCardChecked) {
-                            R.drawable.ic_check_circle
-                        } else {
-                            R.drawable.ic_radio_unchecked
-                        }
-                    ),
-                    contentDescription = null
-                )
             }
         }
     }

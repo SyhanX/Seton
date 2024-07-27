@@ -8,7 +8,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -113,11 +111,25 @@ fun EditNoteContent(
     var showAttachmentsBottomSheet by remember { mutableStateOf(false) }
     var showActionsBottomSheet by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    val darkContainerColor by animateColorAsState(
+        targetValue = note.color.dark,
+        label = "darkBackground"
+    )
+    val lightContainerColor by animateColorAsState(
+        targetValue = note.color.light,
+        label = "lightBackground"
+    )
+    val containerColor by animateColorAsState(
+        targetValue = if (isSystemInDarkTheme()) {
+            note.color.dark
+        } else note.color.light,
+        label = "containerColor"
+    )
 
     Scaffold(
         topBar = {
             EditNoteTopBar(
-                containerColor = getDayNightDynamicBackground(note.color),
+                containerColor = containerColor,
                 onNavigateBack = navigateUp,
                 onSave = {
                     if (note.title.isBlank() || note.content.isBlank()) {
@@ -135,7 +147,7 @@ fun EditNoteContent(
         },
         bottomBar = {
             EditNoteBottomBar(
-                containerColor = getDayNightDynamicBackground(selectedColor = note.color),
+                containerColor = containerColor,
                 onAttachmentsClick = {
                     showAttachmentsBottomSheet = true
                 },
@@ -149,13 +161,13 @@ fun EditNoteContent(
             AttachmentsBottomSheet(
                 onDismissRequest = { showAttachmentsBottomSheet = false },
                 selectedColor = note.color,
-                containerColor = getDayNightDynamicBackground(note.color)
+                containerColor = containerColor
             ) { saveState(NoteStateType.Color(it)) }
         }
         if (showActionsBottomSheet) {
             ActionsBottomSheet(
                 onDismissRequest = { showActionsBottomSheet = false },
-                containerColor = getDayNightDynamicBackground(note.color)
+                containerColor = containerColor
             ) { showDialog = true }
         }
         if (showDialog) {
@@ -171,7 +183,7 @@ fun EditNoteContent(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .background(getDayNightDynamicBackground(note.color))
+                .background(containerColor)
         ) {
             CustomTextField(
                 text = note.title,
@@ -221,60 +233,6 @@ fun EditNoteContent(
             }
         }
     }
-}
-
-@Composable
-fun getDayNightDynamicBackground(selectedColor: SelectedColor): Color {
-    return if (isSystemInDarkTheme()) {
-        getDarkDynamicBackground(color = selectedColor)
-    } else {
-        getLightDynamicBackground(color = selectedColor)
-    }
-}
-
-@Composable
-fun getDarkDynamicBackground(color: SelectedColor): Color {
-    val darkBackgroundColor by animateColorAsState(
-        targetValue = when (color) {
-            SelectedColor.Default -> SelectedColor.Default.dark
-            SelectedColor.Red -> SelectedColor.Red.dark
-            SelectedColor.Orange -> SelectedColor.Orange.dark
-            SelectedColor.Yellow -> SelectedColor.Yellow.dark
-            SelectedColor.Green -> SelectedColor.Green.dark
-            SelectedColor.Turquoise -> SelectedColor.Turquoise.dark
-            SelectedColor.Blue -> SelectedColor.Blue.dark
-            SelectedColor.DarkBlue -> SelectedColor.DarkBlue.dark
-            SelectedColor.Purple -> SelectedColor.Purple.dark
-            SelectedColor.Pink -> SelectedColor.Pink.dark
-            SelectedColor.Brown -> SelectedColor.Brown.dark
-            SelectedColor.Grey -> SelectedColor.Grey.dark
-        },
-        label = "darkBackground",
-        animationSpec = tween()
-    )
-    return darkBackgroundColor
-}
-
-@Composable
-fun getLightDynamicBackground(color: SelectedColor): Color {
-    val lightBackgroundColor by animateColorAsState(
-        targetValue = when (color) {
-            SelectedColor.Default -> SelectedColor.Default.light
-            SelectedColor.Red -> SelectedColor.Red.light
-            SelectedColor.Orange -> SelectedColor.Orange.light
-            SelectedColor.Yellow -> SelectedColor.Yellow.light
-            SelectedColor.Green -> SelectedColor.Green.light
-            SelectedColor.Turquoise -> SelectedColor.Turquoise.light
-            SelectedColor.Blue -> SelectedColor.Blue.light
-            SelectedColor.DarkBlue -> SelectedColor.DarkBlue.light
-            SelectedColor.Purple -> SelectedColor.Purple.light
-            SelectedColor.Pink -> SelectedColor.Pink.light
-            SelectedColor.Brown -> SelectedColor.Brown.light
-            SelectedColor.Grey -> SelectedColor.Grey.light
-        },
-        label = "lightBackground"
-    )
-    return lightBackgroundColor
 }
 
 @Preview
