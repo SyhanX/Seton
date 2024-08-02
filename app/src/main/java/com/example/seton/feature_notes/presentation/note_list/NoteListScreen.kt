@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.seton.R
 import com.example.seton.common.data.NavDestinations
+import com.example.seton.common.domain.util.serialize
 import com.example.seton.common.presentation.components.CustomAlertDialog
 import com.example.seton.feature_notes.presentation.note_list.components.NoteCard
 import com.example.seton.feature_notes.presentation.note_list.components.RegularAppBar
@@ -53,7 +54,6 @@ fun NoteListScreen(
 ) {
     val notes = viewModel.noteListState.collectAsState()
     val openAlertDialog = remember { mutableStateOf(false) }
-
     NoteListContent(
         notes = notes.value.noteList,
         onFabClick = onFabClick,
@@ -72,18 +72,25 @@ fun NoteListScreen(
         },
         onClear = { viewModel.uncheckAllNotes() },
         onDelete = {
-           openAlertDialog.value = true
+            openAlertDialog.value = true
         },
         onFillDb = {
             viewModel.fillDatabase()
+        },
+        onCardClick = { id ->
+            if (notes.value.selectedNoteList.isNotEmpty()) {
+                viewModel.onLongNoteClick(id)
+            } else {
+                val jsonColor = notes.value.noteList[id-1].color.serialize()
+                navController.navigate(
+                    NavDestinations.EditNoteScreen(
+                        currentNoteId = id,
+                        currentNoteColor = jsonColor
+                    )
+                )
+            }
         }
-    ) { id ->
-        if (notes.value.selectedNoteList.isNotEmpty()) {
-            viewModel.onLongNoteClick(id)
-        } else {
-            navController.navigate(NavDestinations.EditNoteScreen(id))
-        }
-    }
+    )
 
     if (openAlertDialog.value) {
         CustomAlertDialog(

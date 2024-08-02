@@ -1,67 +1,67 @@
 package com.example.seton.feature_notes.data
 
+import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.domain.model.Note
-import com.example.seton.feature_notes.presentation.edit_note.components.SelectedColor
 
 val fakeNote = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Default
+    color = ContainerColor.Default
 )
 val fakeNote2 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Red
+    color = ContainerColor.Red
 )
 val fakeNote3 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Orange
+    color = ContainerColor.Orange
 )
 val fakeNote4 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Yellow
+    color = ContainerColor.Yellow
 )
 val fakeNote5 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Green
+    color = ContainerColor.Green
 )
 val fakeNote6 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Turquoise
+    color = ContainerColor.Turquoise
 )
 val fakeNote7 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Blue
+    color = ContainerColor.Blue
 )
 val fakeNote8 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.DarkBlue
+    color = ContainerColor.DarkBlue
 )
 val fakeNote9 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Purple
+    color = ContainerColor.Purple
 )
 val fakeNote10 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Pink
+    color = ContainerColor.Pink
 )
 val fakeNote11 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Brown
+    color = ContainerColor.Brown
 )
 val fakeNote12 = Note(
     title = "Lorem ipsum",
     content = "dolor sit amet",
-    color = SelectedColor.Grey
+    color = ContainerColor.Grey
 )
 
 val fakeNoteList = listOf<Note>(

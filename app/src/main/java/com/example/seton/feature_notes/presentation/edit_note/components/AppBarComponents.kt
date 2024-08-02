@@ -1,11 +1,9 @@
 package com.example.seton.feature_notes.presentation.edit_note.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ButtonDefaults
@@ -20,12 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seton.R
 import com.example.seton.common.presentation.theme.SetonTheme
+import com.example.seton.common.presentation.theme.dynamicTextColor
 
 @Composable
 fun EditNoteTopBar(
@@ -34,6 +34,10 @@ fun EditNoteTopBar(
     onSave: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = containerColor,
+            scrolledContainerColor = containerColor
+        ),
         title = { },
         navigationIcon = {
             IconButton(onClick = onNavigateBack) {
@@ -53,13 +57,10 @@ fun EditNoteTopBar(
                 Text(
                     text = stringResource(R.string.save),
                     fontSize = 18.sp,
-                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
+                    color = dynamicTextColor()
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = containerColor,
-        )
     )
 }
 
@@ -82,7 +83,7 @@ fun EditNoteBottomBar(
                 onAttachmentsClick()
             }
         ) {
-            Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+            Icon(painter = painterResource(R.drawable.ic_color), contentDescription = null)
         }
         Spacer(Modifier.weight(1f))
         /*Text(

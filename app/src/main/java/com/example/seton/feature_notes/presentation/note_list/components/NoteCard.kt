@@ -29,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
-import com.example.seton.feature_notes.presentation.edit_note.components.SelectedColor
 
 private const val TAG = "note_card"
 
@@ -44,7 +44,7 @@ fun NoteCard(
     content: String,
     onLongClick: () -> Unit,
     isCardChecked: Boolean,
-    color: SelectedColor,
+    color: ContainerColor,
     animatedContentScope: AnimatedVisibilityScope,
     sharedTransitionScope: SharedTransitionScope,
     onClick: () -> Unit,
@@ -52,8 +52,8 @@ fun NoteCard(
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
             containerColor = if(isSystemInDarkTheme()) {
-                color.dark
-            } else color.light
+                color.darkVariant
+            } else color.lightVariant
         ),
         border = if (isCardChecked) {
             BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)

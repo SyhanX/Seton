@@ -7,10 +7,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seton.common.domain.util.StorageManager
+import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.domain.model.InvalidNoteException
 import com.example.seton.feature_notes.domain.model.Note
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
-import com.example.seton.feature_notes.presentation.edit_note.components.SelectedColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,7 +67,7 @@ class EditNoteViewModel @Inject constructor(
     }
     
     fun saveColorState(
-        color: SelectedColor
+        color: ContainerColor
     ) {
         _noteState.value = noteState.value.copy(
             color = color 
@@ -78,7 +78,7 @@ class EditNoteViewModel @Inject constructor(
         title: String,
         content: String,
         imageFileName: String?,
-        color: SelectedColor, 
+        color: ContainerColor,
     ) {
         viewModelScope.launch {
             try {

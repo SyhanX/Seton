@@ -22,14 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.seton.R
+import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.theme.dynamicTextColor
 
 @Composable
-fun AttachmentsBottomSheet(
+fun ColorsBottomSheet(
     containerColor: Color,
     onDismissRequest: () -> Unit,
-    selectedColor: SelectedColor,
-    onColorClick: (SelectedColor) -> Unit,
+    selectedColor: ContainerColor,
+    onColorClick: (ContainerColor) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
@@ -43,15 +46,16 @@ fun AttachmentsBottomSheet(
     ) {
         Column(
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(8.dp)
         ) {
             Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.select_color),
+                fontSize = 20.sp,
+                color = dynamicTextColor()
+            )
+            Spacer(Modifier.height(16.dp))
             ColorsRow(selectedColor) { onColorClick(it) }
-            RegularBottomSheetItem(icon = R.drawable.ic_rounded_image, text = R.string.add_image) {
-
-            }
-            RegularBottomSheetItem()
-            RegularBottomSheetItem()
         }
     }
 }

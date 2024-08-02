@@ -46,4 +46,5 @@
     <string name="ask_leave_without_saving">Leave without saving note?</string>
     <string name="must_fill_all_fields">Please fill out all fields</string>
     <string name="copy">Copy</string>
+    <string name="select_color">Select color</string>
 </resources>

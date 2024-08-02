@@ -9,7 +9,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.seton.common.data.NavDestinations
+import com.example.seton.common.domain.util.deserialize
+import com.example.seton.common.domain.util.serialize
+import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
 
@@ -31,17 +35,26 @@ private fun AppContent(navController: NavHostController) {
         ) {
             composable<NavDestinations.NoteListScreen> {
                 NoteListScreen(
-                    onFabClick = { navController.navigate(NavDestinations.EditNoteScreen(-1)) },
+                    onFabClick = {
+                        navController.navigate(
+                            NavDestinations.EditNoteScreen(
+                                currentNoteId = -1,
+                                currentNoteColor = ContainerColor.Default.serialize()
+                            )
+                        )
+                    },
                     cardTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable,
                     navController = navController
                 )
             }
             composable<NavDestinations.EditNoteScreen> {
+                val args = it.toRoute<NavDestinations.EditNoteScreen>()
                 EditNoteScreen(
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable,
-                    navController = navController
+                    navController = navController,
+                    noteColor = args.currentNoteColor.deserialize()
                 )
             }
         }
