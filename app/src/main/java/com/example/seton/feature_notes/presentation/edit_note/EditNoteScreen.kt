@@ -35,7 +35,7 @@ import com.example.seton.common.presentation.components.CustomAlertDialog
 import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
-import com.example.seton.feature_notes.presentation.edit_note.components.ActionsBottomSheet
+import com.example.seton.feature_notes.presentation.edit_note.components.MoreActionsBottomSheet
 import com.example.seton.feature_notes.presentation.edit_note.components.ColorsBottomSheet
 import com.example.seton.feature_notes.presentation.edit_note.components.CustomTextField
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
@@ -43,6 +43,7 @@ import com.example.seton.feature_notes.presentation.edit_note.components.EditNot
 
 private const val TAG = "edit_note_screen"
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
@@ -164,7 +165,7 @@ fun EditNoteContent(
                 }
             }
             if (showActionsBottomSheet) {
-                ActionsBottomSheet(
+                MoreActionsBottomSheet(
                     onDismissRequest = { showActionsBottomSheet = false },
                     containerColor = color
                 ) { showDialog = true }

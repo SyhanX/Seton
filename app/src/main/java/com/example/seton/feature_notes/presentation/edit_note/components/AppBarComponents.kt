@@ -86,11 +86,6 @@ fun EditNoteBottomBar(
             Icon(painter = painterResource(R.drawable.ic_color), contentDescription = null)
         }
         Spacer(Modifier.weight(1f))
-        /*Text(
-            text = "Last edited: ",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
-        )*/
         IconButton(
             onClick = {
                 controller?.hide()

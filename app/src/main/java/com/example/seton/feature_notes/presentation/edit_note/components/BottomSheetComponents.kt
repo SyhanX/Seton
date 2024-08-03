@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seton.R
@@ -46,22 +47,24 @@ fun ColorsBottomSheet(
     ) {
         Column(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(16.dp)
         ) {
             Spacer(Modifier.height(16.dp))
             Text(
                 text = stringResource(R.string.select_color),
                 fontSize = 20.sp,
-                color = dynamicTextColor()
+                color = dynamicTextColor(),
+                fontWeight = FontWeight.SemiBold
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
             ColorsRow(selectedColor) { onColorClick(it) }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
 
 @Composable
-fun ActionsBottomSheet(
+fun MoreActionsBottomSheet(
     containerColor: Color,
     onDismissRequest: () -> Unit,
     onDeleteNote: () -> Unit,

@@ -76,6 +76,7 @@ val surfaceContainerLowDark = Color(0xFF22191A)
 val surfaceContainerDark = Color(0xFF261D1E)
 val surfaceContainerHighDark = Color(0xFF312829)
 val surfaceContainerHighestDark = Color(0xFF3D3233)
+
 /*Custom colors*/
 val defaultColorDark = Color(0xFF43292D)
 val redDark = Color(0xFF77172E)
