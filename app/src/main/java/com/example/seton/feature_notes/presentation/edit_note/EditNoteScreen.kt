@@ -20,8 +20,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,11 +37,11 @@ import com.example.seton.common.presentation.components.CustomAlertDialog
 import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
-import com.example.seton.feature_notes.presentation.edit_note.components.MoreActionsBottomSheet
 import com.example.seton.feature_notes.presentation.edit_note.components.ColorsBottomSheet
 import com.example.seton.feature_notes.presentation.edit_note.components.CustomTextField
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTopBar
+import com.example.seton.feature_notes.presentation.edit_note.components.MoreActionsBottomSheet
 
 private const val TAG = "edit_note_screen"
 
@@ -122,6 +124,8 @@ fun EditNoteContent(
         } else containerColor.lightVariant,
         label = "containerColor"
     )
+    val clipboardManager = LocalClipboardManager.current
+
     Box {
         Scaffold(
             topBar = {
@@ -166,9 +170,20 @@ fun EditNoteContent(
             }
             if (showActionsBottomSheet) {
                 MoreActionsBottomSheet(
+                    containerColor = color,
                     onDismissRequest = { showActionsBottomSheet = false },
-                    containerColor = color
-                ) { showDialog = true }
+                    onDeleteNote = { showDialog = true },
+                    onCopyNote = {
+                        clipboardManager.setText(
+                            AnnotatedString("${note.title}\n\n${note.content}")
+                        )
+                        Toast.makeText(
+                            context,
+                            context.getText(R.string.copied_to_clipboard),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
             }
             if (showDialog) {
                 CustomAlertDialog(
