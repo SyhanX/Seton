@@ -54,6 +54,7 @@ fun NoteListScreen(
 ) {
     val notes = viewModel.noteListState.collectAsState()
     val openAlertDialog = remember { mutableStateOf(false) }
+
     NoteListContent(
         notes = notes.value.noteList,
         onFabClick = onFabClick,
@@ -81,7 +82,10 @@ fun NoteListScreen(
             if (notes.value.selectedNoteList.isNotEmpty()) {
                 viewModel.onLongNoteClick(id)
             } else {
-                val jsonColor = notes.value.noteList[id-1].color.serialize()
+                val jsonColor = notes.value.noteList.find { note ->
+                    note.id == id
+                }!!.color.serialize()
+
                 navController.navigate(
                     NavDestinations.EditNoteScreen(
                         currentNoteId = id,
@@ -160,12 +164,12 @@ private fun NoteListContent(
             items = notes,
             cardTransitionScope = cardTransitionScope,
             animatedContentScope = animatedContentScope,
-            onLongCardClick = { onLongCardClick(it) }
-        ) { onCardClick(it) }
+            onLongCardClick = { onLongCardClick(it) },
+            onCardClick = { onCardClick(it) }
+        )
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DynamicLazyLayout(
     isGridLayout: Boolean,
@@ -236,10 +240,13 @@ fun NoteGrid(
         ) { note ->
             with(sharedTransitionScope) {
                 NoteCard(
+                    onClick = {
+                        onCardClick(note.id)
+                    },
                     id = note.id,
                     title = note.title,
                     content = note.content,
-                    isCardChecked = note.isChecked,
+                    isCardSelected = note.isChecked,
                     onLongClick = { onLongCardClick(note.id) },
                     animatedContentScope = animatedContentScope,
                     sharedTransitionScope = cardTransitionScope,
@@ -250,7 +257,7 @@ fun NoteGrid(
                             rememberSharedContentState(key = note.id),
                             animatedVisibilityScope
                         )
-                ) { onCardClick(note.id) }
+                )
             }
         }
     }
@@ -278,7 +285,7 @@ fun NoteList(
                     id = note.id,
                     title = note.title,
                     content = note.content,
-                    isCardChecked = note.isChecked,
+                    isCardSelected = note.isChecked,
                     onLongClick = { onLongCardClick(note.id) },
                     sharedTransitionScope = cardTransitionScope,
                     animatedContentScope = animatedContentScope,

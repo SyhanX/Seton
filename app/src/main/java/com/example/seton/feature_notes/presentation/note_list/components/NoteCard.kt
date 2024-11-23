@@ -43,7 +43,7 @@ fun NoteCard(
     title: String,
     content: String,
     onLongClick: () -> Unit,
-    isCardChecked: Boolean,
+    isCardSelected: Boolean,
     color: ContainerColor,
     animatedContentScope: AnimatedVisibilityScope,
     sharedTransitionScope: SharedTransitionScope,
@@ -55,8 +55,8 @@ fun NoteCard(
                 color.darkVariant
             } else color.lightVariant
         ),
-        border = if (isCardChecked) {
-            BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
+        border = if (isCardSelected) {
+            BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface)
         } else {
             BorderStroke(0.dp, Color.Transparent)
         },
