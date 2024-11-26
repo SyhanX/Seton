@@ -1,12 +1,8 @@
 package com.example.seton.feature_notes.presentation.edit_note
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.common.domain.util.StorageManager
 import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.domain.model.InvalidNoteException
 import com.example.seton.feature_notes.domain.model.Note
@@ -16,9 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
-private const val TAG = "editnotevm"
+private const val TAG = "EditNoteViewModel"
 
 @HiltViewModel
 class EditNoteViewModel @Inject constructor(
@@ -41,8 +38,9 @@ class EditNoteViewModel @Inject constructor(
                             id = noteId,
                             title = note.title,
                             content = note.content,
-                            imageFileName = note.imageFileName,
-                            color = note.color
+                            color = note.color,
+                            creationDate = note.creationDate,
+                            modificationDate = note.modificationDate
                         )
                     }
                 }
@@ -50,49 +48,51 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
-    fun saveTitleState(
-        title: String
-    ) {
+    fun saveTitleState(title: String) {
         _noteState.value = noteState.value.copy(
             title = title
         )
     }
 
-    fun saveContentState(
-        content: String
-    ) {
+    fun saveContentState(content: String) {
         _noteState.value = noteState.value.copy(
             content = content
         )
     }
-    
-    fun saveColorState(
-        color: ContainerColor
-    ) {
+
+    fun saveColorState(color: ContainerColor) {
         _noteState.value = noteState.value.copy(
-            color = color 
+            color = color
         )
     }
-    
-    fun saveNote(
-        title: String,
-        content: String,
-        imageFileName: String?,
-        color: ContainerColor,
-    ) {
+
+    fun saveCreationDateState() {
+        _noteState.value = noteState.value.copy(
+            creationDate = Calendar.getInstance().time
+        )
+    }
+
+    fun saveModificationDateState() {
+        _noteState.value = noteState.value.copy(
+            modificationDate = Calendar.getInstance().time
+        )
+    }
+
+    fun saveNote() {
         viewModelScope.launch {
             try {
-                noteUseCases.upsertNote(
+                noteUseCases.saveNote(
                     Note(
-                        title = title,
-                        content = content,
-                        imageFileName = imageFileName ?: _noteState.value.imageFileName,
+                        title = noteState.value.title,
+                        content = noteState.value.content,
                         noteId = currentNoteId,
-                        color = color
+                        color = noteState.value.color,
+                        creationDate = noteState.value.creationDate,
+                        modificationDate = noteState.value.modificationDate
                     )
                 )
             } catch (e: InvalidNoteException) {
-                Log.e(TAG, "Error saving note.")
+                e.printStackTrace()
             }
         }
     }
@@ -109,58 +109,11 @@ class EditNoteViewModel @Inject constructor(
                 Note(
                     title = noteState.value.title,
                     content = noteState.value.content,
-                    imageFileName = noteState.value.imageFileName,
-                    noteId = currentNoteId
+                    noteId = currentNoteId,
+                    creationDate = noteState.value.creationDate,
+                    modificationDate = noteState.value.modificationDate
                 )
             )
-        }
-    }
-
-    fun saveBitmapToDevice(context: Context, bitmap: Bitmap?, fileName: String) {
-        if (bitmap != null) {
-            StorageManager.saveToInternalStorage(
-                context = context,
-                bitmapImage = bitmap,
-                imageFileName = fileName
-            )
-            Log.i(TAG, "Saved bitmap: $bitmap")
-        } else {
-            Log.e(TAG, "Couldn't save bitmap because its value is NULL")
-        }
-    }
-
-    fun getBitmapFromDevice(context: Context, fileName: String?): Bitmap? {
-        return if (fileName != null) {
-            try {
-                Log.i(TAG, "Got bitmap successfully: $fileName")
-                StorageManager.getImageFromInternalStorage(
-                    context = context,
-                    imageFileName = fileName
-                )
-            } catch (exception: Exception) {
-                Log.e(TAG, "Couldn't get bitmap $fileName because it doesn't exist.")
-                null
-            }
-        } else {
-            Log.e(TAG, "Couldn't get bitmap because it doesn't exist.")
-            null
-        }
-    }
-
-    fun deleteBitmapFromDevice(context: Context, fileName: String?) {
-        if (fileName != null) {
-            try {
-                StorageManager.deleteImageFromInternalStorage(
-                    context = context,
-                    imageFileName = fileName
-                )
-                Log.i(TAG, "Deleted bitmap successfully.")
-            } catch (exception: IllegalArgumentException) {
-                Log.e(TAG, "Couldn't delete bitmap $fileName because it doesn't exist.")
-                return
-            }
-        } else {
-            Log.e(TAG, "Couldn't delete bitmap because it doesn't exist.")
         }
     }
 }

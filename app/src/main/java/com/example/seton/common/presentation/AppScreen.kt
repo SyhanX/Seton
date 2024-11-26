@@ -11,13 +11,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.seton.common.data.NavDestinations
-import com.example.seton.common.domain.util.deserialize
 import com.example.seton.common.domain.util.serialize
 import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
+import kotlinx.serialization.json.Json
 
-private const val TAG = "app_screen"
+private const val TAG = "AppScreen"
 
 @Composable
 fun AppScreen(
@@ -54,7 +54,9 @@ private fun AppContent(navController: NavHostController) {
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable,
                     navController = navController,
-                    noteColor = args.currentNoteColor.deserialize()
+                    noteColor = Json.decodeFromString<ContainerColor>(
+                        args.currentNoteColor
+                    )
                 )
             }
         }

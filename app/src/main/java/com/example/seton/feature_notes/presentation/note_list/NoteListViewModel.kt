@@ -3,7 +3,7 @@ package com.example.seton.feature_notes.presentation.note_list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.feature_notes.data.fakeNoteList
+import com.example.seton.feature_notes.data.fakeNote
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
 import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
 import com.example.seton.feature_notes.presentation.note_list.state.NoteListState
@@ -124,8 +124,10 @@ class NoteListViewModel @Inject constructor(
 
     fun fillDatabase() {
         viewModelScope.launch {
-            fakeNoteList.forEach {
-                noteUseCases.upsertNote(it)
+            repeat(10) {
+                noteUseCases.saveNote(
+                    fakeNote
+                )
             }
         }
     }

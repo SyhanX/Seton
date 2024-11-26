@@ -1,16 +1,16 @@
 package com.example.seton.common.data.local
 
-import android.net.Uri
-import androidx.core.net.toUri
 import androidx.room.TypeConverter
+import java.util.Date
 
 class Converters {
     @TypeConverter
-    fun fromUri(uri: Uri): String {
-        return uri.toString()
+    fun fromDate(date: Date) : Long {
+        return date.time
     }
+
     @TypeConverter
-    fun toUri(string: String): Uri {
-        return string.toUri()
+    fun toDate(long: Long) : Date {
+        return Date(long)
     }
 }

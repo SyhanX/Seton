@@ -1,7 +1,6 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class)
-
 package com.example.seton.feature_notes.presentation.edit_note
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -43,7 +42,7 @@ import com.example.seton.feature_notes.presentation.edit_note.components.EditNot
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTopBar
 import com.example.seton.feature_notes.presentation.edit_note.components.MoreActionsBottomSheet
 
-private const val TAG = "edit_note_screen"
+private const val TAG = "EditNoteScreen"
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -67,20 +66,18 @@ fun EditNoteScreen(
             note = note.value,
             noteColor = noteColor,
             navigateUp = { navController.navigateUp() },
-            navigateToNoteList = {
-                navController.navigate(NavDestinations.NoteListScreen)
-            },
+            navigateToNoteList = { navController.navigate(NavDestinations.NoteListScreen) },
             saveNote = {
-                viewModel.saveNote(
-                    note.value.title,
-                    note.value.content,
-                    note.value.imageFileName,
-                    note.value.color
-                )
+                if (note.value.creationDate == null) {
+                    viewModel.saveCreationDateState()
+                    Log.d(TAG, "EditNoteScreen: saved CREATION date")
+                } else {
+                    viewModel.saveModificationDateState()
+                    Log.d(TAG, "EditNoteScreen: saved MODIFICATION date")
+                }
+                viewModel.saveNote()
             },
-            deleteNote = {
-                viewModel.deleteNote()
-            },
+            deleteNote = { viewModel.deleteNote() },
             saveState = { type ->
                 when (type) {
                     is NoteStateType.Title -> {
@@ -112,19 +109,23 @@ fun EditNoteContent(
     saveState: (NoteStateType) -> Unit,
 ) {
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
+
     var isTitleBlank by remember { mutableStateOf(true) }
     var isContentBlank by remember { mutableStateOf(true) }
+
     var showAttachmentsBottomSheet by remember { mutableStateOf(false) }
     var showActionsBottomSheet by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+
     var containerColor by remember { mutableStateOf<ContainerColor>(noteColor) }
+
     val color by animateColorAsState(
         targetValue = if (isSystemInDarkTheme()) {
             containerColor.darkVariant
         } else containerColor.lightVariant,
         label = "containerColor"
     )
-    val clipboardManager = LocalClipboardManager.current
 
     Box {
         Scaffold(
@@ -149,12 +150,14 @@ fun EditNoteContent(
             bottomBar = {
                 EditNoteBottomBar(
                     containerColor = color,
-                    onAttachmentsClick = {
+                    onColorSelectorClick = {
                         showAttachmentsBottomSheet = true
                     },
-                    onActionsClick = {
+                    onMoreActionsClick = {
                         showActionsBottomSheet = true
-                    }
+                    },
+                    onShowFullDateClick = { /*TODO*/ },
+                    modificationDate = note.modificationDate ?: note.creationDate
                 )
             }
         ) { padding ->
@@ -162,11 +165,12 @@ fun EditNoteContent(
                 ColorsBottomSheet(
                     onDismissRequest = { showAttachmentsBottomSheet = false },
                     selectedColor = note.color,
-                    containerColor = color
-                ) {
-                    saveState(NoteStateType.Color(it))
-                    containerColor = it
-                }
+                    containerColor = color,
+                    onColorClick = {
+                        saveState(NoteStateType.Color(it))
+                        containerColor = it
+                    }
+                )
             }
             if (showActionsBottomSheet) {
                 MoreActionsBottomSheet(
@@ -259,7 +263,7 @@ private fun EditNotePreview() {
             id = 0,
             title = "Lorem ipsum",
             content = "Dolor sit amet",
-            color = ContainerColor.DarkBlue
+            color = ContainerColor.Red
         ),
         noteColor = ContainerColor.Red,
         navigateUp = { /*TODO*/ },

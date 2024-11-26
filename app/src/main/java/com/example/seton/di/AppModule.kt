@@ -11,7 +11,7 @@ import com.example.seton.feature_notes.domain.use_case.DeleteNoteById
 import com.example.seton.feature_notes.domain.use_case.GetAllNotes
 import com.example.seton.feature_notes.domain.use_case.GetNoteById
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
-import com.example.seton.feature_notes.domain.use_case.UpsertNote
+import com.example.seton.feature_notes.domain.use_case.SaveNote
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,7 +45,7 @@ object AppModule {
             getAllNotes = GetAllNotes(repository),
             deleteNote = DeleteNote(repository),
             deleteAllNotes = DeleteAllNotes(repository),
-            upsertNote = UpsertNote(repository),
+            saveNote = SaveNote(repository),
             getNoteById = GetNoteById(repository),
             deleteNoteById = DeleteNoteById(repository)
         )

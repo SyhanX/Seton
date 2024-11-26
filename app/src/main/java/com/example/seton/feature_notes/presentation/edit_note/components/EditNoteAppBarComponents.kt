@@ -1,7 +1,9 @@
 package com.example.seton.feature_notes.presentation.edit_note.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import android.icu.text.DateFormat
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
@@ -15,17 +17,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seton.R
 import com.example.seton.common.presentation.theme.SetonTheme
 import com.example.seton.common.presentation.theme.dynamicTextColor
+import java.util.Date
+
+private const val TAG = "EditNoteAppBarComponent"
 
 @Composable
 fun EditNoteTopBar(
@@ -66,35 +71,68 @@ fun EditNoteTopBar(
 
 @Composable
 fun EditNoteBottomBar(
+    onColorSelectorClick: () -> Unit,
+    onMoreActionsClick: () -> Unit,
+    onShowFullDateClick: () -> Unit,
     containerColor: Color = MaterialTheme.colorScheme.background,
-    onAttachmentsClick: () -> Unit,
-    onActionsClick: () -> Unit,
+    modificationDate: Date?,
 ) {
     val controller = LocalSoftwareKeyboardController.current
+
+   /* val formattedTime = modificationDate?.let { date ->
+        DateFormat
+            .getInstanceForSkeleton(DateFormat.HOUR24_MINUTE)
+            .format(date)
+    }
+*/
+    val formattedShortDate = modificationDate?.let { date ->
+        DateFormat
+            .getInstanceForSkeleton(DateFormat.ABBR_MONTH_DAY)
+            .format(date)
+    }
 
     BottomAppBar(
         containerColor = containerColor,
         modifier = Modifier
-            .height(64.dp)
     ) {
-        IconButton(
-            onClick = {
-                controller?.hide()
-                onAttachmentsClick()
-            }
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Icon(painter = painterResource(R.drawable.ic_color), contentDescription = null)
-        }
-        Spacer(Modifier.weight(1f))
-        IconButton(
-            onClick = {
-                controller?.hide()
-                onActionsClick()
+            IconButton(
+                onClick = {
+                    controller?.hide()
+                    onColorSelectorClick()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_color),
+                    contentDescription = null
+                )
             }
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.MoreVert, null
-            )
+            if (modificationDate != null && formattedShortDate != null) {
+                TextButton(
+                    onClick = onShowFullDateClick
+                ) {
+                    Text(
+                        text = stringResource(R.string.note_edited_at, formattedShortDate),
+                        fontSize = 18.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = {
+                    controller?.hide()
+                    onMoreActionsClick()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.MoreVert,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -104,6 +142,11 @@ fun EditNoteBottomBar(
 @Composable
 private fun BottomBarPreview() {
     SetonTheme {
-        EditNoteBottomBar(onAttachmentsClick = {}) {}
+        EditNoteBottomBar(
+            onColorSelectorClick = {},
+            onMoreActionsClick = {},
+            onShowFullDateClick = {},
+            modificationDate = Date(),
+        )
     }
 }

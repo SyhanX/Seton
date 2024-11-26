@@ -41,4 +41,5 @@
     <string name="copy">Скопировать</string>
     <string name="select_color">Выберите цвет</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
+    <string name="note_edited_at">Изменено: %1$s</string>
 </resources>

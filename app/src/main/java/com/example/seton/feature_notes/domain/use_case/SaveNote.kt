@@ -4,7 +4,7 @@ import com.example.seton.feature_notes.domain.model.InvalidNoteException
 import com.example.seton.feature_notes.domain.model.Note
 import com.example.seton.feature_notes.domain.repository.NoteRepository
 
-class UpsertNote(
+class SaveNote(
     private val repository: NoteRepository
 ) {
     @Throws(InvalidNoteException::class)
@@ -15,6 +15,6 @@ class UpsertNote(
         if(note.content.isBlank()) {
             throw InvalidNoteException("The content of the note cannot be empty.")
         }
-        repository.upsertNote(note)
+        repository.saveNote(note)
     }
 }

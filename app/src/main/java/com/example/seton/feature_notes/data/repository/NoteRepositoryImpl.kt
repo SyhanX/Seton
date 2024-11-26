@@ -10,7 +10,7 @@ class NoteRepositoryImpl(
 ) : NoteRepository {
     override fun getAllNotes(): Flow<List<Note>> = dao.getAllNotes()
     override suspend fun getNoteById(id: Int): Note? = dao.getNoteById(id)
-    override suspend fun upsertNote(note: Note) = dao.upsertNote(note)
+    override suspend fun saveNote(note: Note) = dao.upsertNote(note)
     override suspend fun deleteNote(note: Note) = dao.deleteNote(note)
     override suspend fun deleteNoteById(id: Int) = dao.deleteNoteById(id)
     override suspend fun deleteAllNotes() = dao.deleteAllNotes()

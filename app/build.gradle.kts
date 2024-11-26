@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.seton.HiltTestRunner"
     }
 
     buildTypes {
@@ -67,6 +67,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.ui.text.google.fonts)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -93,4 +95,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.hilt.compose.navigation)
+    kspAndroidTest(libs.hilt.instrumented.tests)
+    androidTestAnnotationProcessor(libs.hilt.instrumented.tests)
+    androidTestImplementation(libs.hilt.testing)
 }
