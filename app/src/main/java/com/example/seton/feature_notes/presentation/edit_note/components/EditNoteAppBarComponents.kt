@@ -1,6 +1,7 @@
 package com.example.seton.feature_notes.presentation.edit_note.components
 
 import android.icu.text.DateFormat
+import android.text.format.DateUtils
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -78,16 +79,14 @@ fun EditNoteBottomBar(
     modificationDate: Date?,
 ) {
     val controller = LocalSoftwareKeyboardController.current
-
-   /* val formattedTime = modificationDate?.let { date ->
-        DateFormat
-            .getInstanceForSkeleton(DateFormat.HOUR24_MINUTE)
-            .format(date)
-    }
-*/
     val formattedShortDate = modificationDate?.let { date ->
+        val isModificationDateToday = DateUtils.isToday(modificationDate.time)
         DateFormat
-            .getInstanceForSkeleton(DateFormat.ABBR_MONTH_DAY)
+            .getInstanceForSkeleton(
+                if (isModificationDateToday) {
+                    DateFormat.HOUR24_MINUTE
+                } else DateFormat.ABBR_MONTH_DAY
+            )
             .format(date)
     }
 
@@ -118,7 +117,8 @@ fun EditNoteBottomBar(
                 ) {
                     Text(
                         text = stringResource(R.string.note_edited_at, formattedShortDate),
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        color = dynamicTextColor()
                     )
                 }
             }
