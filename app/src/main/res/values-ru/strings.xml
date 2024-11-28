@@ -45,5 +45,5 @@
     <string name="note_info">Детали заметки</string>
     <string name="creation_date">Создано</string>
     <string name="modification_date">Изменено</string>
-    <string name="action_close">Close</string>
+    <string name="action_close">Закрыть</string>
 </resources>
