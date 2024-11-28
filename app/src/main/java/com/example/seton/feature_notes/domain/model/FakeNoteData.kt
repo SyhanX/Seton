@@ -57,7 +57,7 @@ val fakeNotes = mutableListOf<Note>().also { list ->
             Note(
                 title = fakeTitles.shuffled()[it],
                 content = fakeContents.shuffled()[it],
-                color = colors.shuffled()[it],
+                color = colors[it],
                 creationDate = fakeCreationDates.shuffled()[it],
                 modificationDate = fakeModificationDates.shuffled()[it]
             )
