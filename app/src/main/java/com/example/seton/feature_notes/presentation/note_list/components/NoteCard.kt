@@ -1,10 +1,5 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class)
-
 package com.example.seton.feature_notes.presentation.note_list.components
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -30,28 +25,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seton.common.presentation.state.ContainerColor
-import com.example.seton.feature_notes.data.NoteSharedElementKey
-import com.example.seton.feature_notes.data.NoteTextType
 
 private const val TAG = "note_card"
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteCard(
     modifier: Modifier = Modifier,
-    id: Int,
     title: String,
     content: String,
     onLongClick: () -> Unit,
     isCardSelected: Boolean,
     color: ContainerColor,
-    animatedContentScope: AnimatedVisibilityScope,
-    sharedTransitionScope: SharedTransitionScope,
     onClick: () -> Unit,
 ) {
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = if(isSystemInDarkTheme()) {
+            containerColor = if (isSystemInDarkTheme()) {
                 color.darkVariant
             } else color.lightVariant
         ),
@@ -74,41 +64,27 @@ fun NoteCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            with(sharedTransitionScope) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .padding(12.dp, 16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = title,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedTransitionScope.rememberSharedContentState(
-                                    key = NoteSharedElementKey(id, title, NoteTextType.Title)
-                                ),
-                                animatedVisibilityScope = animatedContentScope
-                            )
-                    )
-                    Text(
-                        text = content,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp,
-                        maxLines = 5,
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedTransitionScope.rememberSharedContentState(
-                                    key = NoteSharedElementKey(id, content, NoteTextType.Content)
-                                ),
-                                animatedVisibilityScope = animatedContentScope
-                            )
-                    )
-                }
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(12.dp, 16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+
+                )
+                Text(
+                    text = content,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                    maxLines = 5,
+                )
             }
         }
     }

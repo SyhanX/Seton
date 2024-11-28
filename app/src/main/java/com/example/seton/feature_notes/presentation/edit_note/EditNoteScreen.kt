@@ -2,13 +2,10 @@ package com.example.seton.feature_notes.presentation.edit_note
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,8 +31,6 @@ import com.example.seton.R
 import com.example.seton.common.data.NavDestinations
 import com.example.seton.common.presentation.components.CustomAlertDialog
 import com.example.seton.common.presentation.state.ContainerColor
-import com.example.seton.feature_notes.data.NoteSharedElementKey
-import com.example.seton.feature_notes.data.NoteTextType
 import com.example.seton.feature_notes.presentation.edit_note.components.ColorsBottomSheet
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTextField
@@ -49,58 +44,53 @@ private const val TAG = "EditNoteScreen"
 @Composable
 fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     navController: NavHostController,
     noteColor: ContainerColor
 ) {
     val note = viewModel.noteState.collectAsStateWithLifecycle()
 
-    with(sharedTransitionScope) {
-        EditNoteContent(
-            sharedElementModifier = {
-                Modifier.sharedElement(
-                    sharedTransitionScope.rememberSharedContentState(it),
-                    animatedVisibilityScope = animatedContentScope
+    EditNoteContent(
+        note = note.value,
+        noteColor = noteColor,
+        navigateUp = { navController.navigateUp() },
+        navigateToNoteList = { navController.navigate(NavDestinations.NoteListScreen) },
+        saveNote = {
+            if (note.value.creationDate == null) {
+                viewModel.saveCreationDateState()
+                Log.d(
+                    TAG,
+                    "EditNoteScreen: saved CREATION date"
                 )
-            },
-            note = note.value,
-            noteColor = noteColor,
-            navigateUp = { navController.navigateUp() },
-            navigateToNoteList = { navController.navigate(NavDestinations.NoteListScreen) },
-            saveNote = {
-                if (note.value.creationDate == null) {
-                    viewModel.saveCreationDateState()
-                    Log.d(TAG, "EditNoteScreen: saved CREATION date")
-                } else {
-                    viewModel.saveModificationDateState()
-                    Log.d(TAG, "EditNoteScreen: saved MODIFICATION date")
+            } else {
+                viewModel.saveModificationDateState()
+                Log.d(
+                    TAG,
+                    "EditNoteScreen: saved MODIFICATION date"
+                )
+            }
+            viewModel.saveNote()
+        },
+        deleteNote = { viewModel.deleteNote() },
+        saveState = { type ->
+            when (type) {
+                is NoteStateType.Title -> {
+                    viewModel.saveTitleState(type.title)
                 }
-                viewModel.saveNote()
-            },
-            deleteNote = { viewModel.deleteNote() },
-            saveState = { type ->
-                when (type) {
-                    is NoteStateType.Title -> {
-                        viewModel.saveTitleState(type.title)
-                    }
 
-                    is NoteStateType.Content -> {
-                        viewModel.saveContentState(type.content)
-                    }
+                is NoteStateType.Content -> {
+                    viewModel.saveContentState(type.content)
+                }
 
-                    is NoteStateType.Color -> {
-                        viewModel.saveColorState(type.color)
-                    }
+                is NoteStateType.Color -> {
+                    viewModel.saveColorState(type.color)
                 }
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
 fun EditNoteContent(
-    sharedElementModifier: @Composable (NoteSharedElementKey) -> Modifier,
     note: NoteState,
     noteColor: ContainerColor,
     navigateUp: () -> Unit,
@@ -128,137 +118,113 @@ fun EditNoteContent(
         label = "containerColor"
     )
 
-    Box {
-        Scaffold(
-            topBar = {
-                EditNoteTopBar(
-                    containerColor = color,
-                    onNavigateBack = navigateUp,
-                    onSave = {
-                        if (note.title.isBlank() || note.content.isBlank()) {
-                            Toast.makeText(
-                                context,
-                                context.getText(R.string.must_fill_all_fields),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            saveNote()
-                            navigateToNoteList()
-                        }
-                    }
-                )
-            },
-            bottomBar = {
-                EditNoteBottomBar(
-                    containerColor = color,
-                    onColorSelectorClick = {
-                        showAttachmentsBottomSheet = true
-                    },
-                    onMoreActionsClick = {
-                        showActionsBottomSheet = true
-                    },
-                    onShowDateClick = { showFullDateDialog = true },
-                    modificationDate = note.modificationDate ?: note.creationDate
-                )
-            }
-        ) { padding ->
-            if (showAttachmentsBottomSheet) {
-                ColorsBottomSheet(
-                    onDismissRequest = { showAttachmentsBottomSheet = false },
-                    selectedColor = note.color,
-                    containerColor = color,
-                    onColorClick = {
-                        saveState(NoteStateType.Color(it))
-                        containerColor = it
-                    }
-                )
-            }
-            if (showActionsBottomSheet) {
-                MoreActionsBottomSheet(
-                    containerColor = color,
-                    onDismissRequest = { showActionsBottomSheet = false },
-                    onDeleteNote = { showDeleteNoteDialog = true },
-                    onCopyNote = {
-                        clipboardManager.setText(
-                            AnnotatedString("${note.title}\n\n${note.content}")
-                        )
+    Scaffold(
+        topBar = {
+            EditNoteTopBar(
+                containerColor = color,
+                onNavigateBack = navigateUp,
+                onSave = {
+                    if (note.title.isBlank() || note.content.isBlank()) {
                         Toast.makeText(
                             context,
-                            context.getText(R.string.copied_to_clipboard),
+                            context.getText(R.string.must_fill_all_fields),
                             Toast.LENGTH_SHORT
                         ).show()
+                    } else {
+                        saveNote()
+                        navigateToNoteList()
                     }
-                )
-            }
-            if (showDeleteNoteDialog) {
-                CustomAlertDialog(
-                    title = R.string.confirm_action,
-                    text = R.string.ask_delete_note,
-                    onDismiss = { showDeleteNoteDialog = false }
-                ) {
-                    navigateUp()
-                    deleteNote()
                 }
-            }
-            if (showFullDateDialog) {
-                FullNoteInfoDialog(
-                    onDismissRequest = { showFullDateDialog = false},
-                    color = color,
-                    creationDate = note.creationDate,
-                    modificationDate = note.modificationDate
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .background(color)
+            )
+        },
+        bottomBar = {
+            EditNoteBottomBar(
+                containerColor = color,
+                onColorSelectorClick = {
+                    showAttachmentsBottomSheet = true
+                },
+                onMoreActionsClick = {
+                    showActionsBottomSheet = true
+                },
+                onShowDateClick = { showFullDateDialog = true },
+                modificationDate = note.modificationDate ?: note.creationDate
+            )
+        }
+    ) { padding ->
+        if (showAttachmentsBottomSheet) {
+            ColorsBottomSheet(
+                onDismissRequest = { showAttachmentsBottomSheet = false },
+                selectedColor = note.color,
+                containerColor = color,
+                onColorClick = {
+                    saveState(NoteStateType.Color(it))
+                    containerColor = it
+                }
+            )
+        }
+        if (showActionsBottomSheet) {
+            MoreActionsBottomSheet(
+                containerColor = color,
+                onDismissRequest = { showActionsBottomSheet = false },
+                onDeleteNote = { showDeleteNoteDialog = true },
+                onCopyNote = {
+                    clipboardManager.setText(
+                        AnnotatedString("${note.title}\n\n${note.content}")
+                    )
+                    Toast.makeText(
+                        context,
+                        context.getText(R.string.copied_to_clipboard),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            )
+        }
+        if (showDeleteNoteDialog) {
+            CustomAlertDialog(
+                title = R.string.confirm_action,
+                text = R.string.ask_delete_note,
+                onDismiss = { showDeleteNoteDialog = false }
             ) {
-                EditNoteTextField(
-                    text = note.title,
-                    placeholderText = stringResource(R.string.note_title),
-                    isSingleLine = true,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    imeAction = ImeAction.Next,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(
-                            if (note.title.isNotBlank() || !isTitleBlank) {
-                                sharedElementModifier(
-                                    NoteSharedElementKey(
-                                        note.id,
-                                        note.title,
-                                        NoteTextType.Title
-                                    )
-                                )
-                            } else Modifier
-                        )
+                navigateUp()
+                deleteNote()
+            }
+        }
+        if (showFullDateDialog) {
+            FullNoteInfoDialog(
+                onDismissRequest = { showFullDateDialog = false },
+                color = color,
+                creationDate = note.creationDate,
+                modificationDate = note.modificationDate
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .background(color)
+        ) {
+            EditNoteTextField(
+                text = note.title,
+                placeholderText = stringResource(R.string.note_title),
+                isSingleLine = true,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                imeAction = ImeAction.Next,
+                modifier = Modifier
+                    .fillMaxWidth()
 
-                ) {
-                    isTitleBlank = it.isBlank()
-                    saveState(NoteStateType.Title(it))
-                }
-                EditNoteTextField(
-                    text = note.content,
-                    placeholderText = stringResource(R.string.note_content),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .then(
-                            if (note.content.isNotBlank() || !isContentBlank) {
-                                sharedElementModifier(
-                                    NoteSharedElementKey(
-                                        note.id,
-                                        note.content,
-                                        NoteTextType.Content
-                                    )
-                                )
-                            } else Modifier
-                        )
-                ) {
-                    isContentBlank = it.isBlank()
-                    saveState(NoteStateType.Content(it))
-                }
+            ) {
+                isTitleBlank = it.isBlank()
+                saveState(NoteStateType.Title(it))
+            }
+            EditNoteTextField(
+                text = note.content,
+                placeholderText = stringResource(R.string.note_content),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                isContentBlank = it.isBlank()
+                saveState(NoteStateType.Content(it))
             }
         }
     }
@@ -282,7 +248,6 @@ private fun EditNotePreview() {
         navigateToNoteList = { /*TODO*/ },
         saveNote = { /*TODO*/ },
         deleteNote = { /*TODO*/ },
-        sharedElementModifier = { Modifier },
         saveState = { }
     )
 }
