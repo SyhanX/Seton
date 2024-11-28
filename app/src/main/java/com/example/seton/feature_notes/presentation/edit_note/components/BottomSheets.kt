@@ -85,12 +85,12 @@ fun MoreActionsBottomSheet(
                 .padding(vertical = 8.dp)
         ) {
             Spacer(Modifier.height(16.dp))
-            RegularBottomSheetItem(
+            BottomSheetMenuItem(
                 icon = R.drawable.ic_rounded_delete,
                 text = R.string.delete,
                 onClick = onDeleteNote
             )
-            RegularBottomSheetItem(
+            BottomSheetMenuItem(
                 icon = R.drawable.ic_copy,
                 text = R.string.copy,
                 onClick = onCopyNote
@@ -100,7 +100,7 @@ fun MoreActionsBottomSheet(
 }
 
 @Composable
-fun RegularBottomSheetItem(
+fun BottomSheetMenuItem(
     @DrawableRes icon: Int = R.drawable.ic_bug,
     @StringRes text: Int = R.string.app_name,
     onClick: () -> Unit = {},
