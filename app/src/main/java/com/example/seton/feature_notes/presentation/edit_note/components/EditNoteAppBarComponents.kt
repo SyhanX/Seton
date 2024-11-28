@@ -74,7 +74,7 @@ fun EditNoteTopBar(
 fun EditNoteBottomBar(
     onColorSelectorClick: () -> Unit,
     onMoreActionsClick: () -> Unit,
-    onShowFullDateClick: () -> Unit,
+    onShowDateClick: () -> Unit,
     containerColor: Color = MaterialTheme.colorScheme.background,
     modificationDate: Date?,
 ) {
@@ -113,7 +113,7 @@ fun EditNoteBottomBar(
             }
             if (modificationDate != null && formattedShortDate != null) {
                 TextButton(
-                    onClick = onShowFullDateClick
+                    onClick = onShowDateClick
                 ) {
                     Text(
                         text = stringResource(R.string.note_edited_at, formattedShortDate),
@@ -145,7 +145,7 @@ private fun BottomBarPreview() {
         EditNoteBottomBar(
             onColorSelectorClick = {},
             onMoreActionsClick = {},
-            onShowFullDateClick = {},
+            onShowDateClick = {},
             modificationDate = Date(),
         )
     }

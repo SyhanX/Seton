@@ -42,4 +42,8 @@
     <string name="select_color">Выберите цвет</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
     <string name="note_edited_at">Изменено: %1$s</string>
+    <string name="note_info">Детали заметки</string>
+    <string name="creation_date">Создано</string>
+    <string name="modification_date">Изменено</string>
+    <string name="action_close">Close</string>
 </resources>

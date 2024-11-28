@@ -49,4 +49,8 @@
     <string name="select_color">Select color</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="note_edited_at">Edited: %1$s</string>
+    <string name="note_info">Note Details</string>
+    <string name="creation_date">Created</string>
+    <string name="modification_date">Modified</string>
+    <string name="action_close">Close</string>
 </resources>

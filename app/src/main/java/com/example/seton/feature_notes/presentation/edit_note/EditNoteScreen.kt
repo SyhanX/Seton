@@ -40,6 +40,7 @@ import com.example.seton.feature_notes.presentation.edit_note.components.ColorsB
 import com.example.seton.feature_notes.presentation.edit_note.components.CustomTextField
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTopBar
+import com.example.seton.feature_notes.presentation.edit_note.components.FullNoteInfoDialog
 import com.example.seton.feature_notes.presentation.edit_note.components.MoreActionsBottomSheet
 
 private const val TAG = "EditNoteScreen"
@@ -116,8 +117,8 @@ fun EditNoteContent(
 
     var showAttachmentsBottomSheet by remember { mutableStateOf(false) }
     var showActionsBottomSheet by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
-
+    var showDeleteNoteDialog by remember { mutableStateOf(false) }
+    var showFullDateDialog by remember { mutableStateOf(false) }
     var containerColor by remember { mutableStateOf<ContainerColor>(noteColor) }
 
     val color by animateColorAsState(
@@ -156,7 +157,7 @@ fun EditNoteContent(
                     onMoreActionsClick = {
                         showActionsBottomSheet = true
                     },
-                    onShowFullDateClick = { /*TODO*/ },
+                    onShowDateClick = { showFullDateDialog = true },
                     modificationDate = note.modificationDate ?: note.creationDate
                 )
             }
@@ -176,7 +177,7 @@ fun EditNoteContent(
                 MoreActionsBottomSheet(
                     containerColor = color,
                     onDismissRequest = { showActionsBottomSheet = false },
-                    onDeleteNote = { showDialog = true },
+                    onDeleteNote = { showDeleteNoteDialog = true },
                     onCopyNote = {
                         clipboardManager.setText(
                             AnnotatedString("${note.title}\n\n${note.content}")
@@ -189,15 +190,23 @@ fun EditNoteContent(
                     }
                 )
             }
-            if (showDialog) {
+            if (showDeleteNoteDialog) {
                 CustomAlertDialog(
                     title = R.string.confirm_action,
                     text = R.string.ask_delete_note,
-                    onDismiss = { showDialog = false }
+                    onDismiss = { showDeleteNoteDialog = false }
                 ) {
                     navigateUp()
                     deleteNote()
                 }
+            }
+            if (showFullDateDialog) {
+                FullNoteInfoDialog(
+                    onDismissRequest = { showFullDateDialog = false},
+                    color = color,
+                    creationDate = note.creationDate,
+                    modificationDate = note.modificationDate
+                )
             }
             Column(
                 modifier = Modifier
