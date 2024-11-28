@@ -174,6 +174,8 @@ fun EditNoteContent(
                 text = R.string.ask_delete_note,
                 onDismiss = { showDeleteNoteDialog = false }
             ) {
+                showDeleteNoteDialog = false
+                showActionsBottomSheet = false
                 navigateUp()
                 deleteNote()
             }
