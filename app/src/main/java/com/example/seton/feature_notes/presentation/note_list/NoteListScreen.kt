@@ -1,17 +1,9 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class, ExperimentalSharedTransitionApi::class)
-
 package com.example.seton.feature_notes.presentation.note_list
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,8 +39,6 @@ private const val TAG = "note_list_screen"
 @Composable
 fun NoteListScreen(
     viewModel: NoteListViewModel = hiltViewModel(),
-    cardTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onFabClick: () -> Unit,
     navController: NavHostController,
 ) {
@@ -58,8 +48,6 @@ fun NoteListScreen(
     NoteListContent(
         notes = notes.value.noteList,
         onFabClick = onFabClick,
-        cardTransitionScope = cardTransitionScope,
-        animatedContentScope = animatedContentScope,
         onLongCardClick = {
             viewModel.onLongNoteClick(it)
         },
@@ -115,8 +103,6 @@ fun NoteListScreen(
 private fun NoteListContent(
     notes: List<NoteCardState>,
     selectedNotes: Set<Int>,
-    cardTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onClear: () -> Unit,
     onDelete: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
@@ -162,8 +148,6 @@ private fun NoteListContent(
             isGridLayout = isGridLayout.value,
             innerPadding = innerPadding,
             items = notes,
-            cardTransitionScope = cardTransitionScope,
-            animatedContentScope = animatedContentScope,
             onLongCardClick = { onLongCardClick(it) },
             onCardClick = { onCardClick(it) }
         )
@@ -175,57 +159,38 @@ fun DynamicLazyLayout(
     isGridLayout: Boolean,
     innerPadding: PaddingValues,
     items: List<NoteCardState>,
-    cardTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
     onLongCardClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit
 ) {
-
-    SharedTransitionLayout(
+    AnimatedContent(
+        targetState = isGridLayout,
+        label = "transition",
         modifier = Modifier
-            .fillMaxSize()
             .padding(innerPadding)
             .padding(horizontal = 16.dp)
-    ) {
-        AnimatedContent(
-            targetState = isGridLayout,
-            label = "transition"
-        ) { targetState ->
-            if (targetState) {
-                NoteGrid(
-                    items = items,
-                    onLongCardClick = { onLongCardClick(it) },
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent,
-                    cardTransitionScope = cardTransitionScope,
-                    animatedContentScope = animatedContentScope
-                ) {
-                    onCardClick(it)
-                }
-            } else {
-                NoteList(
-                    items = items,
-                    onLongCardClick = { onLongCardClick(it) },
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent,
-                    cardTransitionScope = cardTransitionScope,
-                    animatedContentScope = animatedContentScope
-                ) {
-                    onCardClick(it)
-                }
+    ) { targetState ->
+        if (targetState) {
+            NoteGrid(
+                items = items,
+                onLongCardClick = { onLongCardClick(it) },
+            ) {
+                onCardClick(it)
+            }
+        } else {
+            NoteList(
+                items = items,
+                onLongCardClick = { onLongCardClick(it) },
+            ) {
+                onCardClick(it)
             }
         }
-        Spacer(Modifier.height(32.dp))
     }
+    Spacer(Modifier.height(32.dp))
 }
 
 @Composable
 fun NoteGrid(
     items: List<NoteCardState>,
-    sharedTransitionScope: SharedTransitionScope,
-    cardTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
-    animatedContentScope: AnimatedContentScope,
     onLongCardClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit
 ) {
@@ -238,27 +203,19 @@ fun NoteGrid(
             items = items,
             key = { item: NoteCardState -> item.id }
         ) { note ->
-            with(sharedTransitionScope) {
-                NoteCard(
-                    onClick = {
-                        onCardClick(note.id)
-                    },
-                    id = note.id,
-                    title = note.title,
-                    content = note.content,
-                    isCardSelected = note.isChecked,
-                    onLongClick = { onLongCardClick(note.id) },
-                    animatedContentScope = animatedContentScope,
-                    sharedTransitionScope = cardTransitionScope,
-                    color = note.color,
-                    modifier = Modifier
-                        .animateItem()
-                        .sharedElement(
-                            rememberSharedContentState(key = note.id),
-                            animatedVisibilityScope
-                        )
-                )
-            }
+            NoteCard(
+                onClick = {
+                    onCardClick(note.id)
+                },
+                title = note.title,
+                content = note.content,
+                isCardSelected = note.isChecked,
+                onLongClick = { onLongCardClick(note.id) },
+                color = note.color,
+                modifier = Modifier
+                    .animateItem()
+
+            )
         }
     }
 }
@@ -266,38 +223,25 @@ fun NoteGrid(
 @Composable
 fun NoteList(
     items: List<NoteCardState>,
-    sharedTransitionScope: SharedTransitionScope,
-    cardTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
-    animatedContentScope: AnimatedContentScope,
     onLongCardClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit
 ) {
-    with(sharedTransitionScope) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            items(
-                items = items,
-                key = { item: NoteCardState -> item.id },
-            ) { note ->
-                NoteCard(
-                    id = note.id,
-                    title = note.title,
-                    content = note.content,
-                    isCardSelected = note.isChecked,
-                    onLongClick = { onLongCardClick(note.id) },
-                    sharedTransitionScope = cardTransitionScope,
-                    animatedContentScope = animatedContentScope,
-                    color = note.color,
-                    modifier = Modifier
-                        .animateItem()
-                        .sharedElement(
-                            rememberSharedContentState(key = note.id),
-                            animatedVisibilityScope
-                        )
-                ) { onCardClick(note.id) }
-            }
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        items(
+            items = items,
+            key = { item: NoteCardState -> item.id },
+        ) { note ->
+            NoteCard(
+                title = note.title,
+                content = note.content,
+                isCardSelected = note.isChecked,
+                onLongClick = { onLongCardClick(note.id) },
+                color = note.color,
+                modifier = Modifier
+                    .animateItem()
+            ) { onCardClick(note.id) }
         }
     }
 }

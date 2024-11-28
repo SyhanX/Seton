@@ -3,7 +3,6 @@
 package com.example.seton.common.presentation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,37 +27,31 @@ fun AppScreen(
 
 @Composable
 private fun AppContent(navController: NavHostController) {
-    SharedTransitionLayout {
-        NavHost(
-            navController = navController,
-            startDestination = NavDestinations.NoteListScreen,
-        ) {
-            composable<NavDestinations.NoteListScreen> {
-                NoteListScreen(
-                    onFabClick = {
-                        navController.navigate(
-                            NavDestinations.EditNoteScreen(
-                                currentNoteId = -1,
-                                currentNoteColor = ContainerColor.Default.serialize()
-                            )
+    NavHost(
+        navController = navController,
+        startDestination = NavDestinations.NoteListScreen,
+    ) {
+        composable<NavDestinations.NoteListScreen> {
+            NoteListScreen(
+                onFabClick = {
+                    navController.navigate(
+                        NavDestinations.EditNoteScreen(
+                            currentNoteId = -1,
+                            currentNoteColor = ContainerColor.Default.serialize()
                         )
-                    },
-                    cardTransitionScope = this@SharedTransitionLayout,
-                    animatedContentScope = this@composable,
-                    navController = navController
-                )
-            }
-            composable<NavDestinations.EditNoteScreen> {
-                val args = it.toRoute<NavDestinations.EditNoteScreen>()
-                EditNoteScreen(
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedContentScope = this@composable,
-                    navController = navController,
-                    noteColor = Json.decodeFromString<ContainerColor>(
-                        args.currentNoteColor
                     )
+                },
+                navController = navController
+            )
+        }
+        composable<NavDestinations.EditNoteScreen> {
+            val args = it.toRoute<NavDestinations.EditNoteScreen>()
+            EditNoteScreen(
+                navController = navController,
+                noteColor = Json.decodeFromString<ContainerColor>(
+                    args.currentNoteColor
                 )
-            }
+            )
         }
     }
 }
