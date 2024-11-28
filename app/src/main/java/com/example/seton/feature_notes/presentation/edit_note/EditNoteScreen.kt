@@ -1,8 +1,6 @@
 package com.example.seton.feature_notes.presentation.edit_note
 
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -40,7 +38,6 @@ import com.example.seton.feature_notes.presentation.edit_note.components.MoreAct
 
 private const val TAG = "EditNoteScreen"
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
@@ -57,16 +54,8 @@ fun EditNoteScreen(
         saveNote = {
             if (note.value.creationDate == null) {
                 viewModel.saveCreationDateState()
-                Log.d(
-                    TAG,
-                    "EditNoteScreen: saved CREATION date"
-                )
             } else {
                 viewModel.saveModificationDateState()
-                Log.d(
-                    TAG,
-                    "EditNoteScreen: saved MODIFICATION date"
-                )
             }
             viewModel.saveNote()
         },

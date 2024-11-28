@@ -27,12 +27,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.seton.R
 import com.example.seton.common.data.NavDestinations
-import com.example.seton.common.domain.util.serialize
 import com.example.seton.common.presentation.components.CustomAlertDialog
 import com.example.seton.feature_notes.presentation.note_list.components.NoteCard
 import com.example.seton.feature_notes.presentation.note_list.components.RegularAppBar
 import com.example.seton.feature_notes.presentation.note_list.components.SelectionAppBar
 import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 private const val TAG = "note_list_screen"
 
@@ -72,7 +73,9 @@ fun NoteListScreen(
             } else {
                 val jsonColor = notes.value.noteList.find { note ->
                     note.id == id
-                }!!.color.serialize()
+                }!!.color.let {
+                    Json.encodeToString(it)
+                }
 
                 navController.navigate(
                     NavDestinations.EditNoteScreen(
