@@ -37,7 +37,7 @@
     <string name="note_saved">Заметка сохранена</string>
     <string name="ask_leave_without_saving">Выйти, не сохранив заметку?</string>
     <string name="must_fill_all_fields">Все поля должны быть заполнены</string>
-    <string name="prepopulate_db">Наполнить базу данных</string>
+    <string name="prepopulate_db">Наполнить БД</string>
     <string name="copy">Скопировать</string>
     <string name="select_color">Выберите цвет</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
