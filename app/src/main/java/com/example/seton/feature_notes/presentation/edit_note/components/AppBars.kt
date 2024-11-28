@@ -9,13 +9,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,35 +39,34 @@ fun EditNoteTopBar(
     onNavigateBack: () -> Unit,
     onSave: () -> Unit,
 ) {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = containerColor,
-            scrolledContainerColor = containerColor
-        ),
-        title = { },
-        navigationIcon = {
-            IconButton(onClick = onNavigateBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = null
-                )
-            }
-        },
-        actions = {
-            TextButton(
-                onClick = onSave,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                )
-            ) {
-                Text(
-                    text = stringResource(R.string.save),
-                    fontSize = 18.sp,
-                    color = dynamicTextColor()
-                )
-            }
-        },
-    )
+    /* This wrapper composable handles smooth color animations */
+    Surface(
+        color = containerColor
+    ) {
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent
+            ),
+            title = { },
+            navigationIcon = {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+            },
+            actions = {
+                TextButton(onClick = onSave) {
+                    Text(
+                        text = stringResource(R.string.save),
+                        fontSize = 18.sp,
+                        color = dynamicTextColor()
+                    )
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -116,7 +115,10 @@ fun EditNoteBottomBar(
                     onClick = onShowDateClick
                 ) {
                     Text(
-                        text = stringResource(R.string.note_edited_at, formattedShortDate),
+                        text = stringResource(
+                            R.string.note_edited_at,
+                            formattedShortDate
+                        ),
                         fontSize = 18.sp,
                         color = dynamicTextColor()
                     )
@@ -137,6 +139,17 @@ fun EditNoteBottomBar(
     }
 }
 
+@Preview
+@Composable
+private fun TopAppBarPreview() {
+    SetonTheme {
+        EditNoteTopBar(
+            containerColor = MaterialTheme.colorScheme.background,
+            onSave = {},
+            onNavigateBack = {}
+        )
+    }
+}
 
 @Preview
 @Composable

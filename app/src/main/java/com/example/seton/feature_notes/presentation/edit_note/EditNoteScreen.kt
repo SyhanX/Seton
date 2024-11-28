@@ -37,8 +37,8 @@ import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
 import com.example.seton.feature_notes.presentation.edit_note.components.ColorsBottomSheet
-import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTextField
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
+import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTextField
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTopBar
 import com.example.seton.feature_notes.presentation.edit_note.components.FullNoteInfoDialog
 import com.example.seton.feature_notes.presentation.edit_note.components.MoreActionsBottomSheet
@@ -264,7 +264,10 @@ fun EditNoteContent(
     }
 }
 
-@Preview
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
 @Composable
 private fun EditNotePreview() {
     EditNoteContent(
