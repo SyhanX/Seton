@@ -37,7 +37,7 @@ import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.data.NoteSharedElementKey
 import com.example.seton.feature_notes.data.NoteTextType
 import com.example.seton.feature_notes.presentation.edit_note.components.ColorsBottomSheet
-import com.example.seton.feature_notes.presentation.edit_note.components.CustomTextField
+import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTextField
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTopBar
 import com.example.seton.feature_notes.presentation.edit_note.components.FullNoteInfoDialog
@@ -213,7 +213,7 @@ fun EditNoteContent(
                     .padding(padding)
                     .background(color)
             ) {
-                CustomTextField(
+                EditNoteTextField(
                     text = note.title,
                     placeholderText = stringResource(R.string.note_title),
                     isSingleLine = true,
@@ -238,7 +238,7 @@ fun EditNoteContent(
                     isTitleBlank = it.isBlank()
                     saveState(NoteStateType.Title(it))
                 }
-                CustomTextField(
+                EditNoteTextField(
                     text = note.content,
                     placeholderText = stringResource(R.string.note_content),
                     modifier = Modifier

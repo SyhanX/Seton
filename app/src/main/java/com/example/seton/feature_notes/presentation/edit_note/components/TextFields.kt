@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CustomTextField(
+fun EditNoteTextField(
     modifier: Modifier = Modifier,
     isSingleLine: Boolean = false,
     fontSize: TextUnit = 18.sp,
