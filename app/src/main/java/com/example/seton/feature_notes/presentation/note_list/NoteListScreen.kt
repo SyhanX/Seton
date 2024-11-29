@@ -125,17 +125,17 @@ private fun NoteListContent(
                     selectedItemCount = selectedNotes.size,
                     onClear = onClear,
                     isChecked = areListsTheSame.value,
-                    onDelete = onDelete
-                ) {
-                    onCheckedChange(it)
-                }
+                    onDelete = onDelete,
+                    onCheckedChange = { onCheckedChange(it) }
+                )
             } else {
                 RegularAppBar(
                     isGridLayout = isGridLayout.value,
-                    onFillDb = onFillDb
-                ) {
-                    isGridLayout.value = it
-                }
+                    onFillDb = onFillDb,
+                    onCheckedChange = {
+                        isGridLayout.value = it
+                    }
+                )
             }
         },
         floatingActionButton = {
