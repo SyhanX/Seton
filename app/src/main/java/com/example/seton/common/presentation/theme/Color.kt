@@ -104,7 +104,6 @@ val pinkLight = Color(0xFFF6E2DD)
 val brownLight = Color(0xFFE9E3D4)
 val greyLight = Color(0xFFEFEFF1)
 
-/*Dynamic Colors*/
 @Composable
 fun dynamicTextColor(): Color {
     return if (isSystemInDarkTheme()) Color.White else Color.Black
