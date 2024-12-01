@@ -28,9 +28,9 @@ import com.example.seton.R
 
 @Composable
 fun RegularAppBar(
-    isGridLayout: Boolean,
     onFillDb: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
+    isGridLayout: Boolean,
 ) {
     val isMenuExpanded = remember { mutableStateOf(false) }
 
@@ -108,8 +108,8 @@ fun SelectionAppBar(
     selectedItemCount: Int,
     onClear: () -> Unit,
     onDelete: () -> Unit,
-    isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    isChecked: Boolean,
 ) {
     TopAppBar(
         title = {

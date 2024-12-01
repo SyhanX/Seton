@@ -1,8 +1,5 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class)
-
 package com.example.seton.common.presentation
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,10 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.seton.common.data.NavDestinations
-import com.example.seton.common.domain.util.serialize
 import com.example.seton.common.presentation.state.ContainerColor
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private const val TAG = "AppScreen"
@@ -37,7 +34,7 @@ private fun AppContent(navController: NavHostController) {
                     navController.navigate(
                         NavDestinations.EditNoteScreen(
                             currentNoteId = -1,
-                            currentNoteColor = ContainerColor.Default.serialize()
+                            currentNoteColor = Json.encodeToString(ContainerColor.Default)
                         )
                     )
                 },
