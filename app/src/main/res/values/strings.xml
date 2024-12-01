@@ -32,6 +32,7 @@
     <string name="ask_delete_all_notes">Delete all notes? This action cannot be undone.</string>
     <string name="selected_items_count">%1$d selected</string>
     <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect all</string>
     <string name="delete_notes">Delete notes</string>
     <string name="ask_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
     <string name="prepopulate_db">Fill database</string>
@@ -53,4 +54,5 @@
     <string name="creation_date">Created</string>
     <string name="modification_date">Modified</string>
     <string name="action_close">Close</string>
+    <string name="send">Send</string>
 </resources>

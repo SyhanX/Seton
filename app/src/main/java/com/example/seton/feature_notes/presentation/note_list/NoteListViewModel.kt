@@ -1,6 +1,5 @@
 package com.example.seton.feature_notes.presentation.note_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seton.feature_notes.domain.model.fakeNotes
@@ -34,21 +33,9 @@ class NoteListViewModel @Inject constructor(
         getAllNotes()
     }
 
-    fun changeLayout() {
-        _noteListState.value = noteListState.value.copy(
-            isGridLayout = !noteListState.value.isGridLayout
-        )
-    }
-
-    fun deleteAllNotes() {
-        viewModelScope.launch {
-            noteUseCases.deleteAllNotes()
-        }
-    }
-
     fun checkAllNotes() {
         _noteListState.value.noteList.forEach {
-            if (!it.isChecked) {
+            if (!it.isSelected) {
                 checkOrUncheckNote(it.id)
             }
         }
@@ -58,13 +45,9 @@ class NoteListViewModel @Inject constructor(
         selectedNotesList.clear()
         _noteListState.value = noteListState.value.copy(
             noteList = noteListState.value.noteList.map { cardState ->
-                cardState.copy(isChecked = false)
+                cardState.copy(isSelected = false)
             },
             selectedNoteList = selectedNotesList
-        )
-        Log.d(
-            TAG,
-            "SELECTED NOTES: $selectedNotesList"
         )
     }
 
@@ -72,8 +55,8 @@ class NoteListViewModel @Inject constructor(
         _noteListState.value = noteListState.value.copy(
             noteList = noteListState.value.noteList.map { cardState ->
                 if (noteId == cardState.id) {
-                    cardState.copy(isChecked = !cardState.isChecked).also {
-                        if (it.isChecked) {
+                    cardState.copy(isSelected = !cardState.isSelected).also {
+                        if (it.isSelected) {
                             selectedNotesList.add(it.id)
                         } else {
                             selectedNotesList.remove(it.id)
@@ -82,10 +65,6 @@ class NoteListViewModel @Inject constructor(
                 } else cardState
             },
             selectedNoteList = selectedNotesList
-        )
-        Log.d(
-            TAG,
-            "SELECTED NOTES: $selectedNotesList"
         )
     }
 
@@ -102,7 +81,7 @@ class NoteListViewModel @Inject constructor(
                     noteList = noteList.map { note ->
                         NoteCardState(
                             id = note.noteId ?: 0,
-                            isChecked = false,
+                            isSelected = false,
                             title = note.title,
                             content = note.content,
                             color = note.color,

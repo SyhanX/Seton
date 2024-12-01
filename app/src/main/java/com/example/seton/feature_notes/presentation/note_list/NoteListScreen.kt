@@ -1,5 +1,7 @@
 package com.example.seton.feature_notes.presentation.note_list
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,6 +48,7 @@ fun NoteListScreen(
 ) {
     val notes = viewModel.noteListState.collectAsState()
     val openAlertDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     NoteListContent(
         notes = notes.value.noteList,
@@ -53,8 +57,8 @@ fun NoteListScreen(
             viewModel.onLongNoteClick(it)
         },
         selectedNotes = notes.value.selectedNoteList,
-        onCheckedChange = { isChecked ->
-            if (!isChecked) {
+        selectOrDeselectAll = { isEverythingSelected ->
+            if (isEverythingSelected) {
                 viewModel.uncheckAllNotes()
             } else {
                 viewModel.checkAllNotes()
@@ -84,6 +88,16 @@ fun NoteListScreen(
                     )
                 )
             }
+        },
+        onSend = {
+            val firstSelectedNote = notes.value.noteList.find {
+                it.isSelected
+            } as NoteCardState
+            sendNote(
+                title = firstSelectedNote.title,
+                content = firstSelectedNote.content,
+                context = context
+            )
         }
     )
 
@@ -108,10 +122,11 @@ private fun NoteListContent(
     selectedNotes: Set<Int>,
     onClear: () -> Unit,
     onDelete: () -> Unit,
-    onCheckedChange: (Boolean) -> Unit,
+    selectOrDeselectAll: (Boolean) -> Unit,
     onFabClick: () -> Unit,
     onFillDb: () -> Unit,
     onLongCardClick: (Int) -> Unit,
+    onSend: () -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
     val isGridLayout = rememberSaveable { mutableStateOf(true) }
@@ -124,9 +139,14 @@ private fun NoteListContent(
                 SelectionAppBar(
                     selectedItemCount = selectedNotes.size,
                     onClear = onClear,
-                    isChecked = areListsTheSame.value,
+                    isEverythingSelected = areListsTheSame.value,
                     onDelete = onDelete,
-                    onCheckedChange = { onCheckedChange(it) }
+                    selectOrDeselectAll = {
+                        selectOrDeselectAll(it)
+                    },
+                    onSend = {
+                        onSend()
+                    }
                 )
             } else {
                 RegularAppBar(
@@ -212,7 +232,7 @@ fun NoteGrid(
                 },
                 title = note.title,
                 content = note.content,
-                isCardSelected = note.isChecked,
+                isCardSelected = note.isSelected,
                 onLongClick = { onLongCardClick(note.id) },
                 color = note.color,
                 modifier = Modifier
@@ -239,7 +259,7 @@ fun NoteList(
             NoteCard(
                 title = note.title,
                 content = note.content,
-                isCardSelected = note.isChecked,
+                isCardSelected = note.isSelected,
                 onLongClick = { onLongCardClick(note.id) },
                 color = note.color,
                 modifier = Modifier
@@ -247,4 +267,29 @@ fun NoteList(
             ) { onCardClick(note.id) }
         }
     }
+}
+
+private fun sendNote(
+    title: String,
+    content: String,
+    context: Context
+) {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(
+            Intent.EXTRA_TEXT,
+            """
+            $title
+            $content
+        """.trimIndent()
+        )
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(
+        sendIntent,
+        null
+    )
+
+    context.startActivity(shareIntent)
 }

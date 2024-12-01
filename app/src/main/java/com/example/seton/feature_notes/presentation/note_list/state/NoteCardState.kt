@@ -6,7 +6,7 @@ data class NoteCardState(
     val id: Int,
     val title: String,
     val content: String,
-    val isChecked: Boolean,
+    val isSelected: Boolean,
     val color: ContainerColor,
     val onClick: (Int, () -> Unit) -> Unit,
     val onLongClick: (Int) -> Unit

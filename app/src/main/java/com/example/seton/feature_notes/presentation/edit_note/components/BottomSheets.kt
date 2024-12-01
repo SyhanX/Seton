@@ -65,10 +65,11 @@ fun ColorsBottomSheet(
 
 @Composable
 fun MoreActionsBottomSheet(
-    containerColor: Color,
     onDismissRequest: () -> Unit,
     onDeleteNote: () -> Unit,
     onCopyNote: () -> Unit,
+    onSendNote: () -> Unit,
+    containerColor: Color,
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
@@ -86,13 +87,18 @@ fun MoreActionsBottomSheet(
         ) {
             Spacer(Modifier.height(16.dp))
             BottomSheetMenuItem(
-                icon = R.drawable.ic_rounded_delete,
-                text = R.string.delete,
+                drawableRes = R.drawable.ic_rounded_delete,
+                textRes = R.string.delete,
                 onClick = onDeleteNote
             )
             BottomSheetMenuItem(
-                icon = R.drawable.ic_copy,
-                text = R.string.copy,
+                drawableRes = R.drawable.ic_send,
+                textRes = R.string.send,
+                onClick = onSendNote
+            )
+            BottomSheetMenuItem(
+                drawableRes = R.drawable.ic_copy,
+                textRes = R.string.copy,
                 onClick = onCopyNote
             )
         }
@@ -101,9 +107,9 @@ fun MoreActionsBottomSheet(
 
 @Composable
 fun BottomSheetMenuItem(
-    @DrawableRes icon: Int = R.drawable.ic_bug,
-    @StringRes text: Int = R.string.app_name,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit,
+    @DrawableRes drawableRes: Int,
+    @StringRes textRes: Int,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -115,8 +121,8 @@ fun BottomSheetMenuItem(
             }
     ) {
         Spacer(Modifier.width(16.dp))
-        Icon(painter = painterResource(icon), contentDescription = null)
+        Icon(painter = painterResource(drawableRes), contentDescription = null)
         Spacer(Modifier.width(16.dp))
-        Text(text = stringResource(text))
+        Text(text = stringResource(textRes))
     }
 }

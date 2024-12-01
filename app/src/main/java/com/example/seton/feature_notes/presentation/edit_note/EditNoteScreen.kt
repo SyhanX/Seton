@@ -1,5 +1,7 @@
 package com.example.seton.feature_notes.presentation.edit_note
 
+import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -165,6 +167,13 @@ fun EditNoteContent(
                         context.getText(R.string.copied_to_clipboard),
                         Toast.LENGTH_SHORT
                     ).show()
+                },
+                onSendNote = {
+                    sendNote(
+                        title = note.title,
+                        content = note.content,
+                        context = context
+                    )
                 }
             )
         }
@@ -220,6 +229,32 @@ fun EditNoteContent(
         }
     }
 }
+
+private fun sendNote(
+    title: String,
+    content: String,
+    context: Context
+) {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(
+            Intent.EXTRA_TEXT,
+            """
+            $title
+            $content
+        """.trimIndent()
+        )
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(
+        sendIntent,
+        null
+    )
+
+    context.startActivity(shareIntent)
+}
+
 
 @Preview(
     showSystemUi = true,

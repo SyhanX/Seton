@@ -26,6 +26,7 @@
     <string name="ask_delete_all_notes">Удалить все заметки? Это действие нельзя отменить.</string>
     <string name="selected_items_count">%1$d выбрано</string>
     <string name="select_all">Выбрать все</string>
+    <string name="deselect_all">Отменить выбор</string>
     <string name="delete_notes">Удалить заметки</string>
     <string name="ask_delete_selected_notes">Удалить выбранные заметки? Это действие нельзя отменить.</string>
     <string name="note_title">Название</string>
@@ -46,4 +47,5 @@
     <string name="creation_date">Создано</string>
     <string name="modification_date">Изменено</string>
     <string name="action_close">Закрыть</string>
+    <string name="send">Send</string>
 </resources>
