@@ -2,6 +2,7 @@ package com.example.seton.feature_notes.presentation.edit_note
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -174,7 +175,12 @@ fun EditNoteContent(
                         content = note.content,
                         context = context
                     )
-                }
+                },
+                showDeleteNoteOption = (note.id != 0)
+            )
+            Log.d(
+                TAG,
+                "EditNoteContent: ${note.id}"
             )
         }
         if (showDeleteNoteDialog) {

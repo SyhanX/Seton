@@ -70,6 +70,7 @@ fun MoreActionsBottomSheet(
     onCopyNote: () -> Unit,
     onSendNote: () -> Unit,
     containerColor: Color,
+    showDeleteNoteOption: Boolean,
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
@@ -86,11 +87,13 @@ fun MoreActionsBottomSheet(
                 .padding(vertical = 8.dp)
         ) {
             Spacer(Modifier.height(16.dp))
-            BottomSheetMenuItem(
-                drawableRes = R.drawable.ic_rounded_delete,
-                textRes = R.string.delete,
-                onClick = onDeleteNote
-            )
+            if (showDeleteNoteOption) {
+                BottomSheetMenuItem(
+                    drawableRes = R.drawable.ic_rounded_delete,
+                    textRes = R.string.delete,
+                    onClick = onDeleteNote
+                )
+            }
             BottomSheetMenuItem(
                 drawableRes = R.drawable.ic_send,
                 textRes = R.string.send,
