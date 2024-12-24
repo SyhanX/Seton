@@ -101,7 +101,7 @@ fun EditNoteContent(
     var showActionsBottomSheet by remember { mutableStateOf(false) }
     var showDeleteNoteDialog by remember { mutableStateOf(false) }
     var showFullDateDialog by remember { mutableStateOf(false) }
-    var containerColor by remember { mutableStateOf<ContainerColor>(noteColor) }
+    var containerColor by remember { mutableStateOf(noteColor) }
 
     val color by animateColorAsState(
         targetValue = if (isSystemInDarkTheme()) {

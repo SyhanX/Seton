@@ -97,12 +97,6 @@ class EditNoteViewModel @Inject constructor(
         }
     }
 
-    fun deleteNoteById(id: Int) {
-        viewModelScope.launch {
-            noteUseCases.deleteNoteById(id)
-        }
-    }
-
     fun deleteNote() {
         viewModelScope.launch(Dispatchers.IO) {
             noteUseCases.deleteNote(

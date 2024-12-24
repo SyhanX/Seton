@@ -12,6 +12,4 @@ sealed interface NavDestinations {
         val currentNoteColor: String
     ) : NavDestinations
 
-/*    @Serializable
-    data object SettingsScreen : NavDestinations*/
 }
