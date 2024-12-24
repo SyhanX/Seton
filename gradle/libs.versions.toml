@@ -1,34 +1,33 @@
 [versions]
-agp = "8.7.2"
-coilCompose = "2.6.0"
-hiltAndroid = "2.50"
+agp = "8.7.3"
+hiltAndroid = "2.51.1"
 hiltWork = "1.2.0"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxCoroutinesAndroid = "1.7.3"
-kotlinxCoroutinesCore = "1.7.3"
+kotlinxCoroutinesAndroid = "1.9.0"
+kotlinxCoroutinesCore = "1.9.0"
 lifecycleExtensions = "2.2.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.11.00"
-navigationFragmentKtx = "2.8.4"
+composeBom = "2024.12.01"
+navigationFragmentKtx = "2.8.5"
 room = "2.6.1"
 material = "1.12.0"
 ksp = "2.0.0-1.0.21"
 serializationPlugin = "2.0.0"
 serialization = "1.6.3"
-composeNavigation = "2.8.4"
-uiTextGoogleFonts = "1.7.5"
+composeNavigation = "2.8.5"
+uiTextGoogleFonts = "1.7.6"
 hiltComposeNavigation = "1.2.0"
 daggerHilt = "2.48.1"
 workRuntimeKtx = "2.10.0"
 material3beta = "1.3.1"
-junitJupiter = "5.8.1"
-junitJunit = "4.12"
+junitJupiter = "5.9.2"
 hilt-testing = "2.51.1"
+desugaring = "2.1.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,7 +45,6 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3beta"}
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "hiltAndroid" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
@@ -68,9 +66,9 @@ ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
-junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 hilt-instrumented-tests = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-testing"}
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt-testing"}
+android-desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugaring"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -42,6 +42,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -68,7 +69,6 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -98,4 +98,5 @@ dependencies {
     kspAndroidTest(libs.hilt.instrumented.tests)
     androidTestAnnotationProcessor(libs.hilt.instrumented.tests)
     androidTestImplementation(libs.hilt.testing)
+    coreLibraryDesugaring(libs.android.desugaring)
 }
