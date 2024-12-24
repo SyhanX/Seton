@@ -77,7 +77,7 @@ val surfaceContainerDark = Color(0xFF261D1E)
 val surfaceContainerHighDark = Color(0xFF312829)
 val surfaceContainerHighestDark = Color(0xFF3D3233)
 
-/*Custom colors*/
+/*Accent colors*/
 val defaultColorDark = Color(0xFF43292D)
 val redDark = Color(0xFF77172E)
 val orangeDark = Color(0xFF692B17)
@@ -105,6 +105,4 @@ val brownLight = Color(0xFFE9E3D4)
 val greyLight = Color(0xFFEFEFF1)
 
 @Composable
-fun dynamicTextColor(): Color {
-    return if (isSystemInDarkTheme()) Color.White else Color.Black
-}
+fun dynamicTextColor(): Color = if (isSystemInDarkTheme()) Color.White else Color.Black

@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 
 private const val TAG = "note_card"
 
@@ -36,7 +36,7 @@ fun NoteCard(
     content: String,
     onLongClick: () -> Unit,
     isCardSelected: Boolean,
-    color: ContainerColor,
+    color: AccentColor,
     onClick: () -> Unit,
 ) {
     OutlinedCard(

@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.seton.common.data.NavDestinations
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 import com.example.seton.feature_notes.presentation.edit_note.EditNoteScreen
 import com.example.seton.feature_notes.presentation.note_list.NoteListScreen
 import kotlinx.serialization.encodeToString
@@ -34,7 +34,7 @@ private fun AppContent(navController: NavHostController) {
                     navController.navigate(
                         NavDestinations.EditNoteScreen(
                             currentNoteId = -1,
-                            currentNoteColor = Json.encodeToString(ContainerColor.Default)
+                            currentNoteColor = Json.encodeToString(AccentColor.Default)
                         )
                     )
                 },
@@ -45,7 +45,7 @@ private fun AppContent(navController: NavHostController) {
             val args = it.toRoute<NavDestinations.EditNoteScreen>()
             EditNoteScreen(
                 navController = navController,
-                noteColor = Json.decodeFromString<ContainerColor>(
+                noteColor = Json.decodeFromString<AccentColor>(
                     args.currentNoteColor
                 )
             )

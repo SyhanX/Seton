@@ -25,15 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seton.R
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 import com.example.seton.common.presentation.theme.dynamicTextColor
 
 @Composable
 fun ColorsBottomSheet(
     containerColor: Color,
     onDismissRequest: () -> Unit,
-    selectedColor: ContainerColor,
-    onColorClick: (ContainerColor) -> Unit,
+    selectedColor: AccentColor,
+    onColorClick: (AccentColor) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false

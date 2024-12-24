@@ -1,6 +1,6 @@
 package com.example.seton.feature_notes.domain.model
 
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 import java.util.Date
 
 val fakeTitles = listOf(
@@ -49,7 +49,7 @@ val fakeModificationDates = mutableListOf<Date>().also { list ->
     }
 }
 
-val colors = ContainerColor.entries.toList()
+val colors = AccentColor.entries.toList()
 
 val fakeNotes = mutableListOf<Note>().also { list ->
     repeat(10) {

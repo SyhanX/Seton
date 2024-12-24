@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.seton.common.data.local.Converters
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 import java.util.Date
 
 @Entity(tableName = "note_table")
@@ -13,7 +13,7 @@ data class Note(
     val noteId: Int? = null,
     val title: String,
     val content: String,
-    val color: ContainerColor = ContainerColor.Default,
+    val color: AccentColor = AccentColor.Default,
     @TypeConverters(Converters::class)
     val creationDate: Date? = null,
     @TypeConverters(Converters::class)

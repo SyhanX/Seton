@@ -6,17 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,44 +26,6 @@ import com.example.seton.R
 import com.example.seton.common.presentation.theme.SetonTheme
 import com.example.seton.common.presentation.theme.dynamicTextColor
 import java.util.Date
-
-private const val TAG = "EditNoteAppBarComponent"
-
-@Composable
-fun EditNoteTopBar(
-    containerColor: Color,
-    onNavigateBack: () -> Unit,
-    onSave: () -> Unit,
-) {
-    /* This wrapper composable handles smooth color animations */
-    Surface(
-        color = containerColor
-    ) {
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent
-            ),
-            title = { },
-            navigationIcon = {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = null
-                    )
-                }
-            },
-            actions = {
-                TextButton(onClick = onSave) {
-                    Text(
-                        text = stringResource(R.string.action_save),
-                        fontSize = 18.sp,
-                        color = dynamicTextColor()
-                    )
-                }
-            },
-        )
-    }
-}
 
 @Composable
 fun EditNoteBottomBar(
@@ -136,18 +94,6 @@ fun EditNoteBottomBar(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun TopAppBarPreview() {
-    SetonTheme {
-        EditNoteTopBar(
-            containerColor = MaterialTheme.colorScheme.background,
-            onSave = {},
-            onNavigateBack = {}
-        )
     }
 }
 

@@ -35,10 +35,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.seton.R
 import com.example.seton.common.data.NavDestinations
-import com.example.seton.common.presentation.components.CustomAlertDialog
+import com.example.seton.common.presentation.components.ConfirmationDialog
 import com.example.seton.feature_notes.presentation.note_list.components.NoteCard
-import com.example.seton.feature_notes.presentation.note_list.components.RegularAppBar
-import com.example.seton.feature_notes.presentation.note_list.components.SelectionAppBar
+import com.example.seton.feature_notes.presentation.note_list.components.NoteListAppBar
+import com.example.seton.feature_notes.presentation.note_list.components.NoteListSelectionAppBar
 import com.example.seton.feature_notes.presentation.note_list.state.NoteCardState
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -107,7 +107,7 @@ fun NoteListScreen(
     )
 
     if (openAlertDialog.value) {
-        CustomAlertDialog(
+        ConfirmationDialog(
             title = R.string.action_delete_notes,
             text = R.string.warning_delete_selected_notes,
             onDismiss = { openAlertDialog.value = false }
@@ -141,7 +141,7 @@ private fun NoteListContent(
     Scaffold(
         topBar = {
             if (selectedNotes.isNotEmpty()) {
-                SelectionAppBar(
+                NoteListSelectionAppBar(
                     selectedItemCount = selectedNotes.size,
                     onClear = onClear,
                     isEverythingSelected = areListsTheSame.value,
@@ -154,7 +154,7 @@ private fun NoteListContent(
                     }
                 )
             } else {
-                RegularAppBar(
+                NoteListAppBar(
                     isGridLayout = isGridLayout.value,
                     onFillDb = onFillDb,
                     onCheckedChange = {

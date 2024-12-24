@@ -26,7 +26,7 @@ import com.example.seton.common.presentation.theme.turquoiseLight
 import com.example.seton.common.presentation.theme.yellowDark
 import com.example.seton.common.presentation.theme.yellowLight
 
-enum class ContainerColor(
+enum class AccentColor(
     val lightVariant: Color,
     val darkVariant: Color
 ) {

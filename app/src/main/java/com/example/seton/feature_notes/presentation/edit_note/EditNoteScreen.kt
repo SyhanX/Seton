@@ -30,8 +30,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.seton.R
 import com.example.seton.common.data.NavDestinations
-import com.example.seton.common.presentation.components.CustomAlertDialog
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.components.ConfirmationDialog
+import com.example.seton.common.presentation.state.AccentColor
 import com.example.seton.feature_notes.presentation.edit_note.components.ColorsBottomSheet
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteBottomBar
 import com.example.seton.feature_notes.presentation.edit_note.components.EditNoteTextField
@@ -45,7 +45,7 @@ private const val TAG = "EditNoteScreen"
 fun EditNoteScreen(
     viewModel: EditNoteViewModel = hiltViewModel(),
     navController: NavHostController,
-    noteColor: ContainerColor
+    noteColor: AccentColor
 ) {
     val note = viewModel.noteState.collectAsStateWithLifecycle()
 
@@ -84,7 +84,7 @@ fun EditNoteScreen(
 @Composable
 fun EditNoteContent(
     note: NoteState,
-    noteColor: ContainerColor,
+    noteColor: AccentColor,
     navigateUp: () -> Unit,
     navigateToNoteList: () -> Unit,
     saveNote: () -> Unit,
@@ -184,7 +184,7 @@ fun EditNoteContent(
             )
         }
         if (showDeleteNoteDialog) {
-            CustomAlertDialog(
+            ConfirmationDialog(
                 title = R.string.warning_confirm_action,
                 text = R.string.warning_delete_note,
                 onDismiss = { showDeleteNoteDialog = false }
@@ -273,9 +273,9 @@ private fun EditNotePreview() {
             id = 0,
             title = "Lorem ipsum",
             content = "Dolor sit amet",
-            color = ContainerColor.Red
+            color = AccentColor.Red
         ),
-        noteColor = ContainerColor.Red,
+        noteColor = AccentColor.Red,
         navigateUp = { /*TODO*/ },
         navigateToNoteList = { /*TODO*/ },
         saveNote = { /*TODO*/ },

@@ -3,7 +3,7 @@ package com.example.seton.feature_notes.presentation.edit_note
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 import com.example.seton.feature_notes.domain.model.InvalidNoteException
 import com.example.seton.feature_notes.domain.model.Note
 import com.example.seton.feature_notes.domain.use_case.NoteUseCases
@@ -60,7 +60,7 @@ class EditNoteViewModel @Inject constructor(
         )
     }
 
-    fun saveColorState(color: ContainerColor) {
+    fun saveColorState(color: AccentColor) {
         _noteState.value = noteState.value.copy(
             color = color
         )

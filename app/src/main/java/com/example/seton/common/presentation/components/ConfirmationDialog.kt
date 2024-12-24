@@ -10,11 +10,11 @@ import androidx.compose.ui.unit.sp
 import com.example.seton.R
 
 @Composable
-fun CustomAlertDialog(
+fun ConfirmationDialog(
     @StringRes title: Int,
     @StringRes text: Int,
-    @StringRes positiveText: Int = R.string.yes,
-    @StringRes negativeText: Int = R.string.action_cancel,
+    @StringRes confirmButtonText: Int = R.string.yes,
+    @StringRes dismissButtonText: Int = R.string.action_cancel,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
@@ -34,7 +34,7 @@ fun CustomAlertDialog(
         confirmButton = {
             TextButton(onClick = onConfirm) {
                 Text(
-                    text = stringResource(positiveText),
+                    text = stringResource(confirmButtonText),
                     fontSize = 16.sp
                 )
             }
@@ -42,7 +42,7 @@ fun CustomAlertDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(
-                    text = stringResource(negativeText),
+                    text = stringResource(dismissButtonText),
                     fontSize = 16.sp
                 )
             }

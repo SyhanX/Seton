@@ -7,14 +7,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.seton.common.presentation.state.ContainerColor
+import com.example.seton.common.presentation.state.AccentColor
 
 @Composable
 fun ColorsRow(
-    containerColor: ContainerColor,
-    onClick: (ContainerColor) -> Unit,
+    accentColor: AccentColor,
+    onClick: (AccentColor) -> Unit,
 ) {
-    val colors = enumValues<ContainerColor>().toList()
+    val colors = enumValues<AccentColor>().toList()
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
@@ -24,7 +24,7 @@ fun ColorsRow(
             items = colors,
         ) { color ->
             ColorButton(
-                isSelected = color == containerColor,
+                isSelected = color == accentColor,
                 lightColor = color.lightVariant,
                 darkColor = color.darkVariant
             ) {
