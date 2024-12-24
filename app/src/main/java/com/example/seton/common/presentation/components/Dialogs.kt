@@ -14,7 +14,7 @@ fun CustomAlertDialog(
     @StringRes title: Int,
     @StringRes text: Int,
     @StringRes positiveText: Int = R.string.yes,
-    @StringRes negativeText: Int = R.string.cancel,
+    @StringRes negativeText: Int = R.string.action_cancel,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {

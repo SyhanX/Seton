@@ -67,7 +67,7 @@ fun RegularAppBar(
                             R.drawable.ic_view_agenda
                         } else R.drawable.ic_dashboard
                     ),
-                    contentDescription = stringResource(R.string.change_layout),
+                    contentDescription = stringResource(R.string.action_change_layout),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -117,7 +117,7 @@ fun RegularAppBar(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = stringResource(R.string.prepopulate_db),
+                            text = stringResource(R.string.action_fill_db),
                             fontSize = 16.sp
                         )
                     },
@@ -184,8 +184,8 @@ fun SelectionAppBar(
                     text = {
                         Text(
                             text = stringResource(
-                                if (isEverythingSelected) R.string.deselect_all
-                                else R.string.select_all
+                                if (isEverythingSelected) R.string.action_deselect_all
+                                else R.string.action_select_all
                             ),
                             fontSize = 16.sp
                         )
@@ -210,7 +210,7 @@ fun SelectionAppBar(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = stringResource(R.string.send),
+                                text = stringResource(R.string.action_send),
                                 fontSize = 16.sp
                             )
                         },
@@ -228,7 +228,7 @@ fun SelectionAppBar(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = stringResource(R.string.delete),
+                            text = stringResource(R.string.action_delete),
                             fontSize = 16.sp
                         )
                     },

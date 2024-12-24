@@ -1,30 +1,41 @@
 <resources>
     <string name="app_name" translatable="false">Seton</string>
-    <string name="yes">Yes</string>
-    <string name="create_note">Create note</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="cancel">Cancel</string>
-    <string name="confirm_action">Confirm action</string>
-    <string name="change_layout">Change layout</string>
-    <string name="no_notes">Your notes appear here</string>
+    <!-- Actions-->
+    <string name="action_create_note">Create note</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_select_all">Select all</string>
+    <string name="action_deselect_all">Deselect all</string>
+    <string name="action_change_layout">Change layout</string>
+    <string name="action_close">Close</string>
+    <string name="action_send">Send</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_fill_db">Fill database</string>
+    <string name="action_delete_notes">Delete notes</string>
+
+    <!-- Warnings -->
+    <string name="warning_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
+    <string name="warning_fill_out_all_fields">Please fill out all fields</string>
+    <string name="warning_confirm_action">Confirm action</string>
+    <string name="warning_delete_note">Delete note?</string>
+
+
+    <!-- Placeholders -->
+    <string name="placeholder_no_notes">Your notes appear here</string>
+
+
+    <!-- Notifications -->
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <!-- Other -->
     <string name="selected_items_count">%1$d selected</string>
-    <string name="select_all">Select all</string>
-    <string name="deselect_all">Deselect all</string>
-    <string name="delete_notes">Delete notes</string>
-    <string name="ask_delete_selected_notes">Delete selected notes? This action cannot be undone.</string>
-    <string name="prepopulate_db">Fill database</string>
+    <string name="yes">Yes</string>
     <string name="note_title">Title</string>
     <string name="note_content">Write something down…</string>
-    <string name="ask_delete_note">Delete note?</string>
-    <string name="must_fill_all_fields">Please fill out all fields</string>
-    <string name="copy">Copy</string>
     <string name="select_color">Select color</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="note_edited_at">Edited: %1$s</string>
     <string name="note_info">Note Details</string>
     <string name="creation_date">Created</string>
     <string name="modification_date">Modified</string>
-    <string name="action_close">Close</string>
-    <string name="send">Send</string>
 </resources>

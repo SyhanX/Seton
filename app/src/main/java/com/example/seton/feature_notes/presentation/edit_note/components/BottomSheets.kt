@@ -90,18 +90,18 @@ fun MoreActionsBottomSheet(
             if (showDeleteNoteOption) {
                 BottomSheetMenuItem(
                     drawableRes = R.drawable.ic_rounded_delete,
-                    textRes = R.string.delete,
+                    textRes = R.string.action_delete,
                     onClick = onDeleteNote
                 )
             }
             BottomSheetMenuItem(
                 drawableRes = R.drawable.ic_send,
-                textRes = R.string.send,
+                textRes = R.string.action_send,
                 onClick = onSendNote
             )
             BottomSheetMenuItem(
                 drawableRes = R.drawable.ic_copy,
-                textRes = R.string.copy,
+                textRes = R.string.action_copy,
                 onClick = onCopyNote
             )
         }

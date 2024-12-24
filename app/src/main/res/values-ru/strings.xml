@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="yes">Да</string>
-    <string name="create_note">Создать заметку</string>
-    <string name="save">Сохранить</string>
-    <string name="delete">Удалить</string>
-    <string name="cancel">Отмена</string>
-    <string name="confirm_action">Подтвердите действие</string>
-    <string name="change_layout">Сменить раскладку</string>
+    <string name="action_create_note">Создать заметку</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="warning_confirm_action">Подтвердите действие</string>
+    <string name="action_change_layout">Сменить раскладку</string>
+    <string name="placeholder_no_notes">Ваши заметки появятся здесь</string>
     <string name="selected_items_count">%1$d выбрано</string>
-    <string name="select_all">Выбрать все</string>
-    <string name="deselect_all">Отменить выбор</string>
-    <string name="delete_notes">Удалить заметки</string>
-    <string name="ask_delete_selected_notes">Удалить выбранные заметки? Это действие нельзя отменить.</string>
+    <string name="action_select_all">Выбрать все</string>
+    <string name="action_deselect_all">Отменить выбор</string>
+    <string name="action_delete_notes">Удалить заметки</string>
+    <string name="warning_delete_selected_notes">Удалить выбранные заметки? Это действие нельзя отменить.</string>
     <string name="note_title">Название</string>
     <string name="note_content">Заметка</string>
-    <string name="ask_delete_note">Удалить заметку?</string>
-    <string name="must_fill_all_fields">Все поля должны быть заполнены</string>
-    <string name="prepopulate_db">Наполнить БД</string>
-    <string name="copy">Скопировать</string>
+    <string name="warning_delete_note">Удалить заметку?</string>
+    <string name="warning_fill_out_all_fields">Все поля должны быть заполнены</string>
+    <string name="action_fill_db">Наполнить БД</string>
+    <string name="action_copy">Скопировать</string>
     <string name="select_color">Выберите цвет</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
     <string name="note_edited_at">Изменено: %1$s</string>
@@ -25,5 +26,5 @@
     <string name="creation_date">Создано</string>
     <string name="modification_date">Изменено</string>
     <string name="action_close">Закрыть</string>
-    <string name="send">Send</string>
+    <string name="action_send">Send</string>
 </resources>

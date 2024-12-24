@@ -108,8 +108,8 @@ fun NoteListScreen(
 
     if (openAlertDialog.value) {
         CustomAlertDialog(
-            title = R.string.delete_notes,
-            text = R.string.ask_delete_selected_notes,
+            title = R.string.action_delete_notes,
+            text = R.string.warning_delete_selected_notes,
             onDismiss = { openAlertDialog.value = false }
         ) {
             openAlertDialog.value = false
@@ -167,7 +167,7 @@ private fun NoteListContent(
             FloatingActionButton(onClick = onFabClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.create_note)
+                    contentDescription = stringResource(R.string.action_create_note)
                 )
             }
         }
@@ -178,7 +178,7 @@ private fun NoteListContent(
                 modifier = Modifier.fillMaxSize()
             ) {
                 Text(
-                    text = stringResource(R.string.no_notes),
+                    text = stringResource(R.string.placeholder_no_notes),
                     fontSize = 20.sp
                 )
             }

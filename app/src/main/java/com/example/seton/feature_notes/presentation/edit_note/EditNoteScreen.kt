@@ -119,7 +119,7 @@ fun EditNoteContent(
                     if (note.title.isBlank() || note.content.isBlank()) {
                         Toast.makeText(
                             context,
-                            context.getText(R.string.must_fill_all_fields),
+                            context.getText(R.string.warning_fill_out_all_fields),
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -185,8 +185,8 @@ fun EditNoteContent(
         }
         if (showDeleteNoteDialog) {
             CustomAlertDialog(
-                title = R.string.confirm_action,
-                text = R.string.ask_delete_note,
+                title = R.string.warning_confirm_action,
+                text = R.string.warning_delete_note,
                 onDismiss = { showDeleteNoteDialog = false }
             ) {
                 showDeleteNoteDialog = false

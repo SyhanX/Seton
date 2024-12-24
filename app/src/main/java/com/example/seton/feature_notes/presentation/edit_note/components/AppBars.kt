@@ -59,7 +59,7 @@ fun EditNoteTopBar(
             actions = {
                 TextButton(onClick = onSave) {
                     Text(
-                        text = stringResource(R.string.save),
+                        text = stringResource(R.string.action_save),
                         fontSize = 18.sp,
                         color = dynamicTextColor()
                     )
